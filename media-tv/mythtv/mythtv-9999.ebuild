@@ -114,8 +114,8 @@ src_unpack() {
 
 	cd ${S}
 
-	epatch "${FILESDIR}"/MythVideo.SubSeasEp.071809.diff
-	epatch "${FILESDIR}"/audioencoding-trunk-7.3.patch
+	epatch "${FILESDIR}"/5900-audioencoding-trunk.patch
+	epatch "${FILESDIR}"/6346-mythvideo-subseasep.patch
 }
 
 setup_pro() {
