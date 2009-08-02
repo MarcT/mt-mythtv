@@ -25,7 +25,6 @@ DEPEND="dev-perl/libwww-perl
 
 src_unpack() {
 	git_src_unpack
-#	git_apply_patches
 }
 
 src_configure() {
@@ -40,7 +39,6 @@ src_install() {
 	insinto /usr
 	dobin bin/*
 	doman man/*
-	dodoc dodoc README INSTALL ChangeLog COPYING FAQ THANKS
 
 	exeinto /etc/cron.hourly
 	doexe ${FILESDIR}/mythtv-status.cron
