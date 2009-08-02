@@ -25,7 +25,7 @@ DEPEND="dev-perl/libwww-perl
 
 src_unpack() {
 	git_src_unpack
-	git_apply_patches
+#	git_apply_patches
 }
 
 src_configure() {
