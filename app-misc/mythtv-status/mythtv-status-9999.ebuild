@@ -28,13 +28,8 @@ src_unpack() {
 	git_apply_patches
 }
 
-
-src_prepare() {
-	strip-flags
-}
-
 src_configure() {
-	return
+	return 0
 }
 
 src_compile() {
@@ -43,17 +38,19 @@ src_compile() {
 
 src_install() {
 	insinto /usr
-	dobin bin/mythtv-status
-	dobin bin/mythtv-update-motd
+	dobin bin/*
+	doman man/*
+	dodoc dodoc README INSTALL ChangeLog COPYING FAQ THANKS
 
 	exeinto /etc/cron.hourly
 	doexe ${FILESDIR}/mythtv-status.cron
+
+	insinto /etc/default
+	newins ${FILESDIR}/mythtv-status
 }
 
 pkg_postinst() {
 	elog
-	elog "If this machine is not your backend you need to edit"
-	elog "/usr/bin/mythtv-update-motd and change $HOST to the"
-	elog " name/ip of your backend."
+	elog "Be sure to create  "
 	elog
 }

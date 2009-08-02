@@ -1,0 +1,3 @@
+RUN=yes
+HOST=localhost
+ARGS="--encoder-details --colour"
