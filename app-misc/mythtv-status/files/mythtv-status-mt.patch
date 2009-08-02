@@ -1,13 +1,13 @@
 diff --git a/mythtv-status/bin/mythtv-update-motd b/mythtv-status/bin/mythtv-update-motd
-index d58aa41..051e95f 100755
+index d58aa41..654bb13 100755
 --- a/mythtv-status/bin/mythtv-update-motd
 +++ b/mythtv-status/bin/mythtv-update-motd
-@@ -2,15 +2,17 @@
+@@ -1,16 +1,16 @@
+ #!/bin/bash
 
- . /etc/default/mythtv-status
-
+-. /etc/default/mythtv-status
 +args=("$@")
-+
+
  if [ x$RUN != xyes ]
  then
    exit
@@ -23,6 +23,5 @@ index d58aa41..051e95f 100755
 +cp /etc/motd.orig /etc/motd.new
 +if mythtv-status $@ -h $HOST >> /etc/motd.new then
 +  mv /etc/motd.new /etc/motd
- fi
-+
+ fi+
 
