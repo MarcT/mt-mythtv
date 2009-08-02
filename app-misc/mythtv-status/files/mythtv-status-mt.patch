@@ -23,5 +23,5 @@ index d58aa41..654bb13 100755
 +cp /etc/motd.orig /etc/motd.new
 +if mythtv-status $@ -h $HOST >> /etc/motd.new then
 +  mv /etc/motd.new /etc/motd
- fi+
+ fi
 
