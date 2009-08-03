@@ -18,7 +18,8 @@ SLOT="0"
 KEYWORDS="~amd64 ~ppc ~ppc64 ~x86"
 IUSE="selinux"
 
-DEPEND="dev-perl/libwww-perl
+DEPEND="dev-util/git[curl]
+	dev-perl/libwww-perl
 	dev-perl/XML-LibXML
 	dev-perl/DateManip
 	dev-perl/MIME-tools
