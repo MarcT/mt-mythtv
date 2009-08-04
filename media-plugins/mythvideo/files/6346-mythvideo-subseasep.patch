@@ -1,6 +1,6 @@
 Index: mythplugins/mythvideo/theme/default/video-ui.xml
 ===================================================================
---- mythplugins/mythvideo/theme/default/video-ui.xml	(revision 20947)
+--- mythplugins/mythvideo/theme/default/video-ui.xml	(revision 20993)
 +++ mythplugins/mythvideo/theme/default/video-ui.xml	(working copy)
 @@ -477,11 +477,23 @@
          </buttonlist>
@@ -217,7 +217,7 @@ Index: mythplugins/mythvideo/theme/default/video-ui.xml
          <button name="coverart_button" from="basesearchbutton">
 Index: mythplugins/mythvideo/theme/default-wide/video-ui.xml
 ===================================================================
---- mythplugins/mythvideo/theme/default-wide/video-ui.xml	(revision 20947)
+--- mythplugins/mythvideo/theme/default-wide/video-ui.xml	(revision 20993)
 +++ mythplugins/mythvideo/theme/default-wide/video-ui.xml	(working copy)
 @@ -467,11 +467,17 @@
          </imagetype>
@@ -661,7 +661,7 @@ Index: mythplugins/mythvideo/theme/default-wide/video-ui.xml
  
 Index: mythplugins/mythvideo/mythvideo/videodlg.h
 ===================================================================
---- mythplugins/mythvideo/mythvideo/videodlg.h	(revision 20947)
+--- mythplugins/mythvideo/mythvideo/videodlg.h	(revision 20993)
 +++ mythplugins/mythvideo/mythvideo/videodlg.h	(working copy)
 @@ -28,6 +28,7 @@
  
@@ -748,7 +748,7 @@ Index: mythplugins/mythvideo/mythvideo/videodlg.h
      void OnVideoSearchByUIDDone(bool normal_exit,
 Index: mythplugins/mythvideo/mythvideo/metadatalistmanager.cpp
 ===================================================================
---- mythplugins/mythvideo/mythvideo/metadatalistmanager.cpp	(revision 20947)
+--- mythplugins/mythvideo/mythvideo/metadatalistmanager.cpp	(revision 20993)
 +++ mythplugins/mythvideo/mythvideo/metadatalistmanager.cpp	(working copy)
 @@ -112,10 +112,11 @@
      MSqlQuery query(MSqlQuery::InitCon());
@@ -768,7 +768,7 @@ Index: mythplugins/mythvideo/mythvideo/metadatalistmanager.cpp
  
 Index: mythplugins/mythvideo/mythvideo/metadata.cpp
 ===================================================================
---- mythplugins/mythvideo/mythvideo/metadata.cpp	(revision 20947)
+--- mythplugins/mythvideo/mythvideo/metadata.cpp	(revision 20993)
 +++ mythplugins/mythvideo/mythvideo/metadata.cpp	(working copy)
 @@ -89,10 +89,11 @@
    public:
@@ -1095,7 +1095,7 @@ Index: mythplugins/mythvideo/mythvideo/metadata.cpp
      return m_imp->GetID();
 Index: mythplugins/mythvideo/mythvideo/globalsettings.cpp
 ===================================================================
---- mythplugins/mythvideo/mythvideo/globalsettings.cpp	(revision 20947)
+--- mythplugins/mythvideo/mythvideo/globalsettings.cpp	(revision 20993)
 +++ mythplugins/mythvideo/mythvideo/globalsettings.cpp	(working copy)
 @@ -235,6 +235,66 @@
      return gc;
@@ -1187,7 +1187,7 @@ Index: mythplugins/mythvideo/mythvideo/globalsettings.cpp
           p != pages.end(); ++p, ++page_num)
 Index: mythplugins/mythvideo/mythvideo/videofilter.h
 ===================================================================
---- mythplugins/mythvideo/mythvideo/videofilter.h	(revision 20947)
+--- mythplugins/mythvideo/mythvideo/videofilter.h	(revision 20993)
 +++ mythplugins/mythvideo/mythvideo/videofilter.h	(working copy)
 @@ -54,7 +54,8 @@
          kOrderByUserRatingDescending = 2,
@@ -1201,7 +1201,7 @@ Index: mythplugins/mythvideo/mythvideo/videofilter.h
      int GetCategory() const { return category; }
 Index: mythplugins/mythvideo/mythvideo/dbcheck.cpp
 ===================================================================
---- mythplugins/mythvideo/mythvideo/dbcheck.cpp	(revision 20947)
+--- mythplugins/mythvideo/mythvideo/dbcheck.cpp	(revision 20993)
 +++ mythplugins/mythvideo/mythvideo/dbcheck.cpp	(working copy)
 @@ -38,7 +38,7 @@
      const QString lastMythDVDDBVersion = "1002";
@@ -1232,7 +1232,7 @@ Index: mythplugins/mythvideo/mythvideo/dbcheck.cpp
  }
 Index: mythplugins/mythvideo/mythvideo/main.cpp
 ===================================================================
---- mythplugins/mythvideo/mythvideo/main.cpp	(revision 20947)
+--- mythplugins/mythvideo/mythvideo/main.cpp	(revision 20993)
 +++ mythplugins/mythvideo/mythvideo/main.cpp	(working copy)
 @@ -315,6 +315,10 @@
          REG_KEY("Video","INCPARENT","Increase Parental Level","],},F11");
@@ -1247,7 +1247,7 @@ Index: mythplugins/mythvideo/mythvideo/main.cpp
  
 Index: mythplugins/mythvideo/mythvideo/videoutils.cpp
 ===================================================================
---- mythplugins/mythvideo/mythvideo/videoutils.cpp	(revision 20947)
+--- mythplugins/mythvideo/mythvideo/videoutils.cpp	(revision 20993)
 +++ mythplugins/mythvideo/mythvideo/videoutils.cpp	(working copy)
 @@ -139,6 +139,16 @@
      return QString("%1 minutes").arg(length);
@@ -1268,7 +1268,7 @@ Index: mythplugins/mythvideo/mythvideo/videoutils.cpp
      return browse ? QObject::tr("Yes") : QObject::tr("No");
 Index: mythplugins/mythvideo/mythvideo/editmetadata.h
 ===================================================================
---- mythplugins/mythvideo/mythvideo/editmetadata.h	(revision 20947)
+--- mythplugins/mythvideo/mythvideo/editmetadata.h	(revision 20993)
 +++ mythplugins/mythvideo/mythvideo/editmetadata.h	(working copy)
 @@ -10,6 +10,7 @@
  class MythUIText;
@@ -1303,7 +1303,7 @@ Index: mythplugins/mythvideo/mythvideo/editmetadata.h
      MythUIButtonList      *m_childList;
 Index: mythplugins/mythvideo/mythvideo/videodlg.cpp
 ===================================================================
---- mythplugins/mythvideo/mythvideo/videodlg.cpp	(revision 20947)
+--- mythplugins/mythvideo/mythvideo/videodlg.cpp	(revision 20993)
 +++ mythplugins/mythvideo/mythvideo/videodlg.cpp	(working copy)
 @@ -288,6 +288,113 @@
          FanartDownloadErrorState m_error_state;
@@ -2435,7 +2435,7 @@ Index: mythplugins/mythvideo/mythvideo/videodlg.cpp
      if (!m_d->m_scanner)
 Index: mythplugins/mythvideo/mythvideo/videolist.cpp
 ===================================================================
---- mythplugins/mythvideo/mythvideo/videolist.cpp	(revision 20947)
+--- mythplugins/mythvideo/mythvideo/videolist.cpp	(revision 20993)
 +++ mythplugins/mythvideo/mythvideo/videolist.cpp	(working copy)
 @@ -826,7 +826,27 @@
      for (meta_dir_node::const_entry_iterator entry = src->entries_begin();
@@ -2477,7 +2477,7 @@ Index: mythplugins/mythvideo/mythvideo/videolist.cpp
              }
 Index: mythplugins/mythvideo/mythvideo/videoscan.cpp
 ===================================================================
---- mythplugins/mythvideo/mythvideo/videoscan.cpp	(revision 20947)
+--- mythplugins/mythvideo/mythvideo/videoscan.cpp	(revision 20993)
 +++ mythplugins/mythvideo/mythvideo/videoscan.cpp	(working copy)
 @@ -267,11 +267,14 @@
                                   VIDEO_SCREENSHOT_DEFAULT,
@@ -2499,7 +2499,7 @@ Index: mythplugins/mythvideo/mythvideo/videoscan.cpp
                          .arg(newFile.GetHost()).arg(newFile.GetFilename()));
 Index: mythplugins/mythvideo/mythvideo/videofilter.cpp
 ===================================================================
---- mythplugins/mythvideo/mythvideo/videofilter.cpp	(revision 20947)
+--- mythplugins/mythvideo/mythvideo/videofilter.cpp	(revision 20993)
 +++ mythplugins/mythvideo/mythvideo/videofilter.cpp	(working copy)
 @@ -353,6 +353,38 @@
              ret = lhs_key < rhs_key;
@@ -2551,7 +2551,7 @@ Index: mythplugins/mythvideo/mythvideo/videofilter.cpp
      new MythUIButtonListItem(m_orderbyList, QObject::tr("User Rating"),
 Index: mythplugins/mythvideo/mythvideo/metadata.h
 ===================================================================
---- mythplugins/mythvideo/mythvideo/metadata.h	(revision 20947)
+--- mythplugins/mythvideo/mythvideo/metadata.h	(revision 20993)
 +++ mythplugins/mythvideo/mythvideo/metadata.h	(working copy)
 @@ -13,6 +13,8 @@
  
@@ -2613,7 +2613,7 @@ Index: mythplugins/mythvideo/mythvideo/metadata.h
  
 Index: mythplugins/mythvideo/mythvideo/editmetadata.cpp
 ===================================================================
---- mythplugins/mythvideo/mythvideo/editmetadata.cpp	(revision 20947)
+--- mythplugins/mythvideo/mythvideo/editmetadata.cpp	(revision 20993)
 +++ mythplugins/mythvideo/mythvideo/editmetadata.cpp	(working copy)
 @@ -12,6 +12,7 @@
  #include <mythtv/libmythui/mythuitextedit.h>
@@ -2706,7 +2706,7 @@ Index: mythplugins/mythvideo/mythvideo/editmetadata.cpp
      m_workingMetadata->SetPlayCommand(m_playerEdit->GetText());
 Index: mythplugins/mythvideo/mythvideo/playercommand.cpp
 ===================================================================
---- mythplugins/mythvideo/mythvideo/playercommand.cpp	(revision 20947)
+--- mythplugins/mythvideo/mythvideo/playercommand.cpp	(revision 20993)
 +++ mythplugins/mythvideo/mythvideo/playercommand.cpp	(working copy)
 @@ -75,26 +75,31 @@
  {
@@ -2820,7 +2820,7 @@ Index: mythplugins/mythvideo/mythvideo/playercommand.cpp
  
 Index: mythplugins/mythvideo/mythvideo/videoutils.h
 ===================================================================
---- mythplugins/mythvideo/mythvideo/videoutils.h	(revision 20947)
+--- mythplugins/mythvideo/mythvideo/videoutils.h	(revision 20993)
 +++ mythplugins/mythvideo/mythvideo/videoutils.h	(working copy)
 @@ -33,6 +33,7 @@
  

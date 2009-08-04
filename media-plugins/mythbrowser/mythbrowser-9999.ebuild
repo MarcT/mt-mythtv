@@ -18,7 +18,7 @@ KEYWORDS="~amd64 ~x86"
 IUSE=""
 
 DEPEND=">=sys-apps/sed-4
-	>=kde-base/kdelibs-3.1
+	x11-libs/qt-webkit
         >=media-tv/mythtv-${PV}"
 
 setup_pro() {
