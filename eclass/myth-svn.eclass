@@ -83,10 +83,6 @@ myth-svn_src_unpack() {
 
 	subversion_src_unpack ; cd ${S}
 
-	if [[ ${_MODULE} == "mythvideo" ]] || [[ ${_MODULE} == "mythbrowser" ]] ; then
-		epatch "${FILESDIR}"/6346-mythvideo-subseasep.patch
-	fi
-
 	if [[ ${_MODULE} == "mythmusic" ]] ; then
 		epatch "${FILESDIR}"/5900-audioencoding-trunk.patch
 	fi
