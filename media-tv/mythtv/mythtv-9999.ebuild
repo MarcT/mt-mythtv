@@ -11,7 +11,7 @@ KEYWORDS="~x86 ~amd64"
 
 IUSE_VIDEO_CARDS="video_cards_i810 video_cards_nvidia video_cards_via"
 
-IUSE="arts directfb directx oss profile xv X proc-opt alsa altivec autostart dbox2 debug directv dvb dvd hdhomerun ieee1394 iptv ivtv jack joystick lcd lirc mmx vorbis opengl perl xvmc vdpau hdpvr iptv hdhomerun firewire ${IUSE_VIDEO_CARDS}"
+IUSE="arts directfb directx oss profile xv X proc-opt alsa altivec autostart dbox2 debug directv dvb dvd hdhomerun ieee1394 iptv ivtv jack joystick lcd lirc mmx vorbis opengl perl xvmc vdpau hdpvr iptv hdhomerun ${IUSE_VIDEO_CARDS}"
 
 RDEPEND=">=media-libs/freetype-2.0
 	>=media-sound/lame-3.93.1
@@ -148,7 +148,6 @@ src_compile() {
 	    $(use_enable hdhomerun)
 	    $(use_enable iptv)
 	    $(use_enable ivtv)
-	    $(use_enable firewire)
 	"
 
 	use debug && myconf="${myconf} --compile-type=debug"
