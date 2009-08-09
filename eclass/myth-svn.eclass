@@ -122,6 +122,29 @@ myth-svn_src_compile() {
 	# Myth doesn't use autoconf, and it rejects unexpected options.
 	myconf=$(echo ${myconf} | sed -e 'sX--enable-audio-jackXXg' -e 'sX--enable-audio-alsaXXg' -e 'sX--enable-audio-artsXXg' -e 'sX--enable-audio-ossXXg' )
 	sed -e 's/rm mythconfig.mak/rm -f mythconfig.mak/' -i configure
+
+        ## CFLAG cleaning so it compiles
+        MARCH=$(get-flag "march")
+        MTUNE=$(get-flag "mtune")
+        strip-flags
+        filter-flags "-march=*" "-mtune=*" "-mcpu=*"
+        filter-flags "-O" "-O?"
+
+        if [[ -n "${MARCH}" ]]; then
+                myconf="${myconf} --cpu=${MARCH}"
+        fi
+        if [[ -n "${MTUNE}" ]]; then
+                myconf="${myconf} --tune=${MTUNE}"
+        fi
+
+#       myconf="${myconf} --extra-cxxflags=\"${CXXFLAGS}\" --extra-cflags=\"${CFLAGS}\""
+#       hasq distcc ${FEATURES} || myconf="${myconf} --disable-distcc"
+#       hasq ccache ${FEATURES} || myconf="${myconf} --disable-ccache"
+
+        # let MythTV come up with our CFLAGS. Upstream will support this
+        CFLAGS=""
+        CXXFLAGS=""
+
         einfo "Running ./configure --prefix=/usr --mandir=/usr/share/man ${myconf}"
 	./configure --prefix=/usr --mandir=/usr/share/man ${myconf}
 
