@@ -17,7 +17,12 @@ SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE=""
 
-DEPEND=">=sys-apps/sed-4
+DEPEND="dev-perl/DateManip
+        dev-perl/ImageSize
+        dev-perl/SOAP-Lite
+        dev-perl/XML-Simple
+        dev-perl/XML-Parser
+        dev-perl/XML-SAX
         >=media-tv/mythtv-${PV}"
 
 setup_pro() {
