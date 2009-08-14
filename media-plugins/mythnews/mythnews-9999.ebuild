@@ -18,7 +18,7 @@ KEYWORDS="~amd64 ~x86"
 IUSE=""
 
 DEPEND=">=sys-apps/sed-4
-        >=media-tv/mythtv-${PV}"
+	>=media-tv/mythtv-${PV}"
 
 setup_pro() {
 	return 0

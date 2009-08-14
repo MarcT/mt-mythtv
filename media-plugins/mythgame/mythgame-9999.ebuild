@@ -19,7 +19,7 @@ IUSE=""
 
 DEPEND=">=sys-apps/sed-4
 	sys-libs/zlib
-        >=media-tv/mythtv-${PV}"
+	>=media-tv/mythtv-${PV}"
 
 setup_pro() {
 	return 0

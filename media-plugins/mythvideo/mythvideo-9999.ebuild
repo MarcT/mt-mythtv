@@ -18,7 +18,8 @@ KEYWORDS="~amd64 ~x86"
 IUSE=""
 
 DEPEND=">=sys-apps/sed-4
-        >=media-tv/mythtv-${PV}"
+	sys-apps/eject
+	>=media-tv/mythtv-${PV}"
 
 RDEPEND="${DEPEND}
 	 dev-perl/libwww-perl

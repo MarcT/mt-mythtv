@@ -19,7 +19,7 @@ IUSE=""
 
 DEPEND=">=sys-apps/sed-4
 	x11-libs/qt-webkit
-        >=media-tv/mythtv-${PV}"
+	>=media-tv/mythtv-${PV}"
 
 setup_pro() {
 	set-kdedir
@@ -30,13 +30,13 @@ setup_pro() {
 	#
 	# set up the correct location for KDE libraries and include files
 	#
-        sed \
-                -e "s:INCLUDEPATH += /usr/kde/3.3/include:INCLUDEPATH += ${KDEDIR}/include:" \
-                -e "s:LIBPATH += /usr/kde/3.3/lib:LIBPATH += ${KDEDIR}/lib:" \
-                -i 'settings.pro' || die "Setting kde library and include file location in settings.pro failed"
-        sed \
-                -e "s:/opt/kde3/include:${KDEDIR}/include:" \
-                -i 'configure' || die "Setting kde include file location in configure failed"
+	sed \
+		-e "s:INCLUDEPATH += /usr/kde/3.3/include:INCLUDEPATH += ${KDEDIR}/include:" \
+		-e "s:LIBPATH += /usr/kde/3.3/lib:LIBPATH += ${KDEDIR}/lib:" \
+		-i 'settings.pro' || die "Setting kde library and include file location in settings.pro failed"
+	sed \
+		-e "s:/opt/kde3/include:${KDEDIR}/include:" \
+		-i 'configure' || die "Setting kde include file location in configure failed"
 
 	return 0
 }

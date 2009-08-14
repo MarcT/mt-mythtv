@@ -17,7 +17,8 @@ SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE=""
 
-DEPEND="dev-perl/DateManip
+DEPEND=">=sys-apps/sed-4
+	dev-perl/DateManip
         dev-perl/ImageSize
         dev-perl/SOAP-Lite
         dev-perl/XML-Simple
@@ -26,6 +27,6 @@ DEPEND="dev-perl/DateManip
         >=media-tv/mythtv-${PV}"
 
 setup_pro() {
-        return 0
+	return 0
 }
 

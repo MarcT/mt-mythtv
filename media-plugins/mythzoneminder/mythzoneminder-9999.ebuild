@@ -16,9 +16,11 @@ KEYWORDS="~amd64 ~x86"
 IUSE=""
 
 DEPEND=">=sys-apps/sed-4
-        >=media-tv/mythtv-${PV}"
+	minimal? ( dev-db/mysql
+	www-misc/zoneminder )
+	>=media-tv/mythtv-${PV}"
 
 setup_pro() {
-        return 0
+	return 0
 }
 
