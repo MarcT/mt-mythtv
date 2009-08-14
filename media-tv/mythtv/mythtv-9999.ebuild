@@ -54,9 +54,9 @@ RDEPEND=">=media-libs/freetype-2.0
 	vdpau? ( >=x11-drivers/nvidia-drivers-180.40 )"
 
 DEPEND="${RDEPEND}
-        x11-proto/xineramaproto
-        x11-proto/xf86vidmodeproto
-        x11-apps/xinit"
+	x11-proto/xineramaproto
+	x11-proto/xf86vidmodeproto
+	x11-apps/xinit"
 
 PDEPEND=""
 
@@ -71,7 +71,7 @@ pkg_setup() {
 		if (( ${NOW} - ${UPDATE} <= ${INTERVAL} )); then
 			echo
 			ewarn "You ran this within 1 hour of your last build,"
-	        	ewarn "so it will skip the update.  To bypass this:"
+			ewarn "so it will skip the update.  To bypass this:"
 			ewarn " touch -t 199901010101 ${ENTRIES}"
 			echo
 		fi
@@ -92,20 +92,20 @@ pkg_setup() {
 		fi
 	fi
 
-        if use xvmc && [[ ! -s "${ROOT}/etc/X11/XvMCConfig" ]]; then
-                ewarn
-                ewarn "No XvMC implementation has been selected yet"
-                ewarn "Use 'eselect xvmc list' for a list of available choices"
-                ewarn "Then use 'eselect xvmc set <choice>' to choose"
-                ewarn "'eselect xvmc set nvidia' for example"
-        fi
+	if use xvmc && [[ ! -s "${ROOT}/etc/X11/XvMCConfig" ]]; then
+		ewarn
+		ewarn "No XvMC implementation has been selected yet"
+		ewarn "Use 'eselect xvmc list' for a list of available choices"
+		ewarn "Then use 'eselect xvmc set <choice>' to choose"
+		ewarn "'eselect xvmc set nvidia' for example"
+	fi
 
-        if use autostart; then
-                elog
-                elog "Please add the following to your /etc/inittab file at the end of"
-                elog "the TERMINALS section"
-                elog "c8:2345:respawn:/sbin/mingetty --autologin mythtv tty8"
-        fi
+	if use autostart; then
+		elog
+		elog "Please add the following to your /etc/inittab file at the end of"
+		elog "the TERMINALS section"
+		elog "c8:2345:respawn:/sbin/mingetty --autologin mythtv tty8"
+	fi
 
 }
 
@@ -125,30 +125,28 @@ setup_pro() {
 src_compile() {
 	use debug && use profile && die "You can not have USE="debug" and USE="profile" at the same time. Must disable one or the other."
 
-	myconf="
-	    $(use_enable alsa audio-alsa)
-	    $(use_enable altivec)
-	    $(use_enable arts audio-arts)
-	    $(use_enable directfb)
-	    $(use_enable directx)
-	    $(use_enable dvb)
-	    $(use_enable ieee1394 firewire)
-	    $(use_enable jack audio-jack)
-	    $(use_enable joystick joystick-menu)
-	    $(use_enable lirc)
-	    $(use_enable xvmc)
-	    $(use_enable opengl opengl-vsync)
-	    $(use_enable opengl opengl-video)
-	    $(use_enable oss audio-oss)
-	    $(use_enable xv)
-	    $(use_enable X x11)
-	    $(use_enable proc-opt)
-	    $(use_enable vdpau)
-	    $(use_enable hdpvr)
-	    $(use_enable hdhomerun)
-	    $(use_enable iptv)
-	    $(use_enable ivtv)
-	"
+	myconf="$(use_enable alsa audio-alsa)
+		$(use_enable altivec)
+		$(use_enable arts audio-arts)
+		$(use_enable directfb)
+		$(use_enable directx)
+		$(use_enable dvb)
+		$(use_enable ieee1394 firewire)
+		$(use_enable jack audio-jack)
+		$(use_enable joystick joystick-menu)
+		$(use_enable lirc)
+		$(use_enable xvmc)
+		$(use_enable opengl opengl-vsync)
+		$(use_enable opengl opengl-video)
+		$(use_enable oss audio-oss)
+		$(use_enable xv)
+		$(use_enable X x11)
+		$(use_enable proc-opt)
+		$(use_enable vdpau)
+		$(use_enable hdpvr)
+		$(use_enable hdhomerun)
+		$(use_enable iptv)
+		$(use_enable ivtv)"
 
 	use debug && myconf="${myconf} --compile-type=debug"
 	use profile && myconf="${myconf} --compile-type=profile"
@@ -158,7 +156,7 @@ src_compile() {
 
 src_install() {
 	myth-svn_src_install || die "install failed"
-	
+
 	insinto /usr/share/mythtv/database
 	doins database/*
 
