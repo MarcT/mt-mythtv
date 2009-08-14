@@ -1,0 +1,29 @@
+diff -Naur mythstream-0.18_qt4-old/libs/streams.res mythstream-0.18_qt4-new/libs/streams.res
+--- mythstream-0.18_qt4-old/libs/streams.res	2007-09-25 11:58:33.000000000 -0700
++++ mythstream-0.18_qt4-new/libs/streams.res	2008-09-18 07:27:17.000000000 -0700
+@@ -10,7 +10,7 @@
+ [item]
+ Interaction
+ Browse Shoutcast genres
+-http://www.shoutcast.com
++http://yp.shoutcast.com/sbin/newxml.phtml
+ [emptystring]
+ *shoutcast/menu
+ 
+@@ -101,14 +101,14 @@
+ [item]
+ Radio
+ Shoutcast Country
+-http://www.shoutcast.com/directory/index.phtml?sgenre=Country&numresult=50
++http://yp.shoutcast.com/sbin/newxml.phtml?genre=Country&limit=50
+ Country music stations
+ shoutcast
+ 
+ [item]
+ Radio
+ Shoutcast Rock
+-http://www.shoutcast.com/directory/index.phtml?sgenre=Rock&numresult=50
++http://yp.shoutcast.com/sbin/newxml.phtml?genre=Rock&limit=50
+ Shoutcast Rock stations
+ shoutcast
+ 

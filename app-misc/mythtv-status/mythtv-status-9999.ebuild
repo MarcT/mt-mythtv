@@ -16,7 +16,7 @@ EGIT_PATCHES="${FILESDIR}"/mythtv-status-mt.patch
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~ppc ~ppc64 ~x86"
-IUSE="selinux"
+IUSE=""
 
 DEPEND="dev-util/git[curl]
 	dev-perl/libwww-perl
