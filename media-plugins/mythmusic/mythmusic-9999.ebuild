@@ -32,7 +32,7 @@ DEPEND=">=media-libs/taglib-1.4
 	sdl? ( >=media-libs/libsdl-1.2.5 )
 	cdr? ( virtual/cdrtools )
 	>=media-tv/mythtv-${PV}
-	libvisual? ( >=media-libs/libvisual-0.4* )"
+	libvisual? ( >=media-libs/libvisual-0.4 )"
 
 pkg_config() {
 	if use libvisual && ! use sdl; then
