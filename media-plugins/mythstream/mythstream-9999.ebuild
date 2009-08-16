@@ -30,8 +30,11 @@ src_unpack() {
 	epatch "${FILESDIR}"/mythstream-parser-update.patch
 	epatch "${FILESDIR}"/mythstream-0.18_qt4-mythtv_0_22.patch
 	epatch "${FILESDIR}"/mythstream-0.18_qt4-apple_parser_fix.patch
+	epatch "${FILESDIR}"/mythstream-0.18_qt4-apple_parser_resolutions.patch
 	epatch "${FILESDIR}"/mythstream-0.18_qt4-streams_res.patch
 	epatch "${FILESDIR}"/mythstream-0.18_qt4-youtube_parser_fix.patch
+	epatch "${FILESDIR}"/mythstream-0.18_qt4-qt_paintevent_fix.patch
+	epatch "${FILESDIR}"/mythstream-0.18_qt4-qt_bitblt_replace.patch
 	qmake mythstream.pro
 }
 
