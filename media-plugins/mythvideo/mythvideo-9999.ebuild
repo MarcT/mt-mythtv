@@ -26,6 +26,8 @@ RDEPEND="${DEPEND}
 	 dev-perl/HTML-Parser
 	 dev-perl/URI
 	 dev-perl/XML-Simple
+	 dev-python/mysql-python
+	 dev-python/imdbpy
 	 || ( media-video/xine-ui media-video/mplayer )"
 
 setup_pro() {
