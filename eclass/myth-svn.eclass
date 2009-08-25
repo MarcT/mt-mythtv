@@ -87,6 +87,10 @@ myth-svn_src_unpack() {
 		epatch "${FILESDIR}"/5900-audioencoding-trunk.patch
 	fi
 
+	if [[ ${_MODULE} == "mythweb" ]] ; then
+		epatch "${FILESDIR}"/6693-webmyth-css.patch
+	fi
+
 	if use debug ; then
 		FEATURES="${FEATURES} nostrip"
 		sed \
