@@ -11,7 +11,9 @@ KEYWORDS="~x86 ~amd64"
 
 IUSE_VIDEO_CARDS="video_cards_i810 video_cards_nvidia video_cards_via"
 
-IUSE="arts directfb directx oss profile xv X proc-opt alsa altivec autostart dbox2 debug directv dvb dvd hdhomerun ieee1394 iptv ivtv jack joystick lcd lirc mmx vorbis opengl perl xvmc vdpau hdpvr iptv hdhomerun ${IUSE_VIDEO_CARDS}"
+IUSE="alsa altivec arts autostart dbox2 debug directfb directv directx dvb 
+dvd hdhomerun hdpvr ieee1394 iptv ivtv jack joystick latm lcd lirc mmx 
+opengl oss perl profile proc-opt vdpau vorbis X xv xvmc ${IUSE_VIDEO_CARDS}"
 
 RDEPEND=">=media-libs/freetype-2.0
 	>=media-sound/lame-3.93.1
@@ -38,20 +40,21 @@ RDEPEND=">=media-libs/freetype-2.0
 	dvb? ( media-libs/libdvb media-tv/linuxtv-dvb-headers )
 	dvd? ( media-libs/libdvdcss )
 	fftw? ( sci-libs/fftw:3.0 )
-	ivtv? ( media-tv/ivtv-utils )
 	ieee1394? ( 	>=sys-libs/libraw1394-1.2.0
 			>=sys-libs/libavc1394-0.5.0
 			>=media-libs/libiec61883-1.0.0 )
+	ivtv? ( media-tv/ivtv-utils )
 	jack? ( media-sound/jack-audio-connection-kit )
+	latm? ( media-libs/faad2 )
 	lcd? ( app-misc/lcdproc )
 	lirc? ( app-misc/lirc )
 	perl? ( dev-perl/DBD-mysql )
 	python? ( dev-python/mysql-python )
+	vdpau? ( >=x11-drivers/nvidia-drivers-180.40 )
 	xvmc? ( 	x11-libs/libXvMC
 			video_cards_nvidia? ( x11-drivers/nvidia-drivers )
 			video_cards_via? ( x11-drivers/xf86-video-via )
-			video_cards_i810? ( x11-drivers/xf86-video-i810 ) )
-	vdpau? ( >=x11-drivers/nvidia-drivers-180.40 )"
+			video_cards_i810? ( x11-drivers/xf86-video-i810 ) )"
 
 DEPEND="${RDEPEND}
 	x11-proto/xineramaproto
@@ -131,22 +134,23 @@ src_compile() {
 		$(use_enable directfb)
 		$(use_enable directx)
 		$(use_enable dvb)
+		$(use_enable hdhomerun)
+		$(use_enable hdpvr)
 		$(use_enable ieee1394 firewire)
+		$(use_enable iptv)
+		$(use_enable ivtv)
 		$(use_enable jack audio-jack)
 		$(use_enable joystick joystick-menu)
+		$(use_enable latm libfaad)
 		$(use_enable lirc)
-		$(use_enable xvmc)
 		$(use_enable opengl opengl-vsync)
 		$(use_enable opengl opengl-video)
 		$(use_enable oss audio-oss)
-		$(use_enable xv)
-		$(use_enable X x11)
 		$(use_enable proc-opt)
 		$(use_enable vdpau)
-		$(use_enable hdpvr)
-		$(use_enable hdhomerun)
-		$(use_enable iptv)
-		$(use_enable ivtv)"
+		$(use_enable X x11)
+		$(use_enable xv)
+		$(use_enable xvmc)"
 
 	use debug && myconf="${myconf} --compile-type=debug"
 	use profile && myconf="${myconf} --compile-type=profile"
