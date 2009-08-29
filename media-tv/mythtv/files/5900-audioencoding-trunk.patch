@@ -42,7 +42,7 @@ index 943bd77..7c55ac0 100644
    protected:
      void Error(const QString &msg);
 diff --git a/mythtv/libs/libmyth/audiooutputalsa.cpp b/mythtv/libs/libmyth/audiooutputalsa.cpp
-index 5bd6445..02f6668 100644
+index 99a9cee..3fd97d6 100644
 --- a/mythtv/libs/libmyth/audiooutputalsa.cpp
 +++ b/mythtv/libs/libmyth/audiooutputalsa.cpp
 @@ -32,6 +32,107 @@ AudioOutputALSA::AudioOutputALSA(const AudioSettings &settings) :
@@ -1320,18 +1320,18 @@ index 8a4689a..8d81298 100644
 -
  #endif
 diff --git a/mythtv/libs/libmyth/audiooutputdx.h b/mythtv/libs/libmyth/audiooutputdx.h
-index e0d3e24..485adb1 100644
+index 9f52a0c..e02fffe 100644
 --- a/mythtv/libs/libmyth/audiooutputdx.h
 +++ b/mythtv/libs/libmyth/audiooutputdx.h
-@@ -15,6 +15,8 @@ public:
+@@ -15,6 +15,8 @@ class AudioOutputDX : public AudioOutputBase
  
      virtual int GetVolumeChannel(int channel) const;
      virtual void SetVolumeChannel(int channel, int volume);
 +    virtual vector<int> GetSupportedRates(void) 
 +        { vector<int> rates; return rates; }
  
-  protected:  
-      virtual bool OpenDevice(void);
+   protected:
+     virtual bool OpenDevice(void);
 diff --git a/mythtv/libs/libmyth/audiooutputjack.cpp b/mythtv/libs/libmyth/audiooutputjack.cpp
 index 7e0ad0d..f9a5848 100644
 --- a/mythtv/libs/libmyth/audiooutputjack.cpp
@@ -1454,7 +1454,7 @@ index d5105a2..e218e31 100644
    private:
      void VolumeInit(void);
 diff --git a/mythtv/libs/libmyth/audiooutputwin.h b/mythtv/libs/libmyth/audiooutputwin.h
-index 8ba37e4..5fd5945 100644
+index 03c5dc8..e28fdf8 100644
 --- a/mythtv/libs/libmyth/audiooutputwin.h
 +++ b/mythtv/libs/libmyth/audiooutputwin.h
 @@ -23,6 +23,8 @@ class AudioOutputWin : public AudioOutputBase
@@ -1577,10 +1577,10 @@ index f9349f4..ba38f51 100644
  };
  
 diff --git a/mythtv/libs/libmythfreesurround/el_processor.cpp b/mythtv/libs/libmythfreesurround/el_processor.cpp
-index 8f24737..1cf0dc8 100644
+index 8761dad..a1dbea9 100644
 --- a/mythtv/libs/libmythfreesurround/el_processor.cpp
 +++ b/mythtv/libs/libmythfreesurround/el_processor.cpp
-@@ -40,17 +40,7 @@ typedef std::complex<float> cfloat;
+@@ -41,17 +41,7 @@ typedef std::complex<float> cfloat;
  
  const float PI = 3.141592654;
  const float epsilon = 0.000001;
@@ -1599,7 +1599,7 @@ index 8f24737..1cf0dc8 100644
  
  // private implementation of the surround decoder
  class decoder_impl {
-@@ -98,19 +88,11 @@ public:
+@@ -99,19 +89,11 @@ public:
              outbuf[c].resize(N);
              filter[c].resize(N);
          }
@@ -1621,7 +1621,7 @@ index 8f24737..1cf0dc8 100644
          current_buf = 0;
          // set the default coefficients
          surround_coefficients(0.8165,0.5774);
-@@ -192,10 +174,10 @@ public:
+@@ -193,10 +175,10 @@ public:
      // set lfe filter params
      void sample_rate(unsigned int srate) {
          // lfe filter is just straight through band limited
@@ -1635,7 +1635,7 @@ index 8f24737..1cf0dc8 100644
              else
                  filter[5][f] = 0.0;
          }
-@@ -214,12 +196,6 @@ public:
+@@ -215,12 +197,6 @@ public:
          E = (o+v)*n; F = (o+u)*n; G = (o-v)*n;  H = (o-u)*n;
      }
  
@@ -1648,7 +1648,7 @@ index 8f24737..1cf0dc8 100644
      // set the phase shifting mode
      void phase_mode(unsigned mode) {
          const float modes[4][2] = {{0,0},{0,PI},{PI,0},{-PI/2,PI/2}};
-@@ -290,7 +266,7 @@ private:
+@@ -291,7 +267,7 @@ private:
  
          // 2. compare amplitude and phase of each DFT bin and produce the X/Y coordinates in the sound field
          //    but dont do DC or N/2 component
@@ -1657,7 +1657,7 @@ index 8f24737..1cf0dc8 100644
              // get left/right amplitudes/phases
              float ampL = amplitude(dftL[f]), ampR = amplitude(dftR[f]);
              float phaseL = phase(dftL[f]), phaseR = phase(dftR[f]);
-@@ -305,41 +281,6 @@ private:
+@@ -306,41 +282,6 @@ private:
              phaseDiff = abs(phaseDiff);
  
              if (linear_steering) {
@@ -1699,7 +1699,7 @@ index 8f24737..1cf0dc8 100644
                  // --- this is the fancy new linear mode ---
  
                  // get sound field x/y position
-@@ -597,7 +538,6 @@ private:
+@@ -598,7 +539,6 @@ private:
      float surround_high,surround_low;  // high and low surround mixing coefficient (e.g. 0.8165/0.5774)
      float surround_balance;            // the xfs balance that follows from the coeffs
      float surround_level;              // gain for the surround channels (follows from the coeffs
@@ -1707,7 +1707,7 @@ index 8f24737..1cf0dc8 100644
      float phase_offsetL, phase_offsetR;// phase shifts to be applied to the rear channels
      float front_separation;            // front stereo separation
      float rear_separation;             // rear stereo separation
-@@ -625,8 +565,6 @@ void fsurround_decoder::flush() { impl->flush(); }
+@@ -626,8 +566,6 @@ void fsurround_decoder::flush() { impl->flush(); }
  
  void fsurround_decoder::surround_coefficients(float a, float b) { impl->surround_coefficients(a,b); }
  
@@ -1877,10 +1877,10 @@ index bb85f8b..a53a942 100644
  			continue ;
  			} ;
 diff --git a/mythtv/libs/libmythtv/NuppelVideoPlayer.cpp b/mythtv/libs/libmythtv/NuppelVideoPlayer.cpp
-index 955596a..61a0668 100644
+index dedfe0f..6c052c4 100644
 --- a/mythtv/libs/libmythtv/NuppelVideoPlayer.cpp
 +++ b/mythtv/libs/libmythtv/NuppelVideoPlayer.cpp
-@@ -218,9 +218,9 @@ NuppelVideoPlayer::NuppelVideoPlayer()
+@@ -219,9 +219,9 @@ NuppelVideoPlayer::NuppelVideoPlayer()
        audioOutput(NULL),
        audio_main_device(QString::null),
        audio_passthru_device(QString::null),
@@ -1893,7 +1893,7 @@ index 955596a..61a0668 100644
        // Picture-in-Picture stuff
        pip_active(false),            pip_visible(true),
        // Preview window support
-@@ -915,8 +915,8 @@ QString NuppelVideoPlayer::ReinitAudio(void)
+@@ -921,8 +921,8 @@ QString NuppelVideoPlayer::ReinitAudio(void)
          bool setVolume = gContext->GetNumSetting("MythControlsVolume", 1);
          audioOutput = AudioOutput::OpenAudio(audio_main_device,
                                               audio_passthru_device,
@@ -1904,7 +1904,7 @@ index 955596a..61a0668 100644
                                               AUDIOOUTPUT_VIDEO,
                                               setVolume, audio_passthru);
          if (!audioOutput)
-@@ -944,10 +944,11 @@ QString NuppelVideoPlayer::ReinitAudio(void)
+@@ -950,10 +950,11 @@ QString NuppelVideoPlayer::ReinitAudio(void)
  
      if (audioOutput)
      {
@@ -1919,7 +1919,7 @@ index 955596a..61a0668 100644
          errMsg = audioOutput->GetError();
          if (!errMsg.isEmpty())
              audioOutput->SetStretchFactor(audio_stretchfactor);
-@@ -3887,20 +3888,16 @@ bool NuppelVideoPlayer::StartPlaying(bool openfile)
+@@ -3903,20 +3904,16 @@ bool NuppelVideoPlayer::StartPlaying(bool openfile)
      return !IsErrored();
  }
  
@@ -1942,7 +1942,7 @@ index 955596a..61a0668 100644
  void NuppelVideoPlayer::SetEffDsp(int dsprate)
  {
      if (audioOutput)
-@@ -5323,6 +5320,13 @@ void NuppelVideoPlayer::ToggleAdjustFill(AdjustFillMode adjustfillMode)
+@@ -5340,6 +5337,13 @@ void NuppelVideoPlayer::ToggleAdjustFill(AdjustFillMode adjustfillMode)
      }
  }
  
@@ -1957,10 +1957,10 @@ index 955596a..61a0668 100644
  {
      if (videoOutput)
 diff --git a/mythtv/libs/libmythtv/NuppelVideoPlayer.h b/mythtv/libs/libmythtv/NuppelVideoPlayer.h
-index fc44dcd..1bf953d 100644
+index 5d96a66..b56be15 100644
 --- a/mythtv/libs/libmythtv/NuppelVideoPlayer.h
 +++ b/mythtv/libs/libmythtv/NuppelVideoPlayer.h
-@@ -125,7 +125,8 @@ class MPUBLIC NuppelVideoPlayer : public CC608Reader, public CC708Reader
+@@ -126,7 +126,8 @@ class MPUBLIC NuppelVideoPlayer : public CC608Reader, public CC708Reader
      void SetAudioStretchFactor(float factor)  { audio_stretchfactor = factor; }
      void SetAudioOutput(AudioOutput *ao)      { audioOutput = ao; }
      void SetAudioInfo(const QString &main, const QString &passthru, uint rate);
@@ -1970,7 +1970,7 @@ index fc44dcd..1bf953d 100644
      void SetEffDsp(int dsprate);
      uint AdjustVolume(int change);
      bool SetMuted(bool mute);
-@@ -179,6 +180,7 @@ class MPUBLIC NuppelVideoPlayer : public CC608Reader, public CC708Reader
+@@ -180,6 +181,7 @@ class MPUBLIC NuppelVideoPlayer : public CC608Reader, public CC708Reader
      // Toggle Sets
      void ToggleAspectOverride(AspectOverrideMode aspectMode = kAspect_Toggle);
      void ToggleAdjustFill(AdjustFillMode adjustfillMode = kAdjustFill_Toggle);
@@ -1978,7 +1978,7 @@ index fc44dcd..1bf953d 100644
  
      // Gets
      QSize   GetVideoBufferSize(void) const    { return video_dim; }
-@@ -711,10 +713,10 @@ class MPUBLIC NuppelVideoPlayer : public CC608Reader, public CC708Reader
+@@ -715,10 +717,10 @@ class MPUBLIC NuppelVideoPlayer : public CC608Reader, public CC708Reader
      QString  audio_main_device;
      QString  audio_passthru_device;
      int      audio_channels;
@@ -1991,7 +1991,7 @@ index fc44dcd..1bf953d 100644
      QMutex   audio_lock;
  
 diff --git a/mythtv/libs/libmythtv/avformatdecoder.cpp b/mythtv/libs/libmythtv/avformatdecoder.cpp
-index 5f276f1..b33e814 100644
+index 06350da..ff93968 100644
 --- a/mythtv/libs/libmythtv/avformatdecoder.cpp
 +++ b/mythtv/libs/libmythtv/avformatdecoder.cpp
 @@ -462,7 +462,7 @@ AvFormatDecoder::AvFormatDecoder(NuppelVideoPlayer *parent,
@@ -2003,7 +2003,7 @@ index 5f276f1..b33e814 100644
        // DVD
        lastdvdtitle(-1),
        decodeStillFrame(false),
-@@ -2020,7 +2020,7 @@ int AvFormatDecoder::ScanStreams(bool novideo)
+@@ -2024,7 +2024,7 @@ int AvFormatDecoder::ScanStreams(bool novideo)
      // waiting on audio.
      if (GetNVP()->HasAudioIn() && tracks[kTrackTypeAudio].empty())
      {
@@ -2012,7 +2012,7 @@ index 5f276f1..b33e814 100644
          GetNVP()->ReinitAudio();
          if (ringBuffer && ringBuffer->isDVD())
              audioIn = AudioInfo();
-@@ -3055,15 +3055,9 @@ int AvFormatDecoder::AutoSelectAudioTrack(void)
+@@ -3059,15 +3059,9 @@ int AvFormatDecoder::AutoSelectAudioTrack(void)
      {
          int idx = atracks[i].av_stream_index;
          AVCodecContext *codec_ctx = ic->streams[idx]->codec;
@@ -2029,7 +2029,7 @@ index 5f276f1..b33e814 100644
          VERBOSE(VB_AUDIO, LOC + " * " + item.toString());
      }
  #endif
-@@ -3197,6 +3191,7 @@ static void extract_mono_channel(uint channel, AudioInfo *audioInfo,
+@@ -3201,6 +3195,7 @@ static void extract_mono_channel(uint channel, AudioInfo *audioInfo,
  bool AvFormatDecoder::GetFrame(int onlyvideo)
  {
      AVPacket *pkt = NULL;
@@ -2037,12 +2037,15 @@ index 5f276f1..b33e814 100644
      int len;
      unsigned char *ptr;
      int data_size = 0;
-@@ -3393,12 +3388,13 @@ bool AvFormatDecoder::GetFrame(int onlyvideo)
+@@ -3397,6 +3392,7 @@ bool AvFormatDecoder::GetFrame(int onlyvideo)
          pts = 0;
  
          AVStream *curstream = ic->streams[pkt->stream_index];
 +        AVCodecContext *ctx = curstream->codec;
  
+         if (!curstream)
+         {
+@@ -3408,8 +3404,8 @@ bool AvFormatDecoder::GetFrame(int onlyvideo)
          if (pkt->dts != (int64_t)AV_NOPTS_VALUE)
              pts = (long long)(av_q2d(curstream->time_base) * pkt->dts * 1000);
  
@@ -2053,7 +2056,7 @@ index 5f276f1..b33e814 100644
          {
              MpegPreProcessPkt(curstream, pkt);
  
-@@ -3420,7 +3416,7 @@ bool AvFormatDecoder::GetFrame(int onlyvideo)
+@@ -3431,7 +3427,7 @@ bool AvFormatDecoder::GetFrame(int onlyvideo)
  
              if (!d->HasMPEG2Dec())
              {
@@ -2062,7 +2065,7 @@ index 5f276f1..b33e814 100644
                  int video_width = GetNVP()->GetVideoSize().width();
                  if (dvd_xvmc_enabled && GetNVP() && GetNVP()->getVideoOutput())
                  {
-@@ -3460,7 +3456,7 @@ bool AvFormatDecoder::GetFrame(int onlyvideo)
+@@ -3471,7 +3467,7 @@ bool AvFormatDecoder::GetFrame(int onlyvideo)
          }
  
          if (storevideoframes &&
@@ -2071,7 +2074,7 @@ index 5f276f1..b33e814 100644
          {
              av_dup_packet(pkt);
              storedPackets.append(pkt);
-@@ -3468,17 +3464,16 @@ bool AvFormatDecoder::GetFrame(int onlyvideo)
+@@ -3479,17 +3475,16 @@ bool AvFormatDecoder::GetFrame(int onlyvideo)
              continue;
          }
  
@@ -2092,7 +2095,7 @@ index 5f276f1..b33e814 100644
              {
                  H264PreProcessPkt(curstream, pkt);
              }
-@@ -3523,8 +3518,8 @@ bool AvFormatDecoder::GetFrame(int onlyvideo)
+@@ -3534,8 +3529,8 @@ bool AvFormatDecoder::GetFrame(int onlyvideo)
          }
  
          if (len > 0 &&
@@ -2103,7 +2106,7 @@ index 5f276f1..b33e814 100644
          {
              ProcessVBIDataPacket(curstream, pkt);
  
-@@ -3533,8 +3528,8 @@ bool AvFormatDecoder::GetFrame(int onlyvideo)
+@@ -3544,8 +3539,8 @@ bool AvFormatDecoder::GetFrame(int onlyvideo)
          }
  
          if (len > 0 &&
@@ -2114,7 +2117,7 @@ index 5f276f1..b33e814 100644
          {
              ProcessDVBDataPacket(curstream, pkt);
  
-@@ -3544,8 +3539,8 @@ bool AvFormatDecoder::GetFrame(int onlyvideo)
+@@ -3555,8 +3550,8 @@ bool AvFormatDecoder::GetFrame(int onlyvideo)
  
  #ifdef USING_MHEG
          if (len > 0 &&
@@ -2125,7 +2128,7 @@ index 5f276f1..b33e814 100644
          {
              ProcessDSMCCPacket(curstream, pkt);
  
-@@ -3566,20 +3561,20 @@ bool AvFormatDecoder::GetFrame(int onlyvideo)
+@@ -3577,20 +3572,20 @@ bool AvFormatDecoder::GetFrame(int onlyvideo)
  #endif // USING_MHEG
  
          // we don't care about other data streams
@@ -2151,7 +2154,7 @@ index 5f276f1..b33e814 100644
              av_free_packet(pkt);
              continue;
          }
-@@ -3588,7 +3583,7 @@ bool AvFormatDecoder::GetFrame(int onlyvideo)
+@@ -3599,7 +3594,7 @@ bool AvFormatDecoder::GetFrame(int onlyvideo)
          have_err = false;
  
          avcodeclock.lock();
@@ -2160,7 +2163,7 @@ index 5f276f1..b33e814 100644
          int audIdx = selectedTrack[kTrackTypeAudio].av_stream_index;
          int audSubIdx = selectedTrack[kTrackTypeAudio].av_substream_index;
          int subIdx = selectedTrack[kTrackTypeSubtitle].av_stream_index;
-@@ -3613,51 +3608,57 @@ bool AvFormatDecoder::GetFrame(int onlyvideo)
+@@ -3624,51 +3619,57 @@ bool AvFormatDecoder::GetFrame(int onlyvideo)
  
                      // detect switches between stereo and dual languages
                      bool wasDual = audSubIdx != -1;
@@ -2237,7 +2240,7 @@ index 5f276f1..b33e814 100644
                      }
  
                      if (reselectAudioTrack)
-@@ -3673,6 +3674,7 @@ bool AvFormatDecoder::GetFrame(int onlyvideo)
+@@ -3684,6 +3685,7 @@ bool AvFormatDecoder::GetFrame(int onlyvideo)
                              .av_stream_index;
                          audSubIdx = selectedTrack[kTrackTypeAudio]
                              .av_substream_index;
@@ -2245,7 +2248,7 @@ index 5f276f1..b33e814 100644
                      }
  
                      if ((onlyvideo > 0) || (pkt->stream_index != audIdx))
-@@ -3704,14 +3706,12 @@ bool AvFormatDecoder::GetFrame(int onlyvideo)
+@@ -3715,14 +3717,12 @@ bool AvFormatDecoder::GetFrame(int onlyvideo)
                      if (audioOut.do_passthru)
                      {
                          data_size = pkt->size;
@@ -2261,7 +2264,7 @@ index 5f276f1..b33e814 100644
                          if ((ctx->channels == 0) ||
                              (ctx->channels > audioOut.channels))
                          {
-@@ -3720,10 +3720,9 @@ bool AvFormatDecoder::GetFrame(int onlyvideo)
+@@ -3731,10 +3731,9 @@ bool AvFormatDecoder::GetFrame(int onlyvideo)
  
                          if (!already_decoded)
                          {
@@ -2274,7 +2277,7 @@ index 5f276f1..b33e814 100644
                                                          &data_size, ptr, len);
                          }
  
-@@ -3739,6 +3738,7 @@ bool AvFormatDecoder::GetFrame(int onlyvideo)
+@@ -3750,6 +3749,7 @@ bool AvFormatDecoder::GetFrame(int onlyvideo)
                              audIdx = -1;
                              AutoSelectAudioTrack();
                              data_size = 0;
@@ -2282,7 +2285,7 @@ index 5f276f1..b33e814 100644
                          }
                      }
                      avcodeclock.unlock();
-@@ -3762,8 +3762,7 @@ bool AvFormatDecoder::GetFrame(int onlyvideo)
+@@ -3773,8 +3773,7 @@ bool AvFormatDecoder::GetFrame(int onlyvideo)
  
                      // calc for next frame
                      lastapts += (long long)((double)(data_size * 1000) /
@@ -2292,7 +2295,7 @@ index 5f276f1..b33e814 100644
  
                      VERBOSE(VB_PLAYBACK+VB_TIMESTAMP,
                              LOC + QString("audio timecode %1 %2 %3 %4")
-@@ -3831,7 +3830,6 @@ bool AvFormatDecoder::GetFrame(int onlyvideo)
+@@ -3842,7 +3841,6 @@ bool AvFormatDecoder::GetFrame(int onlyvideo)
                          continue;
                      }
  
@@ -2300,7 +2303,7 @@ index 5f276f1..b33e814 100644
                      AVFrame mpa_pic;
                      bzero(&mpa_pic, sizeof(AVFrame));
  
-@@ -3846,24 +3844,24 @@ bool AvFormatDecoder::GetFrame(int onlyvideo)
+@@ -3857,24 +3855,24 @@ bool AvFormatDecoder::GetFrame(int onlyvideo)
                              // HACK
                              while (!gotpicture && count < 5)
                              {
@@ -2329,7 +2332,7 @@ index 5f276f1..b33e814 100644
                                                          &gotpicture, ptr, len);
                      }
                      avcodeclock.unlock();
-@@ -3931,9 +3929,9 @@ bool AvFormatDecoder::GetFrame(int onlyvideo)
+@@ -3942,9 +3940,9 @@ bool AvFormatDecoder::GetFrame(int onlyvideo)
                          myth_sws_img_convert(
                              &tmppicture, PIX_FMT_YUV420P,
                                      (AVPicture *)&mpa_pic,
@@ -2342,7 +2345,7 @@ index 5f276f1..b33e814 100644
  
                          if (xf)
                          {
-@@ -3956,10 +3954,10 @@ bool AvFormatDecoder::GetFrame(int onlyvideo)
+@@ -3967,10 +3965,10 @@ bool AvFormatDecoder::GetFrame(int onlyvideo)
                          (temppts + 10000 > lastvpts || temppts < 0))
                      {
                          temppts = lastvpts;
@@ -2355,7 +2358,7 @@ index 5f276f1..b33e814 100644
                      }
  
                      VERBOSE(VB_PLAYBACK+VB_TIMESTAMP, LOC +
-@@ -3995,7 +3993,7 @@ bool AvFormatDecoder::GetFrame(int onlyvideo)
+@@ -4006,7 +4004,7 @@ bool AvFormatDecoder::GetFrame(int onlyvideo)
                      picframe->frameNumber = framesPlayed;
                      GetNVP()->ReleaseNextVideoFrame(picframe, temppts);
                      if (d->HasMPEG2Dec() && mpa_pic.data[3])
@@ -2364,7 +2367,7 @@ index 5f276f1..b33e814 100644
  
                      decoded_video_frame = picframe;
                      gotvideo = 1;
-@@ -4051,11 +4049,10 @@ bool AvFormatDecoder::GetFrame(int onlyvideo)
+@@ -4062,11 +4060,10 @@ bool AvFormatDecoder::GetFrame(int onlyvideo)
                  }
                  default:
                  {
@@ -2378,7 +2381,7 @@ index 5f276f1..b33e814 100644
                      have_err = true;
                      break;
                  }
-@@ -4185,6 +4182,24 @@ void AvFormatDecoder::SetDisablePassThrough(bool disable)
+@@ -4196,6 +4193,24 @@ void AvFormatDecoder::SetDisablePassThrough(bool disable)
      }
  }
  
@@ -2403,7 +2406,7 @@ index 5f276f1..b33e814 100644
  /** \fn AvFormatDecoder::SetupAudioStream(void)
   *  \brief Reinitializes audio if it needs to be reinitialized.
   *
-@@ -4198,7 +4213,6 @@ bool AvFormatDecoder::SetupAudioStream(void)
+@@ -4209,7 +4224,6 @@ bool AvFormatDecoder::SetupAudioStream(void)
      AVStream *curstream = NULL;
      AVCodecContext *codec_ctx = NULL;
      AudioInfo old_in  = audioIn;
@@ -2411,7 +2414,7 @@ index 5f276f1..b33e814 100644
      bool using_passthru = false;
  
      if ((currentTrack[kTrackTypeAudio] >= 0) &&
-@@ -4212,14 +4226,9 @@ bool AvFormatDecoder::SetupAudioStream(void)
+@@ -4223,14 +4237,9 @@ bool AvFormatDecoder::SetupAudioStream(void)
          codec_ctx = curstream->codec;
          if (codec_ctx)
          {
@@ -2429,7 +2432,7 @@ index 5f276f1..b33e814 100644
          }
      }
  
-@@ -4236,41 +4245,25 @@ bool AvFormatDecoder::SetupAudioStream(void)
+@@ -4247,41 +4256,25 @@ bool AvFormatDecoder::SetupAudioStream(void)
              QString("audio track #%1").arg(currentTrack[kTrackTypeAudio]+1));
  
      audioOut = audioIn = info;
@@ -2502,7 +2505,7 @@ index 9c05180..4f799a3 100644
      VideoFrame       *dummy_frame;
  
 diff --git a/mythtv/libs/libmythtv/nuppeldecoder.cpp b/mythtv/libs/libmythtv/nuppeldecoder.cpp
-index 88d2fbb..010a458 100644
+index bc9c4d3..8cf4a5c 100644
 --- a/mythtv/libs/libmythtv/nuppeldecoder.cpp
 +++ b/mythtv/libs/libmythtv/nuppeldecoder.cpp
 @@ -495,6 +495,7 @@ int NuppelDecoder::OpenFile(RingBuffer *rbuffer, bool novideo,
@@ -2514,7 +2517,7 @@ index 88d2fbb..010a458 100644
                                   false /* AC3/DTS pass through */);
          GetNVP()->ReinitAudio();
 diff --git a/mythtv/libs/libmythtv/tv_play.cpp b/mythtv/libs/libmythtv/tv_play.cpp
-index d469fed..89a2dc6 100644
+index d67b9ce..c3bf43e 100644
 --- a/mythtv/libs/libmythtv/tv_play.cpp
 +++ b/mythtv/libs/libmythtv/tv_play.cpp
 @@ -491,6 +491,7 @@ void TV::InitKeys(void)
@@ -2534,7 +2537,7 @@ index d469fed..89a2dc6 100644
  */
  }
  
-@@ -4343,6 +4344,8 @@ bool TV::ToggleHandleAction(PlayerContext *ctx,
+@@ -4353,6 +4354,8 @@ bool TV::ToggleHandleAction(PlayerContext *ctx,
          DoTogglePictureAttribute(ctx, kAdjustingPicture_Playback);
      else if (has_action("TOGGLESTRETCH", actions))
          ToggleTimeStretch(ctx);
@@ -2543,7 +2546,7 @@ index d469fed..89a2dc6 100644
      else if (has_action("TOGGLESLEEP", actions))
          ToggleSleepTimer(ctx);
      else if (has_action("TOGGLERECORD", actions) && islivetv)
-@@ -8036,6 +8039,20 @@ void TV::ChangeTimeStretch(PlayerContext *ctx, int dir, bool allowEdit)
+@@ -8039,6 +8042,20 @@ void TV::ChangeTimeStretch(PlayerContext *ctx, int dir, bool allowEdit)
      SetSpeedChangeTimer(0, __LINE__);
  }
  
@@ -2564,7 +2567,7 @@ index d469fed..89a2dc6 100644
  // dir in 10ms jumps
  void TV::ChangeAudioSync(PlayerContext *ctx, int dir, bool allowEdit)
  {
-@@ -9669,6 +9686,8 @@ void TV::TreeMenuSelected(OSDListTreeItemSelectedEvent *e)
+@@ -9668,6 +9685,8 @@ void TV::TreeMenuSelected(OSDListTreeItemSelectedEvent *e)
          SetManualZoom(actx, true, tr("Zoom Mode ON"));
      else if (action == "TOGGLESTRETCH")
          ToggleTimeStretch(actx);
@@ -2573,7 +2576,7 @@ index d469fed..89a2dc6 100644
      else if (action.left(13) == "ADJUSTSTRETCH")
      {
          bool floatRead;
-@@ -10022,6 +10041,8 @@ void TV::FillOSDTreeMenu(
+@@ -10033,6 +10052,8 @@ void TV::FillOSDTreeMenu(
  
      if (category == "AUDIOSYNC")
          new OSDGenericTree(treeMenu, tr("Adjust Audio Sync"), "TOGGLEAUDIOSYNC");
@@ -2583,10 +2586,10 @@ index d469fed..89a2dc6 100644
          FillMenuTimeStretch(ctx, treeMenu);
      else if (category == "VIDEOSCAN")
 diff --git a/mythtv/libs/libmythtv/tv_play.h b/mythtv/libs/libmythtv/tv_play.h
-index d50e0d4..4895219 100644
+index da2a625..3c37873 100644
 --- a/mythtv/libs/libmythtv/tv_play.h
 +++ b/mythtv/libs/libmythtv/tv_play.h
-@@ -419,6 +419,7 @@ class MPUBLIC TV : public QThread
+@@ -421,6 +421,7 @@ class MPUBLIC TV : public QThread
          ARBSEEK_FORWARD,
          ARBSEEK_END
      };
@@ -2594,7 +2597,7 @@ index d50e0d4..4895219 100644
      void DoArbSeek(PlayerContext*, ArbSeekWhence whence);
      void NormalSpeed(PlayerContext*);
      void ChangeSpeed(PlayerContext*, int direction);
-@@ -427,6 +428,7 @@ class MPUBLIC TV : public QThread
+@@ -429,6 +430,7 @@ class MPUBLIC TV : public QThread
      bool TimeStretchHandleAction(PlayerContext*,
                                   const QStringList &actions);
  
@@ -2616,10 +2619,10 @@ index 994dcb2..ef714ea 100644
      curMenuEntries.append(
          new TVOSDMenuEntry("VIDEOSCAN",            1, 1, 1, 1, "Video Scan"));
 diff --git a/mythtv/programs/mythfrontend/globalsettings.cpp b/mythtv/programs/mythfrontend/globalsettings.cpp
-index 2f166ff..e6fcc3f 100644
+index 494f009..858f3e6 100644
 --- a/mythtv/programs/mythfrontend/globalsettings.cpp
 +++ b/mythtv/programs/mythfrontend/globalsettings.cpp
-@@ -119,6 +119,27 @@ static HostComboBox *AudioUpmixType()
+@@ -121,6 +121,27 @@ static HostComboBox *AudioUpmixType()
      return gc;
  }
  
@@ -2647,7 +2650,7 @@ index 2f166ff..e6fcc3f 100644
  static HostComboBox *PassThroughOutputDevice()
  {
      HostComboBox *gc = new HostComboBox("PassThruOutputDevice", true);
-@@ -3435,6 +3456,7 @@ class AudioSystemSettingsGroup : public VerticalConfigurationGroup
+@@ -3524,6 +3545,7 @@ class AudioSystemSettingsGroup : public VerticalConfigurationGroup
  
          addChild(MaxAudioChannels());
          addChild(AudioUpmixType());
@@ -2656,7 +2659,7 @@ index 2f166ff..e6fcc3f 100644
          // General boolean settings
          addChild(AC3PassThrough());
 diff --git a/mythtv/programs/mythtranscode/transcode.cpp b/mythtv/programs/mythtranscode/transcode.cpp
-index 1120976..9ec39a1 100644
+index ff8eb54..af5b16f 100644
 --- a/mythtv/programs/mythtranscode/transcode.cpp
 +++ b/mythtv/programs/mythtranscode/transcode.cpp
 @@ -49,7 +49,7 @@ class AudioReencodeBuffer : public AudioOutput
