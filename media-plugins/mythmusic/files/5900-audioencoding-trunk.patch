@@ -1,8 +1,35 @@
-diff --git a/mythplugins/mythmusic/mythmusic/avfdecoder.cpp b/mythplugins/mythmusic/mythmusic/avfdecoder.cpp
-index 8d26724..476e600 100644
---- a/mythplugins/mythmusic/mythmusic/avfdecoder.cpp
-+++ b/mythplugins/mythmusic/mythmusic/avfdecoder.cpp
-@@ -253,8 +253,8 @@ bool avfDecoder::initialize()
+Index: mythplugins/mythmusic/mythmusic/playbackbox.cpp
+===================================================================
+--- mythplugins/mythmusic/mythmusic/playbackbox.cpp	(revision 21594)
++++ mythplugins/mythmusic/mythmusic/playbackbox.cpp	(working copy)
+@@ -365,6 +365,8 @@
+             changeSpeed(true);
+         else if (action == "MUTE")
+             toggleMute();
++        else if (action == "TOGGLEUPMIX")
++            toggleUpmix();
+         else if (action == "MENU" && visualizer_status != 2)
+         {
+             menufilters = false;
+@@ -1202,6 +1204,13 @@
+     }
+ }
+ 
++void PlaybackBoxMusic::toggleUpmix()
++{
++    if (gPlayer->getOutput())
++        gPlayer->getOutput()->ToggleUpmix();
++}
++    
++
+ void PlaybackBoxMusic::showProgressBar()
+ {
+     if (progress_bar && visualizer_status != 2)
+Index: mythplugins/mythmusic/mythmusic/avfdecoder.cpp
+===================================================================
+--- mythplugins/mythmusic/mythmusic/avfdecoder.cpp	(revision 21594)
++++ mythplugins/mythmusic/mythmusic/avfdecoder.cpp	(working copy)
+@@ -256,8 +256,8 @@
      if (output())
      {
          const AudioSettings settings(
@@ -13,33 +40,11 @@ index 8d26724..476e600 100644
          output()->Reconfigure(settings);
          output()->SetSourceBitrate(m_audioDec->bit_rate);
      }
-diff --git a/mythplugins/mythmusic/mythmusic/cddecoder.cpp b/mythplugins/mythmusic/mythmusic/cddecoder.cpp
-index 9eb0d74..e53194b 100644
---- a/mythplugins/mythmusic/mythmusic/cddecoder.cpp
-+++ b/mythplugins/mythmusic/mythmusic/cddecoder.cpp
-@@ -14,6 +14,7 @@ using namespace std;
- 
- #include <mythtv/mythcontext.h>
- #include <mythtv/mythmediamonitor.h>
-+#include <mythtv/libavcodec/avcodec.h>
- 
- CdDecoder::CdDecoder(const QString &file, DecoderFactory *d, QIODevice *i,
-                      AudioOutput *o) :
-@@ -149,7 +150,8 @@ bool CdDecoder::initialize()
-     if (output())
-     {
-         const AudioSettings settings(
--            16 /*bits*/, chan, freq, false /* AC3/DTS passthru */);
-+            16 /*bits*/, chan, CODEC_ID_PCM_S16LE, freq,
-+            false /* AC3/DTS passthru */);
-         output()->Reconfigure(settings);
-         output()->SetSourceBitrate(44100 * 2 * 16);
-     }
-diff --git a/mythplugins/mythmusic/mythmusic/main.cpp b/mythplugins/mythmusic/mythmusic/main.cpp
-index 2d741c1..c8bfa52 100644
---- a/mythplugins/mythmusic/mythmusic/main.cpp
-+++ b/mythplugins/mythmusic/mythmusic/main.cpp
-@@ -376,6 +376,7 @@ void setupKeys(void)
+Index: mythplugins/mythmusic/mythmusic/main.cpp
+===================================================================
+--- mythplugins/mythmusic/mythmusic/main.cpp	(revision 21594)
++++ mythplugins/mythmusic/mythmusic/main.cpp	(working copy)
+@@ -389,6 +389,7 @@
      REG_KEY("Music", "VOLUMEDOWN", "Volume down",       "[,{,F10,Volume Down");
      REG_KEY("Music", "VOLUMEUP",   "Volume up",         "],},F11,Volume Up");
      REG_KEY("Music", "MUTE",       "Mute",              "|,\\,F9,Volume Mute");
@@ -47,11 +52,11 @@ index 2d741c1..c8bfa52 100644
      REG_KEY("Music", "CYCLEVIS",   "Cycle visualizer mode",      "6");
      REG_KEY("Music", "BLANKSCR",   "Blank screen",               "5");
      REG_KEY("Music", "THMBUP",     "Increase rating",            "9");
-diff --git a/mythplugins/mythmusic/mythmusic/musicplayer.cpp b/mythplugins/mythmusic/mythmusic/musicplayer.cpp
-index fad20ee..088f88b 100644
---- a/mythplugins/mythmusic/mythmusic/musicplayer.cpp
-+++ b/mythplugins/mythmusic/mythmusic/musicplayer.cpp
-@@ -348,16 +348,18 @@ void MusicPlayer::stopDecoder(void)
+Index: mythplugins/mythmusic/mythmusic/musicplayer.cpp
+===================================================================
+--- mythplugins/mythmusic/mythmusic/musicplayer.cpp	(revision 21594)
++++ mythplugins/mythmusic/mythmusic/musicplayer.cpp	(working copy)
+@@ -348,16 +348,18 @@
  
  void MusicPlayer::openOutputDevice(void)
  {
@@ -73,38 +78,11 @@ index fad20ee..088f88b 100644
      m_output->setBufferSize(256 * 1024);
      m_output->SetBlocking(false);
  
-diff --git a/mythplugins/mythmusic/mythmusic/playbackbox.cpp b/mythplugins/mythmusic/mythmusic/playbackbox.cpp
-index f8a2bc7..0a6a061 100644
---- a/mythplugins/mythmusic/mythmusic/playbackbox.cpp
-+++ b/mythplugins/mythmusic/mythmusic/playbackbox.cpp
-@@ -367,6 +367,8 @@ void PlaybackBoxMusic::keyPressEvent(QKeyEvent *e)
-             changeSpeed(true);
-         else if (action == "MUTE")
-             toggleMute();
-+        else if (action == "TOGGLEUPMIX")
-+            toggleUpmix();
-         else if (action == "MENU" && visualizer_status != 2)
-         {
-             menufilters = false;
-@@ -1202,6 +1204,13 @@ void PlaybackBoxMusic::toggleMute()
-     }
- }
- 
-+void PlaybackBoxMusic::toggleUpmix()
-+{
-+    if (gPlayer->getOutput())
-+        gPlayer->getOutput()->ToggleUpmix();
-+}
-+    
-+
- void PlaybackBoxMusic::showProgressBar()
- {
-     if (progress_bar && visualizer_status != 2)
-diff --git a/mythplugins/mythmusic/mythmusic/playbackbox.h b/mythplugins/mythmusic/mythmusic/playbackbox.h
-index ecc0207..b22c6ce 100644
---- a/mythplugins/mythmusic/mythmusic/playbackbox.h
-+++ b/mythplugins/mythmusic/mythmusic/playbackbox.h
-@@ -69,6 +69,7 @@ class PlaybackBoxMusic : public MythThemedDialog
+Index: mythplugins/mythmusic/mythmusic/playbackbox.h
+===================================================================
+--- mythplugins/mythmusic/mythmusic/playbackbox.h	(revision 21594)
++++ mythplugins/mythmusic/mythmusic/playbackbox.h	(working copy)
+@@ -69,6 +69,7 @@
      void changeVolume(bool up_or_down);
      void changeSpeed(bool up_or_down);
      void toggleMute();
@@ -112,3 +90,25 @@ index ecc0207..b22c6ce 100644
      void resetTimer();
      void hideVolume(){showVolume(false);}
      void showVolume(bool on_or_off);
+Index: mythplugins/mythmusic/mythmusic/cddecoder.cpp
+===================================================================
+--- mythplugins/mythmusic/mythmusic/cddecoder.cpp	(revision 21594)
++++ mythplugins/mythmusic/mythmusic/cddecoder.cpp	(working copy)
+@@ -14,6 +14,7 @@
+ 
+ #include <mythtv/mythcontext.h>
+ #include <mythtv/mythmediamonitor.h>
++#include <mythtv/libavcodec/avcodec.h>
+ 
+ CdDecoder::CdDecoder(const QString &file, DecoderFactory *d, QIODevice *i,
+                      AudioOutput *o) :
+@@ -149,7 +150,8 @@
+     if (output())
+     {
+         const AudioSettings settings(
+-            16 /*bits*/, chan, freq, false /* AC3/DTS passthru */);
++            16 /*bits*/, chan, CODEC_ID_PCM_S16LE, freq,
++            false /* AC3/DTS passthru */);
+         output()->Reconfigure(settings);
+         output()->SetSourceBitrate(44100 * 2 * 16);
+     }

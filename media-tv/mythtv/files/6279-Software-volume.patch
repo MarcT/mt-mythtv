@@ -1,8 +1,7 @@
-diff --git a/mythtv/libs/libmyth/audiooutputalsa.cpp b/mythtv/libs/libmyth/audiooutputalsa.cpp
-index 788ae18..8ae7419 100644
---- a/mythtv/libs/libmyth/audiooutputalsa.cpp
-+++ b/mythtv/libs/libmyth/audiooutputalsa.cpp
-@@ -752,6 +752,9 @@ void AudioOutputALSA::SetupMixer(void)
+diff -Naur --exclude=.svn mythtv.ori/libs/libmyth/audiooutputalsa.cpp mythtv/libs/libmyth/audiooutputalsa.cpp
+--- mythtv.ori/libs/libmyth/audiooutputalsa.cpp	2009-08-31 01:31:31.000000000 +1000
++++ mythtv/libs/libmyth/audiooutputalsa.cpp	2009-08-31 01:32:54.000000000 +1000
+@@ -780,6 +780,9 @@
      if (mixer_handle != NULL)
          CloseMixer();
  
@@ -12,10 +11,9 @@ index 788ae18..8ae7419 100644
      VERBOSE(VB_AUDIO, QString("Opening mixer %1").arg(device));
  
      // TODO: This is opening card 0. Fix for case of multiple soundcards
-diff --git a/mythtv/libs/libmyth/audiooutputbase.cpp b/mythtv/libs/libmyth/audiooutputbase.cpp
-index 63f90a4..6b2d085 100644
---- a/mythtv/libs/libmyth/audiooutputbase.cpp
-+++ b/mythtv/libs/libmyth/audiooutputbase.cpp
+diff -Naur --exclude=.svn mythtv.ori/libs/libmyth/audiooutputbase.cpp mythtv/libs/libmyth/audiooutputbase.cpp
+--- mythtv.ori/libs/libmyth/audiooutputbase.cpp	2009-08-31 01:31:31.000000000 +1000
++++ mythtv/libs/libmyth/audiooutputbase.cpp	2009-08-31 01:40:53.000000000 +1000
 @@ -1,5 +1,6 @@
  // Std C headers
  #include <cmath>
@@ -23,7 +21,7 @@ index 63f90a4..6b2d085 100644
  
  // POSIX headers
  #include <unistd.h>
-@@ -53,6 +54,7 @@ AudioOutputBase::AudioOutputBase(const AudioSettings &settings) :
+@@ -53,6 +54,7 @@
      needs_upmix(false),
      surround_mode(FreeSurround::SurroundModePassive),
      old_audio_stretchfactor(1.0),
@@ -31,28 +29,23 @@ index 63f90a4..6b2d085 100644
  
      blocking(false),
  
-@@ -322,7 +324,6 @@ void AudioOutputBase::Reconfigure(const AudioSettings &orig_settings)
-     audio_bytes_per_sample = audio_channels * audio_bits / 8;
-     source_audio_bytes_per_sample = source_audio_channels * audio_bits / 8;
- 
--    
-     VERBOSE(VB_GENERAL, QString("Opening audio device '%1'. ch %2(%3) sr %4")
-             .arg(audio_main_device).arg(audio_channels)
-             .arg(source_audio_channels).arg(audio_samplerate));
-@@ -336,7 +337,11 @@ void AudioOutputBase::Reconfigure(const AudioSettings &orig_settings)
-         VERBOSE(VB_AUDIO, "Aborting reconfigure");
+@@ -335,6 +337,15 @@
          return;
      }
--
-+    
+ 
 +    // Only used for software volume
 +    if (set_initial_vol && internal_vol) 
 +        volume = gContext->GetNumSetting("PCMMixerVolume", 80);
-+    
++    {
++        QString controlLabel = gContext->GetSetting("MixerControl", "PCM");
++        controlLabel += "MixerVolume";
++        volume = gContext->GetNumSetting(controlLabel, 80);
++    }
++
      SyncVolume();
  
      VERBOSE(VB_AUDIO, LOC + QString("Audio fragment size: %1")
-@@ -627,6 +632,65 @@ int AudioOutputBase::GetAudioBufferedTime(void)
+@@ -628,6 +639,63 @@
       return audbuf_timecode - GetAudiotime();
  }
  
@@ -63,17 +56,17 @@ index 63f90a4..6b2d085 100644
 +    {
 +        QString controlLabel = gContext->GetSetting("MixerControl", "PCM");
 +        controlLabel += "MixerVolume";
-+        gContext->SaveSetting(controlLabel, volume);    
++        gContext->SaveSetting(controlLabel, volume);
 +    }
 +}
 +
-+int AudioOutputBase::GetSWVolume() 
++int AudioOutputBase::GetSWVolume()
 +{
 +    return volume;
 +}
 +
 +template <class AudioDataType>
-+void AudioOutputBase::_AdjustVolume(AudioDataType *buffer, int len, bool music) 
++void AudioOutputBase::_AdjustVolume(AudioDataType *buffer, int len, bool music)
 +{
 +    float g = volume / 100.0;
 +
@@ -105,24 +98,22 @@ index 63f90a4..6b2d085 100644
 +    }
 +}
 +
-+void AudioOutputBase::AdjustVolume(void *buffer, int len, bool music) {
-+
++void AudioOutputBase::AdjustVolume(void *buffer, int len, bool music)
++{
 +    if (audio_bits == 8)
 +        _AdjustVolume<char>((char *)buffer, len, music);
 +    else if (audio_bits == 16)
 +        _AdjustVolume<short>((short *)buffer, len, music);
-+
 +}
-+
 +
  bool AudioOutputBase::AddSamples(char *buffers[], int samples,
                                   long long timecode)
  {
-@@ -970,6 +1034,20 @@ void AudioOutputBase::_AddSamples(void *buffer, bool interleaved, int samples,
-         
+@@ -969,6 +1037,20 @@
+         }
      }
  
-+    if (internal_vol && SWVolume()) 
++    if (internal_vol && SWVolume())
 +    {
 +        int bdiff = kAudioRingBufferSize - waud;
 +        bool music = (timecode < 1);
@@ -139,11 +130,10 @@ index 63f90a4..6b2d085 100644
      // Encode to AC-3? 
      if (encoder) 
      {
-diff --git a/mythtv/libs/libmyth/audiooutputbase.h b/mythtv/libs/libmyth/audiooutputbase.h
-index 4bcaaa4..da4b0d7 100644
---- a/mythtv/libs/libmyth/audiooutputbase.h
-+++ b/mythtv/libs/libmyth/audiooutputbase.h
-@@ -47,6 +47,9 @@ class AudioOutputBase : public AudioOutput, public QThread
+diff -Naur --exclude=.svn mythtv.ori/libs/libmyth/audiooutputbase.h mythtv/libs/libmyth/audiooutputbase.h
+--- mythtv.ori/libs/libmyth/audiooutputbase.h	2009-08-31 01:31:31.000000000 +1000
++++ mythtv/libs/libmyth/audiooutputbase.h	2009-08-31 01:42:06.000000000 +1000
+@@ -47,6 +47,9 @@
  
      virtual void Reset(void);
  
@@ -153,19 +143,19 @@ index 4bcaaa4..da4b0d7 100644
      // timecode is in milliseconds.
      virtual bool AddSamples(char *buffer, int samples, long long timecode);
      virtual bool AddSamples(char *buffers[], int samples, long long timecode);
-@@ -153,6 +156,11 @@ class AudioOutputBase : public AudioOutput, public QThread
+@@ -153,6 +156,11 @@
      int src_quality;
  
   private:
 +    // software volume
-+    template <class AudioDataType> 
++    template <class AudioDataType>
 +    void _AdjustVolume(AudioDataType *buffer, int len, bool music);
 +    void AdjustVolume(void *buffer, int len, bool music);
-+    
++
      // resampler
      bool need_resampler;
      SRC_STATE *src_ctx;
-@@ -169,6 +177,7 @@ class AudioOutputBase : public AudioOutput, public QThread
+@@ -169,6 +177,7 @@
      int surround_mode;
      bool allow_ac3_passthru;
      float old_audio_stretchfactor;
@@ -173,29 +163,28 @@ index 4bcaaa4..da4b0d7 100644
  
      bool blocking; // do AddSamples calls block?
  
-diff --git a/mythtv/libs/libmyth/audiooutputoss.cpp b/mythtv/libs/libmyth/audiooutputoss.cpp
-index 8d3b135..69f9f02 100644
---- a/mythtv/libs/libmyth/audiooutputoss.cpp
-+++ b/mythtv/libs/libmyth/audiooutputoss.cpp
-@@ -313,6 +313,8 @@ void AudioOutputOSS::VolumeInit()
+diff -Naur --exclude=.svn mythtv.ori/libs/libmyth/audiooutputoss.cpp mythtv/libs/libmyth/audiooutputoss.cpp
+--- mythtv.ori/libs/libmyth/audiooutputoss.cpp	2009-08-31 01:31:31.000000000 +1000
++++ mythtv/libs/libmyth/audiooutputoss.cpp	2009-08-31 01:42:44.000000000 +1000
+@@ -317,6 +317,9 @@
      int volume = 0;
  
      QString device = gContext->GetSetting("MixerDevice", "/dev/mixer");
 +    if (device.toLower() == "software")
 +        return;
++
      QByteArray dev = device.toAscii();
      mixerfd = open(dev.constData(), O_RDONLY);
  
-diff --git a/mythtv/libs/libmyth/volumebase.cpp b/mythtv/libs/libmyth/volumebase.cpp
-index d1f1fb0..a6d053a 100644
---- a/mythtv/libs/libmyth/volumebase.cpp
-+++ b/mythtv/libs/libmyth/volumebase.cpp
-@@ -10,6 +10,20 @@ VolumeBase::VolumeBase() :
+diff -Naur --exclude=.svn mythtv.ori/libs/libmyth/volumebase.cpp mythtv/libs/libmyth/volumebase.cpp
+--- mythtv.ori/libs/libmyth/volumebase.cpp	2009-08-31 01:29:36.000000000 +1000
++++ mythtv/libs/libmyth/volumebase.cpp	2009-08-31 01:45:03.000000000 +1000
+@@ -10,6 +10,20 @@
      internal_vol(false), volume(80), 
      current_mute_state(kMuteOff)
  {
-+    swvol = swvol_setting = 
-+      (gContext->GetSetting("MixerDevice", "default").toLower() == "software");
++    swvol = swvol_setting =
++        (gContext->GetSetting("MixerDevice", "default").toLower() == "software");
 +}
 +
 +bool VolumeBase::SWVolume(void)
@@ -211,7 +200,7 @@ index d1f1fb0..a6d053a 100644
  }
  
  uint VolumeBase::GetCurrentVolume(void) const
-@@ -76,9 +90,17 @@ MuteState VolumeBase::NextMuteState(MuteState cur)
+@@ -76,9 +90,17 @@
  void VolumeBase::UpdateVolume(void)
  {
      int new_volume = volume;
@@ -222,29 +211,28 @@ index d1f1fb0..a6d053a 100644
 +        save = false;
 +    }
 +
-+    if (swvol) 
++    if (swvol)
 +    {
 +        SetSWVolume(new_volume, save);
 +        return;
      }
      
      // TODO: Avoid assumption that there are 2 channels!
-@@ -102,6 +124,9 @@ void VolumeBase::UpdateVolume(void)
+@@ -102,6 +124,9 @@
  void VolumeBase::SyncVolume(void)
  {
      // Read the volume from the audio driver and setup our internal state to match
 -    volume = GetVolumeChannel(0);
-+    if (swvol) 
++    if (swvol)
 +        volume = GetSWVolume();
 +    else
 +        volume = GetVolumeChannel(0);
  }
  
-diff --git a/mythtv/libs/libmyth/volumebase.h b/mythtv/libs/libmyth/volumebase.h
-index 4257f0b..68fb6f1 100644
---- a/mythtv/libs/libmyth/volumebase.h
-+++ b/mythtv/libs/libmyth/volumebase.h
-@@ -20,6 +20,8 @@ class MPUBLIC VolumeBase
+diff -Naur --exclude=.svn mythtv.ori/libs/libmyth/volumebase.h mythtv/libs/libmyth/volumebase.h
+--- mythtv.ori/libs/libmyth/volumebase.h	2009-08-31 01:29:36.000000000 +1000
++++ mythtv/libs/libmyth/volumebase.h	2009-08-31 01:45:34.000000000 +1000
+@@ -20,6 +20,8 @@
      VolumeBase();    
      virtual ~VolumeBase() {};
  
@@ -253,7 +241,7 @@ index 4257f0b..68fb6f1 100644
      virtual uint GetCurrentVolume(void) const;
      virtual void SetCurrentVolume(int value);
      virtual void AdjustCurrentVolume(int change);
-@@ -34,6 +36,8 @@ class MPUBLIC VolumeBase
+@@ -34,6 +36,8 @@
  
      virtual int GetVolumeChannel(int channel) const = 0; // Returns 0-100
      virtual void SetVolumeChannel(int channel, int volume) = 0; // range 0-100 for vol
@@ -262,7 +250,7 @@ index 4257f0b..68fb6f1 100644
  
      void UpdateVolume(void);
      void SyncVolume(void);
-@@ -44,6 +48,8 @@ class MPUBLIC VolumeBase
+@@ -44,6 +48,8 @@
      
      int volume;
      MuteState current_mute_state;
@@ -271,11 +259,10 @@ index 4257f0b..68fb6f1 100644
  
  };
  
-diff --git a/mythtv/libs/libmythtv/avformatdecoder.cpp b/mythtv/libs/libmythtv/avformatdecoder.cpp
-index 4530bc4..dec51e3 100644
---- a/mythtv/libs/libmythtv/avformatdecoder.cpp
-+++ b/mythtv/libs/libmythtv/avformatdecoder.cpp
-@@ -443,6 +443,7 @@ AvFormatDecoder::AvFormatDecoder(NuppelVideoPlayer *parent,
+diff -Naur --exclude=.svn mythtv.ori/libs/libmythtv/avformatdecoder.cpp mythtv/libs/libmythtv/avformatdecoder.cpp
+--- mythtv.ori/libs/libmythtv/avformatdecoder.cpp	2009-08-31 01:31:31.000000000 +1000
++++ mythtv/libs/libmythtv/avformatdecoder.cpp	2009-08-31 01:49:07.000000000 +1000
+@@ -461,6 +461,7 @@
        // Audio
        audioSamples(NULL),
        allow_ac3_passthru(false),    allow_dts_passthru(false),
@@ -283,7 +270,7 @@ index 4530bc4..dec51e3 100644
        disable_passthru(false),      max_channels(2),
        last_ac3_channels(0),	    dummy_frame(NULL),
        // DVD
-@@ -464,6 +465,7 @@ AvFormatDecoder::AvFormatDecoder(NuppelVideoPlayer *parent,
+@@ -482,6 +483,7 @@
  
      allow_ac3_passthru = gContext->GetNumSetting("AC3PassThru", false);
      allow_dts_passthru = gContext->GetNumSetting("DTSPassThru", false);
@@ -291,7 +278,7 @@ index 4530bc4..dec51e3 100644
      max_channels = (uint) gContext->GetNumSetting("MaxChannels", 2);
  
      audioIn.sample_size = -32; // force SetupAudioStream to run once
-@@ -4204,9 +4206,10 @@ bool AvFormatDecoder::DoPassThrough(const AVCodecContext *ctx)
+@@ -4203,9 +4205,10 @@
  
      if (ctx->codec_id == CODEC_ID_AC3)
          passthru = allow_ac3_passthru && 
@@ -301,14 +288,13 @@ index 4530bc4..dec51e3 100644
      else if (ctx->codec_id == CODEC_ID_DTS)
 -        passthru = allow_dts_passthru;
 +        passthru = allow_dts_passthru && !internal_vol;
-     
+ 
      passthru &= !transcoding && !disable_passthru;
      // Don't know any cards that support spdif clocked at < 44100
-diff --git a/mythtv/libs/libmythtv/avformatdecoder.h b/mythtv/libs/libmythtv/avformatdecoder.h
-index ea1fb23..4fe8d65 100644
---- a/mythtv/libs/libmythtv/avformatdecoder.h
-+++ b/mythtv/libs/libmythtv/avformatdecoder.h
-@@ -269,6 +269,7 @@ class AvFormatDecoder : public DecoderBase
+diff -Naur --exclude=.svn mythtv.ori/libs/libmythtv/avformatdecoder.h mythtv/libs/libmythtv/avformatdecoder.h
+--- mythtv.ori/libs/libmythtv/avformatdecoder.h	2009-08-31 01:31:31.000000000 +1000
++++ mythtv/libs/libmythtv/avformatdecoder.h	2009-08-31 01:49:36.000000000 +1000
+@@ -259,6 +259,7 @@
      short int        *audioSamples;
      bool              allow_ac3_passthru;
      bool              allow_dts_passthru;
@@ -316,25 +302,37 @@ index ea1fb23..4fe8d65 100644
      bool              disable_passthru;
      uint              max_channels;
      uint              last_ac3_channels;
-diff --git a/mythtv/programs/mythtranscode/transcode.cpp b/mythtv/programs/mythtranscode/transcode.cpp
-index 9958473..77ca720 100644
---- a/mythtv/programs/mythtranscode/transcode.cpp
-+++ b/mythtv/programs/mythtranscode/transcode.cpp
-@@ -227,6 +227,17 @@ class AudioReencodeBuffer : public AudioOutput
-         // Do nothing
+diff -Naur --exclude=.svn mythtv.ori/programs/mythfrontend/globalsettings.cpp mythtv/programs/mythfrontend/globalsettings.cpp
+--- mythtv.ori/programs/mythfrontend/globalsettings.cpp	2009-08-31 01:31:31.000000000 +1000
++++ mythtv/programs/mythfrontend/globalsettings.cpp	2009-08-31 02:02:42.000000000 +1000
+@@ -196,6 +196,9 @@
+ #ifdef USING_WINAUDIO
+     gc->addSelection("Windows:", "Windows:");
+ #endif
++#if !(defined(USING_DIRECTX) || defined(USING_WINAUDIO))
++    gc->addSelection("software", "sofware");
++#endif
+ 
+     return gc;
+ }
+diff -Naur --exclude=.svn mythtv.ori/programs/mythtranscode/transcode.cpp mythtv/programs/mythtranscode/transcode.cpp
+--- mythtv.ori/programs/mythtranscode/transcode.cpp	2009-08-31 01:31:31.000000000 +1000
++++ mythtv/programs/mythtranscode/transcode.cpp	2009-08-31 01:50:45.000000000 +1000
+@@ -228,6 +228,17 @@
          return false;
      }
-+    virtual void SetSWVolume(int new_volume, bool save) 
+ 
++    virtual void SetSWVolume(int new_volume, bool save)
 +    {
 +        // Do nothing
 +        return;
 +    }
-+    
-+    virtual int GetSWVolume(void) 
++    virtual int GetSWVolume(void)
 +    {
 +        // Do nothing
 +        return 100;
 +    }
- 
++
      //  These are pure virtual in AudioOutput, but we don't need them here
      virtual void bufferOutputData(bool){ return; }
+     virtual int readOutputData(unsigned char*, int ){ return 0; }
