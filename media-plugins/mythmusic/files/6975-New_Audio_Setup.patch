@@ -1,6 +1,6 @@
 Index: mythplugins/mythmusic/mythmusic/playbackbox.cpp
 ===================================================================
---- mythplugins/mythmusic/mythmusic/playbackbox.cpp	(revision 21594)
+--- mythplugins/mythmusic/mythmusic/playbackbox.cpp	(revision 21650)
 +++ mythplugins/mythmusic/mythmusic/playbackbox.cpp	(working copy)
 @@ -365,6 +365,8 @@
              changeSpeed(true);
@@ -25,9 +25,39 @@ Index: mythplugins/mythmusic/mythmusic/playbackbox.cpp
  void PlaybackBoxMusic::showProgressBar()
  {
      if (progress_bar && visualizer_status != 2)
+Index: mythplugins/mythmusic/mythmusic/globalsettings.cpp
+===================================================================
+--- mythplugins/mythmusic/mythmusic/globalsettings.cpp	(revision 21650)
++++ mythplugins/mythmusic/mythmusic/globalsettings.cpp	(working copy)
+@@ -67,6 +67,17 @@
+     return gc;
+ };
+ 
++static HostCheckBox *MusicUpmixer()
++{
++    HostCheckBox *gc = new HostCheckBox("MusicDefaultUpmix");
++    gc->setLabel(QObject::tr("Upconvert stereo to 5.1 surround"));
++    gc->setValue(false);
++    gc->setHelpText(QObject::tr("MythTV can upconvert stereo tracks to 5.1 audio. "
++                                "Set this option to enable it by default. "
++                                "You can enable or disable the upconversion during playback at anytime."));
++    return gc;
++};
++
+ static HostLineEdit *CDDevice()
+ {
+     HostLineEdit *gc = new HostLineEdit("CDDevice");
+@@ -545,6 +556,7 @@
+     general->setLabel(QObject::tr("General Settings (1)"));
+     general->addChild(SetMusicDirectory());
+     general->addChild(MusicAudioDevice());
++    general->addChild(MusicUpmixer());
+     general->addChild(CDDevice());
+     general->addChild(AutoLookupCD());
+     general->addChild(AutoPlayCD());
 Index: mythplugins/mythmusic/mythmusic/avfdecoder.cpp
 ===================================================================
---- mythplugins/mythmusic/mythmusic/avfdecoder.cpp	(revision 21594)
+--- mythplugins/mythmusic/mythmusic/avfdecoder.cpp	(revision 21650)
 +++ mythplugins/mythmusic/mythmusic/avfdecoder.cpp	(working copy)
 @@ -256,8 +256,8 @@
      if (output())
@@ -42,7 +72,7 @@ Index: mythplugins/mythmusic/mythmusic/avfdecoder.cpp
      }
 Index: mythplugins/mythmusic/mythmusic/main.cpp
 ===================================================================
---- mythplugins/mythmusic/mythmusic/main.cpp	(revision 21594)
+--- mythplugins/mythmusic/mythmusic/main.cpp	(revision 21650)
 +++ mythplugins/mythmusic/mythmusic/main.cpp	(working copy)
 @@ -389,6 +389,7 @@
      REG_KEY("Music", "VOLUMEDOWN", "Volume down",       "[,{,F10,Volume Down");
@@ -54,9 +84,9 @@ Index: mythplugins/mythmusic/mythmusic/main.cpp
      REG_KEY("Music", "THMBUP",     "Increase rating",            "9");
 Index: mythplugins/mythmusic/mythmusic/musicplayer.cpp
 ===================================================================
---- mythplugins/mythmusic/mythmusic/musicplayer.cpp	(revision 21594)
+--- mythplugins/mythmusic/mythmusic/musicplayer.cpp	(revision 21650)
 +++ mythplugins/mythmusic/mythmusic/musicplayer.cpp	(working copy)
-@@ -348,16 +348,18 @@
+@@ -348,16 +348,19 @@
  
  void MusicPlayer::openOutputDevice(void)
  {
@@ -74,13 +104,14 @@ Index: mythplugins/mythmusic/mythmusic/musicplayer.cpp
 -    m_output = AudioOutput::OpenAudio(adevice, "default", 16, 2, 44100,
 -                                    AUDIOOUTPUT_MUSIC, true, false);
 +    m_output = AudioOutput::OpenAudio(adevice, pdevice, 16, 2, 0, 44100,
-+                                      AUDIOOUTPUT_MUSIC, true, false);
++                                      AUDIOOUTPUT_MUSIC, true, false,
++                                      gContext->GetNumSetting("MusicDefaultUpmix", 0) + 1);
      m_output->setBufferSize(256 * 1024);
      m_output->SetBlocking(false);
  
 Index: mythplugins/mythmusic/mythmusic/playbackbox.h
 ===================================================================
---- mythplugins/mythmusic/mythmusic/playbackbox.h	(revision 21594)
+--- mythplugins/mythmusic/mythmusic/playbackbox.h	(revision 21650)
 +++ mythplugins/mythmusic/mythmusic/playbackbox.h	(working copy)
 @@ -69,6 +69,7 @@
      void changeVolume(bool up_or_down);
@@ -92,7 +123,7 @@ Index: mythplugins/mythmusic/mythmusic/playbackbox.h
      void showVolume(bool on_or_off);
 Index: mythplugins/mythmusic/mythmusic/cddecoder.cpp
 ===================================================================
---- mythplugins/mythmusic/mythmusic/cddecoder.cpp	(revision 21594)
+--- mythplugins/mythmusic/mythmusic/cddecoder.cpp	(revision 21650)
 +++ mythplugins/mythmusic/mythmusic/cddecoder.cpp	(working copy)
 @@ -14,6 +14,7 @@
  

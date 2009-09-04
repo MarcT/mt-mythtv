@@ -117,8 +117,7 @@ src_unpack() {
 
 	cd ${S}
 
-	epatch "${FILESDIR}"/5900-audioencoding-trunk.patch
-	epatch "${FILESDIR}"/6279-Software-volume.patch
+	epatch "${FILESDIR}"/6975-New_Audio_Setup.patch
 }
 
 setup_pro() {
