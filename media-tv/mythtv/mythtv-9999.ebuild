@@ -11,9 +11,9 @@ KEYWORDS="~x86 ~amd64"
 
 IUSE_VIDEO_CARDS="video_cards_i810 video_cards_nvidia video_cards_via"
 
-IUSE="alsa altivec arts autostart dbox2 debug directfb directv directx dvb 
-dvd hdhomerun hdpvr ieee1394 iptv ivtv jack joystick latm lcd lirc mmx 
-opengl oss perl profile proc-opt vdpau vorbis X xv xvmc ${IUSE_VIDEO_CARDS}"
+IUSE="alsa altivec arts autostart dbox2 debug directfb directv dvb dvd 
+hdhomerun hdpvr ieee1394 iptv ivtv jack joystick latm lcd lirc mmx opengl 
+oss perl profile proc-opt vdpau vorbis X xv xvmc ${IUSE_VIDEO_CARDS}"
 
 RDEPEND=">=media-libs/freetype-2.0
 	>=media-sound/lame-3.93.1
@@ -131,7 +131,6 @@ src_compile() {
 		$(use_enable altivec)
 		$(use_enable arts audio-arts)
 		$(use_enable directfb)
-		$(use_enable directx)
 		$(use_enable dvb)
 		$(use_enable hdhomerun)
 		$(use_enable hdpvr)
