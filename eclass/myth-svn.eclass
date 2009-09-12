@@ -31,8 +31,8 @@ if hasq ${_MODULE} ${MYTHPLUGINS} ; then
 	ESVN_REPO_URI="http://cvs.mythtv.org/svn/trunk/mythplugins"
 	ESVN_PROJECT=mythplugins
 elif [ "${_MODULE}" == "mythtv-themes" ]; then
-	ESVN_REPO_URI="http://cvs.mythtv.org/svn/trunk/myththemes"
-	ESVN_PROJECT=myththemes
+	ESVN_REPO_URI="http://cvs.mythtv.org/svn/trunk/oldthemes"
+	ESVN_PROJECT=oldthemes
 elif [ "${_MODULE}" == "mythtv-themes-extra" ]; then
         ESVN_REPO_URI="http://cvs.mythtv.org/svn/trunk/themes"
         ESVN_PROJECT=themes
@@ -85,10 +85,6 @@ myth-svn_src_unpack() {
 
 	if [[ ${_MODULE} == "mythmusic" ]] ; then
 		epatch "${FILESDIR}"/6975-New_Audio_Setup.patch
-	fi
-
-	if [[ ${_MODULE} == "mythweb" ]] ; then
-		epatch "${FILESDIR}"/6693-webmyth-css.patch
 	fi
 
 	if use debug ; then
