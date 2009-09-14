@@ -1,7 +1,33 @@
-diff --git a/mythtv-status/bin/mythtv-update-motd b/mythtv-status/bin/mythtv-update-motd
+diff --git a/a/mythtv-status/bin/mythtv-status b/b/mythtv-status/bin/mythtv-status
+index 26901da..3fed5ff 100755
+--- a/a/mythtv-status/bin/mythtv-status
++++ b/b/mythtv-status/bin/mythtv-status
+@@ -162,13 +162,16 @@ my @blocks = (
+     'attrs' => [ qw/hostname id state connected/ ],
+     'template' => "__hostname__ (__id__) - __state____connected__",
+     'rewrite' => {
+-      '/connected/' => { '1' => '', '0' => ' (Disconnected)' },
++      '/connected/' => { '1' => '', '0' => "${warning}(Disconnected)${normal}" },
+       '/state/' => {
++	 '^-1$' => "${warning}Error${normal}",
+ 	 '^0$' => "${safe}Idle${normal}",
+-         '^1$' => "${warning}Watching LiveTV${normal}",
+-         '^2$' => "${warning}Watching Pre-recorded${normal}",
+-         '^3$' => "${warning}Watching Recording${normal}",
+-         '^4$' => "${warning}Recording${normal}" },
++	 '^1$' => "${warning}Watching LiveTV${normal}",
++	 '^2$' => "${warning}Watching Pre-recorded${normal}",
++	 '^3$' => "${warning}Watching DVD${normal}",
++	 '^4$' => "${warning}Watching Video${normal}",
++	 '^5$' => "${warning}Watching Recording${normal}",
++	 '^6$' => "${warning}Recording${normal}" },
+     }
+   },
+ 
+diff --git a/a/mythtv-status/bin/mythtv-update-motd b/b/mythtv-status/bin/mythtv-update-motd
 index d58aa41..c5fbaab 100755
---- a/mythtv-status/bin/mythtv-update-motd
-+++ b/mythtv-status/bin/mythtv-update-motd
+--- a/a/mythtv-status/bin/mythtv-update-motd
++++ b/b/mythtv-status/bin/mythtv-update-motd
 @@ -7,10 +7,10 @@ then
    exit
  fi
