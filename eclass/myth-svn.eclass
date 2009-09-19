@@ -106,7 +106,7 @@ myth-svn_src_unpack() {
 		fi
 	fi
 
-#	setup_pro
+	setup_pro
 }
 
 myth-svn_src_compile() {

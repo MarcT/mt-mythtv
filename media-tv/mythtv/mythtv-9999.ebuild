@@ -121,7 +121,17 @@ src_unpack() {
 }
 
 setup_pro() {
-	return 0
+	cp -fR /usr/portage/distfiles/svn-src/mythtv/mythtv/.svn ${S}
+
+        # upstream wants the revision number in their version.cpp
+        # since the subversion.eclass strips out the .svn directory
+        # svnversion in MythTV's build doesn't work
+        sed -e "s:\`(svnversion \$\${SVNTREEDIR} 2>\/dev\/null) || echo Unknown\`:${MYTHTV_SVN_REVISION}:" \
+                -i "${S}"/version.pro || die "svnversion sed failed"
+
+        # Perl bits need to go into vender_perl and not site_perl
+        sed -e "s:pure_install:pure_install INSTALLDIRS=vendor:" \
+                -i "${S}"/bindings/perl/perl.pro
 }
 
 src_compile() {
