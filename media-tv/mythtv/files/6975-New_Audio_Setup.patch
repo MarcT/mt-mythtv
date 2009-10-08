@@ -1,8 +1,8 @@
 Index: mythtv/libs/libmythtv/nuppeldecoder.cpp
 ===================================================================
---- mythtv/libs/libmythtv/nuppeldecoder.cpp	(revision 21947)
+--- mythtv/libs/libmythtv/nuppeldecoder.cpp	(revision 22249)
 +++ mythtv/libs/libmythtv/nuppeldecoder.cpp	(working copy)
-@@ -495,6 +495,7 @@
+@@ -496,6 +496,7 @@
  #endif
          GetNVP()->SetAudioParams(extradata.audio_bits_per_sample,
                                   extradata.audio_channels, 
@@ -12,7 +12,7 @@ Index: mythtv/libs/libmythtv/nuppeldecoder.cpp
          GetNVP()->ReinitAudio();
 Index: mythtv/libs/libmythtv/NuppelVideoPlayer.cpp
 ===================================================================
---- mythtv/libs/libmythtv/NuppelVideoPlayer.cpp	(revision 21947)
+--- mythtv/libs/libmythtv/NuppelVideoPlayer.cpp	(revision 22249)
 +++ mythtv/libs/libmythtv/NuppelVideoPlayer.cpp	(working copy)
 @@ -212,9 +212,9 @@
        audioOutput(NULL),
@@ -51,7 +51,7 @@ Index: mythtv/libs/libmythtv/NuppelVideoPlayer.cpp
          errMsg = audioOutput->GetError();
          if (!errMsg.isEmpty())
              audioOutput->SetStretchFactor(audio_stretchfactor);
-@@ -3910,20 +3911,16 @@
+@@ -3916,20 +3917,16 @@
      return !IsErrored();
  }
  
@@ -74,7 +74,7 @@ Index: mythtv/libs/libmythtv/NuppelVideoPlayer.cpp
  void NuppelVideoPlayer::SetEffDsp(int dsprate)
  {
      if (audioOutput)
-@@ -5347,6 +5344,13 @@
+@@ -5353,6 +5350,13 @@
      }
  }
  
@@ -90,7 +90,7 @@ Index: mythtv/libs/libmythtv/NuppelVideoPlayer.cpp
      if (videoOutput)
 Index: mythtv/libs/libmythtv/avformatdecoder.cpp
 ===================================================================
---- mythtv/libs/libmythtv/avformatdecoder.cpp	(revision 21947)
+--- mythtv/libs/libmythtv/avformatdecoder.cpp	(revision 22249)
 +++ mythtv/libs/libmythtv/avformatdecoder.cpp	(working copy)
 @@ -461,8 +461,9 @@
        // Audio
@@ -150,7 +150,7 @@ Index: mythtv/libs/libmythtv/avformatdecoder.cpp
      int len;
      unsigned char *ptr;
      int data_size = 0;
-@@ -3631,14 +3628,6 @@
+@@ -3638,14 +3635,6 @@
                          reselectAudioTrack = true;
                      }
  
@@ -162,10 +162,10 @@ Index: mythtv/libs/libmythtv/avformatdecoder.cpp
 -                         (curstream->codec->codec_id == CODEC_ID_DTS));
 -                    bool using_passthru = do_ac3_passthru || do_dts_passthru;
 -
-                     // detect channels on streams that need
-                     // to be decoded before we can know this
-                     bool already_decoded = false;
-@@ -3649,7 +3638,7 @@
+                     /// XXX HACK: set sample format to signed 16 bit
+                     if (curstream->codec->codec_id == CODEC_ID_TRUEHD)
+                         curstream->codec->sample_fmt = SAMPLE_FMT_S16;
+@@ -3660,7 +3649,7 @@
                                  QString("Setting channels to %1")
                                  .arg(audioOut.channels));
  
@@ -174,7 +174,7 @@ Index: mythtv/libs/libmythtv/avformatdecoder.cpp
                          {
                              // for passthru let it select the max number
                              // of channels
-@@ -3671,6 +3660,20 @@
+@@ -3682,6 +3671,20 @@
                          reselectAudioTrack |= curstream->codec->channels;
                      }
  
@@ -195,7 +195,7 @@ Index: mythtv/libs/libmythtv/avformatdecoder.cpp
                      if (reselectAudioTrack)
                      {
                          QMutexLocker locker(&avcodeclock);
-@@ -4196,6 +4199,25 @@
+@@ -4207,6 +4210,25 @@
      }
  }
  
@@ -221,7 +221,7 @@ Index: mythtv/libs/libmythtv/avformatdecoder.cpp
  /** \fn AvFormatDecoder::SetupAudioStream(void)
   *  \brief Reinitializes audio if it needs to be reinitialized.
   *
-@@ -4209,7 +4231,6 @@
+@@ -4220,7 +4242,6 @@
      AVStream *curstream = NULL;
      AVCodecContext *codec_ctx = NULL;
      AudioInfo old_in  = audioIn;
@@ -229,7 +229,7 @@ Index: mythtv/libs/libmythtv/avformatdecoder.cpp
      bool using_passthru = false;
  
      if ((currentTrack[kTrackTypeAudio] >= 0) &&
-@@ -4223,14 +4244,9 @@
+@@ -4234,14 +4255,9 @@
          codec_ctx = curstream->codec;
          if (codec_ctx)
          {
@@ -247,7 +247,7 @@ Index: mythtv/libs/libmythtv/avformatdecoder.cpp
          }
      }
  
-@@ -4247,41 +4263,25 @@
+@@ -4258,41 +4274,25 @@
              QString("audio track #%1").arg(currentTrack[kTrackTypeAudio]+1));
  
      audioOut = audioIn = info;
@@ -301,7 +301,7 @@ Index: mythtv/libs/libmythtv/avformatdecoder.cpp
      return true;
 Index: mythtv/libs/libmythtv/tv_play.h
 ===================================================================
---- mythtv/libs/libmythtv/tv_play.h	(revision 21947)
+--- mythtv/libs/libmythtv/tv_play.h	(revision 22249)
 +++ mythtv/libs/libmythtv/tv_play.h	(working copy)
 @@ -430,6 +430,7 @@
      bool TimeStretchHandleAction(PlayerContext*,
@@ -313,7 +313,7 @@ Index: mythtv/libs/libmythtv/tv_play.h
  
 Index: mythtv/libs/libmythtv/NuppelVideoPlayer.h
 ===================================================================
---- mythtv/libs/libmythtv/NuppelVideoPlayer.h	(revision 21947)
+--- mythtv/libs/libmythtv/NuppelVideoPlayer.h	(revision 22249)
 +++ mythtv/libs/libmythtv/NuppelVideoPlayer.h	(working copy)
 @@ -125,7 +125,7 @@
      void SetAudioStretchFactor(float factor)  { audio_stretchfactor = factor; }
@@ -346,17 +346,18 @@ Index: mythtv/libs/libmythtv/NuppelVideoPlayer.h
      bool     audio_muted_on_creation;
 Index: mythtv/libs/libmythtv/tv_play.cpp
 ===================================================================
---- mythtv/libs/libmythtv/tv_play.cpp	(revision 21947)
+--- mythtv/libs/libmythtv/tv_play.cpp	(revision 22249)
 +++ mythtv/libs/libmythtv/tv_play.cpp	(working copy)
-@@ -496,6 +496,7 @@
-     REG_KEY("TV Playback", "VOLUMEDOWN", "Volume down", "[,{,F10,Volume Down");
-     REG_KEY("TV Playback", "VOLUMEUP",   "Volume up",   "],},F11,Volume Up");
-     REG_KEY("TV Playback", "MUTE",       "Mute",        "|,\\,F9,Volume Mute");
-+    REG_KEY("TV Playback", "TOGGLEUPMIX", "Toggle audio upmixer", "Ctrl+U");
-     REG_KEY("TV Playback", "TOGGLEPIPMODE", "Toggle Picture-in-Picture view",
-             "V");
-     REG_KEY("TV Playback", "TOGGLEPBPMODE", "Toggle Picture-by-Picture view",
-@@ -633,7 +634,7 @@
+@@ -533,6 +533,8 @@
+             "Volume up"), "],},F11,Volume Up");
+     REG_KEY("TV Playback", "MUTE", QT_TRANSLATE_NOOP("MythControls", "Mute"),
+             "|,\\,F9,Volume Mute");
++    REG_KEY("TV Playback", "TOGGLEUPMIX", QT_TRANSLATE_NOOP("MythControls",
++            "Toggle audio upmixer"), "Ctrl+U");
+     REG_KEY("TV Playback", "TOGGLEPIPMODE", QT_TRANSLATE_NOOP("MythControls",
+             "Toggle Picture-in-Picture view"), "V");
+     REG_KEY("TV Playback", "TOGGLEPBPMODE", QT_TRANSLATE_NOOP("MythControls",
+@@ -747,7 +749,7 @@
    Teletext     F2,F3,F4,F5,F6,F7,F8
    ITV          F2,F3,F4,F5,F6,F7,F12
  
@@ -365,7 +366,7 @@ Index: mythtv/libs/libmythtv/tv_play.cpp
  */
  }
  
-@@ -4348,6 +4349,8 @@
+@@ -4468,6 +4470,8 @@
          DoTogglePictureAttribute(ctx, kAdjustingPicture_Playback);
      else if (has_action("TOGGLESTRETCH", actions))
          ToggleTimeStretch(ctx);
@@ -374,7 +375,7 @@ Index: mythtv/libs/libmythtv/tv_play.cpp
      else if (has_action("TOGGLESLEEP", actions))
          ToggleSleepTimer(ctx);
      else if (has_action("TOGGLERECORD", actions) && islivetv)
-@@ -7981,6 +7984,20 @@
+@@ -8101,6 +8105,20 @@
      SetSpeedChangeTimer(0, __LINE__);
  }
  
@@ -395,7 +396,7 @@ Index: mythtv/libs/libmythtv/tv_play.cpp
  // dir in 10ms jumps
  void TV::ChangeAudioSync(PlayerContext *ctx, int dir, bool allowEdit)
  {
-@@ -9624,6 +9641,8 @@
+@@ -9744,6 +9762,8 @@
          SetManualZoom(actx, true, tr("Zoom Mode ON"));
      else if (action == "TOGGLESTRETCH")
          ToggleTimeStretch(actx);
@@ -404,7 +405,7 @@ Index: mythtv/libs/libmythtv/tv_play.cpp
      else if (action.left(13) == "ADJUSTSTRETCH")
      {
          bool floatRead;
-@@ -9989,6 +10008,8 @@
+@@ -10109,6 +10129,8 @@
  
      if (category == "AUDIOSYNC")
          new OSDGenericTree(treeMenu, tr("Adjust Audio Sync"), "TOGGLEAUDIOSYNC");
@@ -415,7 +416,7 @@ Index: mythtv/libs/libmythtv/tv_play.cpp
      else if (category == "VIDEOSCAN")
 Index: mythtv/libs/libmythtv/tvosdmenuentry.cpp
 ===================================================================
---- mythtv/libs/libmythtv/tvosdmenuentry.cpp	(revision 21947)
+--- mythtv/libs/libmythtv/tvosdmenuentry.cpp	(revision 22249)
 +++ mythtv/libs/libmythtv/tvosdmenuentry.cpp	(working copy)
 @@ -232,6 +232,8 @@
      curMenuEntries.append(new TVOSDMenuEntry(
@@ -428,7 +429,7 @@ Index: mythtv/libs/libmythtv/tvosdmenuentry.cpp
          "VIDEOSCAN",          1,  1,  1,  1, "Video Scan"));
 Index: mythtv/libs/libmythtv/avformatdecoder.h
 ===================================================================
---- mythtv/libs/libmythtv/avformatdecoder.h	(revision 21947)
+--- mythtv/libs/libmythtv/avformatdecoder.h	(revision 22249)
 +++ mythtv/libs/libmythtv/avformatdecoder.h	(working copy)
 @@ -188,6 +188,7 @@
  
@@ -451,7 +452,7 @@ Index: mythtv/libs/libmythtv/avformatdecoder.h
  
 Index: mythtv/libs/libmyth/audiooutputjack.h
 ===================================================================
---- mythtv/libs/libmyth/audiooutputjack.h	(revision 21947)
+--- mythtv/libs/libmyth/audiooutputjack.h	(revision 22249)
 +++ mythtv/libs/libmyth/audiooutputjack.h	(working copy)
 @@ -23,6 +23,7 @@
      virtual void WriteAudio(unsigned char *aubuf, int size);
@@ -463,7 +464,7 @@ Index: mythtv/libs/libmyth/audiooutputjack.h
  
 Index: mythtv/libs/libmyth/audiosettings.cpp
 ===================================================================
---- mythtv/libs/libmyth/audiosettings.cpp	(revision 21947)
+--- mythtv/libs/libmyth/audiosettings.cpp	(revision 22249)
 +++ mythtv/libs/libmyth/audiosettings.cpp	(working copy)
 @@ -7,16 +7,18 @@
  
@@ -552,7 +553,7 @@ Index: mythtv/libs/libmyth/audiosettings.cpp
  
 Index: mythtv/libs/libmyth/audiooutputbase.h
 ===================================================================
---- mythtv/libs/libmyth/audiooutputbase.h	(revision 21947)
+--- mythtv/libs/libmyth/audiooutputbase.h	(revision 22249)
 +++ mythtv/libs/libmyth/audiooutputbase.h	(working copy)
 @@ -43,9 +43,13 @@
  
@@ -613,8 +614,8 @@ Index: mythtv/libs/libmyth/audiooutputbase.h
      // resampler
      bool need_resampler;
      SRC_STATE *src_ctx;
-@@ -156,9 +171,13 @@
-     FreeSurround              *upmixer;
+@@ -160,9 +175,13 @@
+         void *_MonoToStereo(AudioDataType *s1, AudioDataType *s2, int samples);
  
      int source_audio_channels;
 +    int source_audio_samplerate;
@@ -629,7 +630,7 @@ Index: mythtv/libs/libmyth/audiooutputbase.h
  
 Index: mythtv/libs/libmyth/audiooutputalsa.cpp
 ===================================================================
---- mythtv/libs/libmyth/audiooutputalsa.cpp	(revision 21947)
+--- mythtv/libs/libmyth/audiooutputalsa.cpp	(revision 22249)
 +++ mythtv/libs/libmyth/audiooutputalsa.cpp	(working copy)
 @@ -32,13 +32,125 @@
  AudioOutputALSA::~AudioOutputALSA()
@@ -776,47 +777,7 @@ Index: mythtv/libs/libmyth/audiooutputalsa.cpp
  
      VERBOSE(VB_GENERAL, QString("Opening ALSA audio device '%1'.")
              .arg(real_device));
-@@ -146,7 +266,29 @@
-     }
- }
- 
-+void AudioOutputALSA::ReorderSmpteToAlsa6ch(unsigned char *buf, int size) 
-+{
-+    if (audio_bits == 8)
-+        _ReorderSmpteToAlsa6ch(buf, size);
-+    else if (audio_bits == 16)
-+        _ReorderSmpteToAlsa6ch((short *)buf, size / sizeof(short));
-+}
- 
-+template <class AudioDataType>
-+void AudioOutputALSA::_ReorderSmpteToAlsa6ch(AudioDataType *buf, int size) 
-+{
-+    AudioDataType tmpC, tmpLFE;
-+
-+    for (int i = 0; i < size; i+= 6) {
-+        tmpC = buf[i+2];
-+        tmpLFE = buf[i+3];
-+        buf[i+2] = buf[i+4];
-+        buf[i+3] = buf[i+5];
-+        buf[i+4] = tmpC;
-+        buf[i+5] = tmpLFE;
-+    }
-+
-+}
- void AudioOutputALSA::WriteAudio(unsigned char *aubuf, int size)
- {
-     unsigned char *tmpbuf;
-@@ -158,6 +300,9 @@
-         VERBOSE(VB_IMPORTANT, QString("WriteAudio() called with pcm_handle == NULL!"));
-         return;
-     }
-+
-+    if (!(audio_passthru || audio_enc) && audio_channels == 6)
-+        ReorderSmpteToAlsa6ch(aubuf, size);
-     
-     tmpbuf = aubuf;
- 
-@@ -634,6 +779,9 @@
+@@ -662,6 +782,9 @@
      if (mixer_handle != NULL)
          CloseMixer();
  
@@ -828,7 +789,7 @@ Index: mythtv/libs/libmyth/audiooutputalsa.cpp
      // TODO: This is opening card 0. Fix for case of multiple soundcards
 Index: mythtv/libs/libmyth/volumebase.cpp
 ===================================================================
---- mythtv/libs/libmyth/volumebase.cpp	(revision 21947)
+--- mythtv/libs/libmyth/volumebase.cpp	(revision 22249)
 +++ mythtv/libs/libmyth/volumebase.cpp	(working copy)
 @@ -10,8 +10,22 @@
      internal_vol(false), volume(80), 
@@ -885,7 +846,7 @@ Index: mythtv/libs/libmyth/volumebase.cpp
  
 Index: mythtv/libs/libmyth/audiooutputjack.cpp
 ===================================================================
---- mythtv/libs/libmyth/audiooutputjack.cpp	(revision 21947)
+--- mythtv/libs/libmyth/audiooutputjack.cpp	(revision 22249)
 +++ mythtv/libs/libmyth/audiooutputjack.cpp	(working copy)
 @@ -30,6 +30,44 @@
      Reconfigure(settings);
@@ -934,7 +895,7 @@ Index: mythtv/libs/libmyth/audiooutputjack.cpp
      // Close down all audio stuff
 Index: mythtv/libs/libmyth/audiooutputoss.h
 ===================================================================
---- mythtv/libs/libmyth/audiooutputoss.h	(revision 21947)
+--- mythtv/libs/libmyth/audiooutputoss.h	(revision 22249)
 +++ mythtv/libs/libmyth/audiooutputoss.h	(working copy)
 @@ -23,6 +23,7 @@
      virtual void WriteAudio(unsigned char *aubuf, int size);
@@ -946,7 +907,7 @@ Index: mythtv/libs/libmyth/audiooutputoss.h
      void VolumeInit(void);
 Index: mythtv/libs/libmyth/audiooutputbase.cpp
 ===================================================================
---- mythtv/libs/libmyth/audiooutputbase.cpp	(revision 21947)
+--- mythtv/libs/libmyth/audiooutputbase.cpp	(revision 22249)
 +++ mythtv/libs/libmyth/audiooutputbase.cpp	(working copy)
 @@ -1,5 +1,6 @@
  // Std C headers
@@ -1064,14 +1025,14 @@ Index: mythtv/libs/libmyth/audiooutputbase.cpp
              pSoundStretch->setTempo(audio_stretchfactor);
              pSoundStretch->setSetting(SETTING_SEQUENCE_MS, 35);
  
-             // dont need these with only tempo change
+             // don't need these with only tempo change
              //pSoundStretch->setPitch(1.0);
              //pSoundStretch->setRate(1.0);
 -
              //pSoundStretch->setSetting(SETTING_USE_QUICKSEEK, true);
              //pSoundStretch->setSetting(SETTING_USE_AA_FILTER, false);
          }
-@@ -183,36 +165,44 @@
+@@ -183,46 +165,46 @@
      return audio_stretchfactor;
  }
  
@@ -1123,19 +1084,29 @@ Index: mythtv/libs/libmyth/audiooutputbase.cpp
 -    if (audio_codec)
 +    // Enough channels? Upmix if not
 +    if (settings.channels < configured_audio_channels &&
-+        !settings.use_passthru)
++         !settings.use_passthru)
      {
 -        codec_id = audio_codec->codec_id;
 -        cchannels = ((AVCodecContext*)audio_codec)->channels;
 -    }
 -
--    if ((configured_audio_channels == 6) &&
--        !(settings.codec || audio_codec))
+-    if ((configured_audio_channels == 2) &&
+-        !(settings.codec || audio_codec) &&
+-        (settings.channels == 1))
 -    {
          settings.channels = configured_audio_channels;
          lneeds_upmix = true;
+-        VERBOSE(VB_AUDIO,LOC + "Needs Mono->Stereo upmix");
+-    }
+-    else if ((configured_audio_channels == 6) &&
+-        !(settings.codec || audio_codec))
+-    {
+-        settings.channels = configured_audio_channels;
+-        lneeds_upmix = true;
          VERBOSE(VB_AUDIO,LOC + "Needs upmix");
-@@ -224,7 +214,7 @@
+     }
+ 
+@@ -232,7 +214,7 @@
          settings.samplerate == audio_samplerate && !need_resampler &&
          settings.use_passthru == audio_passthru &&
          lneeds_upmix == needs_upmix &&
@@ -1144,7 +1115,7 @@ Index: mythtv/libs/libmyth/audiooutputbase.cpp
      bool upmix_deps =
          (lsource_audio_channels == source_audio_channels);
      if (general_deps && upmix_deps)
-@@ -251,12 +241,12 @@
+@@ -259,12 +241,12 @@
      waud = raud = 0;
      audio_actually_paused = false;
  
@@ -1160,7 +1131,7 @@ Index: mythtv/libs/libmyth/audiooutputbase.cpp
      audio_passthru = settings.use_passthru;
      needs_upmix = lneeds_upmix;
  
-@@ -265,8 +255,9 @@
+@@ -273,8 +255,9 @@
          Error("AudioOutput only supports 8 or 16bit audio.");
          return;
      }
@@ -1172,7 +1143,7 @@ Index: mythtv/libs/libmyth/audiooutputbase.cpp
  
      need_resampler = false;
      killaudio = false;
-@@ -274,11 +265,71 @@
+@@ -282,11 +265,71 @@
      was_paused = true;
      internal_vol = gContext->GetNumSetting("MythControlsVolume", 0);
  
@@ -1247,7 +1218,7 @@ Index: mythtv/libs/libmyth/audiooutputbase.cpp
  
      // Actually do the device specific open call
      if (!OpenDevice())
-@@ -290,18 +341,23 @@
+@@ -298,18 +341,23 @@
          return;
      }
  
@@ -1276,14 +1247,15 @@ Index: mythtv/libs/libmyth/audiooutputbase.cpp
      audbuf_timecode = 0;
      audiotime = 0;
      samples_buffered = 0;
-@@ -310,27 +366,6 @@
+@@ -318,30 +366,8 @@
      current_seconds = -1;
      source_bitrate = -1;
  
 -    // NOTE: this won't do anything as above samplerate vars are set equal
 -    // Check if we need the resampler
 -    if (audio_samplerate != settings.samplerate)
--    {
++    if (needs_upmix)
+     {
 -        int error;
 -        VERBOSE(VB_GENERAL, LOC + QString("Using resampler. From: %1 to %2")
 -                               .arg(settings.samplerate).arg(audio_samplerate));
@@ -1301,10 +1273,13 @@ Index: mythtv/libs/libmyth/audiooutputbase.cpp
 -        need_resampler = true;
 -    }
 -
-     if (needs_upmix)
-     {
+-    if (needs_upmix &&
+-        !(settings.channels == 2))
+-    {
          VERBOSE(VB_AUDIO, LOC + QString("create upmixer"));
-@@ -345,63 +380,15 @@
+         if (configured_audio_channels == 6)
+         {
+@@ -354,63 +380,15 @@
              (FreeSurround::SurroundMode)surround_mode);
  
          VERBOSE(VB_AUDIO, LOC +
@@ -1371,7 +1346,7 @@ Index: mythtv/libs/libmyth/audiooutputbase.cpp
      // Setup visualisations, zero the visualisations buffers
      prepareVisuals();
  
-@@ -437,10 +424,15 @@
+@@ -446,10 +424,15 @@
      VERBOSE(VB_AUDIO, LOC + "Killing AudioOutputDSP");
      killaudio = true;
      StopOutputThread();
@@ -1387,7 +1362,7 @@ Index: mythtv/libs/libmyth/audiooutputbase.cpp
      need_resampler = false;
  
      // close sound stretcher
-@@ -448,6 +440,8 @@
+@@ -457,6 +440,8 @@
      {
          delete pSoundStretch;
          pSoundStretch = NULL;
@@ -1396,7 +1371,7 @@ Index: mythtv/libs/libmyth/audiooutputbase.cpp
      }
  
      if (encoder)
-@@ -462,6 +456,7 @@
+@@ -471,6 +456,7 @@
          upmixer = NULL;
      }
      needs_upmix = false;
@@ -1404,7 +1379,7 @@ Index: mythtv/libs/libmyth/audiooutputbase.cpp
  
      CloseDevice();
  
-@@ -612,21 +607,15 @@
+@@ -621,21 +607,15 @@
  
      // include algorithmic latencies
      if (pSoundStretch)
@@ -1429,7 +1404,7 @@ Index: mythtv/libs/libmyth/audiooutputbase.cpp
      audiotime = audbuf_timecode - (int)(totalbuffer * 100000.0 /
                                     (audio_bytes_per_sample * effdspstretched));
  
-@@ -651,6 +640,63 @@
+@@ -660,6 +640,63 @@
       return audbuf_timecode - GetAudiotime();
  }
  
@@ -1447,6 +1422,14 @@ Index: mythtv/libs/libmyth/audiooutputbase.cpp
 +int AudioOutputBase::GetSWVolume()
 +{
 +    return volume;
++}
++
++void AudioOutputBase::AdjustVolume(void *buffer, int len, bool music)
++{
++    if (audio_bits == 8)
++        _AdjustVolume<char>((char *)buffer, len, music);
++    else if (audio_bits == 16)
++        _AdjustVolume<short>((short *)buffer, len, music);
 +}
 +
 +template <class AudioDataType>
@@ -1482,18 +1465,10 @@ Index: mythtv/libs/libmyth/audiooutputbase.cpp
 +    }
 +}
 +
-+void AudioOutputBase::AdjustVolume(void *buffer, int len, bool music)
-+{
-+    if (audio_bits == 8)
-+        _AdjustVolume<char>((char *)buffer, len, music);
-+    else if (audio_bits == 16)
-+        _AdjustVolume<short>((short *)buffer, len, music);
-+}
-+
  bool AudioOutputBase::AddSamples(char *buffers[], int samples,
                                   long long timecode)
  {
-@@ -682,6 +728,8 @@
+@@ -691,6 +728,8 @@
          return false; // would overflow
      }
  
@@ -1502,7 +1477,7 @@ Index: mythtv/libs/libmyth/audiooutputbase.cpp
      // resample input if necessary
      if (need_resampler && src_ctx)
      {
-@@ -726,6 +774,10 @@
+@@ -735,6 +774,10 @@
      int abps = (encoder) ?
          encoder->audio_bytes_per_sample : audio_bytes_per_sample;
      int len = samples * abps;
@@ -1513,7 +1488,7 @@ Index: mythtv/libs/libmyth/audiooutputbase.cpp
  
      // Check we have enough space to write the data
      if (need_resampler && src_ctx)
-@@ -750,6 +802,8 @@
+@@ -759,6 +802,8 @@
          return false; // would overflow
      }
  
@@ -1522,20 +1497,20 @@ Index: mythtv/libs/libmyth/audiooutputbase.cpp
      // resample input if necessary
      if (need_resampler && src_ctx)
      {
-@@ -810,9 +864,12 @@
+@@ -819,9 +864,12 @@
              {
                  int error = src_reset(src_ctx);
                  if (error)
 +                {
                      VERBOSE(VB_IMPORTANT, LOC_ERR + QString(
-                             "Error occured while resetting resampler: %1")
+                             "Error occurred while resetting resampler: %1")
                              .arg(src_strerror(error)));
 +                    src_ctx = NULL;
 +                }
              }
          }
      }
-@@ -822,8 +879,6 @@
+@@ -852,8 +900,6 @@
  void AudioOutputBase::_AddSamples(void *buffer, bool interleaved, int samples,
                                    long long timecode)
  {
@@ -1544,20 +1519,25 @@ Index: mythtv/libs/libmyth/audiooutputbase.cpp
      int len; // = samples * audio_bytes_per_sample;
      int audio_bytes = audio_bits / 8;
      int org_waud = waud;
-@@ -840,17 +895,17 @@
+@@ -870,9 +916,9 @@
              .arg(samples * abps)
              .arg(kAudioRingBufferSize-afree).arg(afree).arg(timecode)
              .arg(needs_upmix));
 -
 +    
-+    len = WaitForFreeSpace(samples);
+     len = WaitForFreeSpace(samples);
+-
 +        
-     if (upmixer && needs_upmix)
+     if (needs_upmix &&
+         configured_audio_channels == 2 &&
+         source_audio_channels == 1)
+@@ -893,13 +939,11 @@
+     else if (upmixer && needs_upmix)
      {
          int out_samples = 0;
 +        org_waud = waud;
          int step = (interleaved)?source_audio_channels:1;
--        len = WaitForFreeSpace(samples);    // test
+-
 +	
          for (int itemp = 0; itemp < samples; )
          {
@@ -1567,7 +1547,7 @@ Index: mythtv/libs/libmyth/audiooutputbase.cpp
              if (audio_bytes == 2)
              {
                  itemp += upmixer->putSamples(
-@@ -867,7 +922,6 @@
+@@ -916,7 +960,6 @@
                      source_audio_channels,
                      (interleaved) ? 0 : samples);
              }
@@ -1575,16 +1555,15 @@ Index: mythtv/libs/libmyth/audiooutputbase.cpp
  
              int copy_samples = upmixer->numSamples();
              if (copy_samples)
-@@ -901,8 +955,6 @@
-     }
-     else
-     {
--        len = WaitForFreeSpace(samples);
+@@ -942,7 +985,6 @@
+                 org_waud = (org_waud + copy_len) % kAudioRingBufferSize;
+             }
+         }
 -
-         if (interleaved)
-         {
-             char *mybuf = (char*)buffer;
-@@ -937,138 +989,113 @@
+         if (samples > 0)
+             len = WaitForFreeSpace(out_samples);
+ 
+@@ -984,138 +1026,113 @@
          }
      }
  
@@ -1813,7 +1792,7 @@ Index: mythtv/libs/libmyth/audiooutputbase.cpp
  }
  
  void AudioOutputBase::Status()
-@@ -1209,18 +1236,9 @@
+@@ -1256,18 +1273,9 @@
                  last_space_on_soundcard = space_on_soundcard;
              }
  
@@ -1834,7 +1813,7 @@ Index: mythtv/libs/libmyth/audiooutputbase.cpp
  
 Index: mythtv/libs/libmyth/audiooutput.cpp
 ===================================================================
---- mythtv/libs/libmyth/audiooutput.cpp	(revision 21947)
+--- mythtv/libs/libmyth/audiooutput.cpp	(revision 22249)
 +++ mythtv/libs/libmyth/audiooutput.cpp	(working copy)
 @@ -31,14 +31,16 @@
  AudioOutput *AudioOutput::OpenAudio(
@@ -1859,7 +1838,7 @@ Index: mythtv/libs/libmyth/audiooutput.cpp
  
 Index: mythtv/libs/libmyth/audiosettings.h
 ===================================================================
---- mythtv/libs/libmyth/audiosettings.h	(revision 21947)
+--- mythtv/libs/libmyth/audiosettings.h	(revision 22249)
 +++ mythtv/libs/libmyth/audiosettings.h	(working copy)
 @@ -29,17 +29,19 @@
          const QString    &audio_passthru_device,
@@ -1899,7 +1878,7 @@ Index: mythtv/libs/libmyth/audiosettings.h
  #endif // _AUDIO_SETTINGS_H_
 Index: mythtv/libs/libmyth/volumebase.h
 ===================================================================
---- mythtv/libs/libmyth/volumebase.h	(revision 21947)
+--- mythtv/libs/libmyth/volumebase.h	(revision 22249)
 +++ mythtv/libs/libmyth/volumebase.h	(working copy)
 @@ -20,6 +20,8 @@
      VolumeBase();    
@@ -1930,7 +1909,7 @@ Index: mythtv/libs/libmyth/volumebase.h
  
 Index: mythtv/libs/libmyth/audiooutputoss.cpp
 ===================================================================
---- mythtv/libs/libmyth/audiooutputoss.cpp	(revision 21947)
+--- mythtv/libs/libmyth/audiooutputoss.cpp	(revision 22249)
 +++ mythtv/libs/libmyth/audiooutputoss.cpp	(working copy)
 @@ -42,6 +42,36 @@
      KillAudio();
@@ -1981,7 +1960,7 @@ Index: mythtv/libs/libmyth/audiooutputoss.cpp
  
 Index: mythtv/libs/libmyth/audiooutputdigitalencoder.cpp
 ===================================================================
---- mythtv/libs/libmyth/audiooutputdigitalencoder.cpp	(revision 21947)
+--- mythtv/libs/libmyth/audiooutputdigitalencoder.cpp	(revision 22249)
 +++ mythtv/libs/libmyth/audiooutputdigitalencoder.cpp	(working copy)
 @@ -32,9 +32,8 @@
  AudioOutputDigitalEncoder::AudioOutputDigitalEncoder(void) :
@@ -2134,7 +2113,7 @@ Index: mythtv/libs/libmyth/audiooutputdigitalencoder.cpp
 +}
 Index: mythtv/libs/libmyth/audiooutput.h
 ===================================================================
---- mythtv/libs/libmyth/audiooutput.h	(revision 21947)
+--- mythtv/libs/libmyth/audiooutput.h	(revision 22249)
 +++ mythtv/libs/libmyth/audiooutput.h	(working copy)
 @@ -15,9 +15,11 @@
      static AudioOutput *OpenAudio(
@@ -2160,7 +2139,7 @@ Index: mythtv/libs/libmyth/audiooutput.h
      void Error(const QString &msg);
 Index: mythtv/libs/libmyth/audiooutputdigitalencoder.h
 ===================================================================
---- mythtv/libs/libmyth/audiooutputdigitalencoder.h	(revision 21947)
+--- mythtv/libs/libmyth/audiooutputdigitalencoder.h	(revision 22249)
 +++ mythtv/libs/libmyth/audiooutputdigitalencoder.h	(working copy)
 @@ -5,6 +5,9 @@
  #include "libavcodec/avcodec.h"
@@ -2211,9 +2190,9 @@ Index: mythtv/libs/libmyth/audiooutputdigitalencoder.h
  #endif
 Index: mythtv/libs/libmyth/audiooutputalsa.h
 ===================================================================
---- mythtv/libs/libmyth/audiooutputalsa.h	(revision 21947)
+--- mythtv/libs/libmyth/audiooutputalsa.h	(revision 22249)
 +++ mythtv/libs/libmyth/audiooutputalsa.h	(working copy)
-@@ -65,14 +65,18 @@
+@@ -65,8 +65,10 @@
      virtual void WriteAudio(unsigned char *aubuf, int size);
      virtual int  GetSpaceOnSoundcard(void) const;
      virtual int  GetBufferedOnSoundcard(void) const;
@@ -2224,18 +2203,9 @@ Index: mythtv/libs/libmyth/audiooutputalsa.h
      inline int SetParameters(snd_pcm_t *handle,
                               snd_pcm_format_t format, unsigned int channels,
                               unsigned int rate, unsigned int buffer_time,
-                              unsigned int period_time);
- 
--
-+    void ReorderSmpteToAlsa6ch(unsigned char *buf, int size);
-+    template <class AudioDataType>
-+        void _ReorderSmpteToAlsa6ch(AudioDataType *buf, int size);
-     // Volume related
-     void SetCurrentVolume(QString control, int channel, int volume);
-     void OpenMixer(bool setstartingvolume);
 Index: mythtv/libs/libmythfreesurround/el_processor.cpp
 ===================================================================
---- mythtv/libs/libmythfreesurround/el_processor.cpp	(revision 21947)
+--- mythtv/libs/libmythfreesurround/el_processor.cpp	(revision 22249)
 +++ mythtv/libs/libmythfreesurround/el_processor.cpp	(working copy)
 @@ -26,7 +26,6 @@
  #include "fftw3.h"
@@ -2384,7 +2354,7 @@ Index: mythtv/libs/libmythfreesurround/el_processor.cpp
  void fsurround_decoder::steering_mode(bool mode) { impl->steering_mode(mode); }
 Index: mythtv/libs/libmythfreesurround/freesurround.cpp
 ===================================================================
---- mythtv/libs/libmythfreesurround/freesurround.cpp	(revision 21947)
+--- mythtv/libs/libmythfreesurround/freesurround.cpp	(revision 22249)
 +++ mythtv/libs/libmythfreesurround/freesurround.cpp	(working copy)
 @@ -63,10 +63,9 @@
  const unsigned default_block_size = 8192;
@@ -2437,102 +2407,15 @@ Index: mythtv/libs/libmythfreesurround/freesurround.cpp
  {
  }
  
-@@ -329,11 +324,11 @@
-                     for (i=0;(i<numSamples) && (ic < bs);i++,ic++)
-                     {
-                         int16bufs->l[ic] = *samples++ >> 1;
--                        int16bufs->c[ic] = *samples++ >> 1;
-                         int16bufs->r[ic] = *samples++ >> 1;
-+                        int16bufs->c[ic] = *samples++ >> 1;
-+                        int16bufs->lfe[ic] = *samples++ >> 1;
-                         int16bufs->ls[ic] = *samples++ >> 1;
-                         int16bufs->rs[ic] = *samples++ >> 1;
--                        int16bufs->lfe[ic] = *samples++ >> 1;
-                     }
-                     break;
-             }
-@@ -391,11 +386,11 @@
-                         for (i=0;i<numSamples;i++)
-                         {
-                             *l++ = *samples++ >> 1;
--                            *c++ = *samples++ >> 1;
-                             *r++ = *samples++ >> 1;
-+                            *c++ = *samples++ >> 1;
-+                            *lfe++ = *samples++ >> 1;
-                             *ls++ = *samples++ >> 1;
-                             *rs++ = *samples++ >> 1;
--                            *lfe++ = *samples++ >> 1;
-                         }
-                         } break;
-                 }
-@@ -479,11 +474,11 @@
-                     for (i=0;(i<numSamples) && (ic < bs);i++,ic++)
-                     {
-                         int16bufs->l[ic] = *samples++ << 7;
--                        int16bufs->c[ic] = *samples++ << 7;
-                         int16bufs->r[ic] = *samples++ << 7;
-+                        int16bufs->c[ic] = *samples++ << 7;
-+                        int16bufs->lfe[ic] = *samples++ << 7;
-                         int16bufs->ls[ic] = *samples++ << 7;
-                         int16bufs->rs[ic] = *samples++ << 7;
--                        int16bufs->lfe[ic] = *samples++ << 7;
-                     }
-                     break;
-             }
-@@ -541,11 +536,11 @@
-                         for (i=0;i<numSamples;i++)
-                         {
-                             *l++ = *samples++ << 7;
--                            *c++ = *samples++ << 7;
-                             *r++ = *samples++ << 7;
-+                            *c++ = *samples++ << 7;
-+                            *lfe++ = *samples++ << 7;
-                             *ls++ = *samples++ << 7;
-                             *rs++ = *samples++ << 7;
--                            *lfe++ = *samples++ << 7;
-                         }
-                         } break;
-                 }
-@@ -588,10 +583,10 @@
-             {
-                 *output++ = int16bufs->l[outindex];
-                 *output++ = int16bufs->r[outindex];
--                *output++ = int16bufs->ls[outindex];
--                *output++ = int16bufs->rs[outindex];
-                 *output++ = int16bufs->c[outindex];
-                 *output++ = int16bufs->lfe[outindex];
-+                *output++ = int16bufs->ls[outindex];
-+                *output++ = int16bufs->rs[outindex];
-                 oc--;
-                 outindex++;
-             }
-@@ -611,10 +606,10 @@
-                 {
-                     *output++ = lrintf(*l++ INV_MASTER_GAIN);
-                     *output++ = lrintf(*r++ INV_MASTER_GAIN);
--                    *output++ = lrintf(*ls++ INV_MASTER_GAIN);
--                    *output++ = lrintf(*rs++ INV_MASTER_GAIN);
-                     *output++ = lrintf(*c++ INV_MASTER_GAIN);
-                     *output++ = lrintf(*lfe++ INV_MASTER_GAIN);
-+                    *output++ = lrintf(*ls++ INV_MASTER_GAIN);
-+                    *output++ = lrintf(*rs++ INV_MASTER_GAIN);
-                 }
-                 oc -= maxSamples;
-                 outindex += maxSamples;
-@@ -631,10 +626,10 @@
-                 {
-                     *output++ = *l++;
-                     *output++ = *r++;
--                    *output++ = *ls++;
--                    *output++ = *rs++;
-                     *output++ = *c++;
-                     *output++ = *lfe++;
-+                    *output++ = *ls++;
-+                    *output++ = *rs++;
-                 }
-                 oc -= maxSamples;
-                 outindex += maxSamples;
-@@ -655,16 +650,6 @@
+@@ -581,6 +576,7 @@
+     uint oc = out_count;
+     if (maxSamples>oc) maxSamples = oc;
+     uint outindex = processed_size - oc;
++
+     switch (surround_mode)
+     {
+         case SurroundModePassive:
+@@ -655,16 +651,6 @@
      {
          if (decoder) 
          {
@@ -2551,7 +2434,7 @@ Index: mythtv/libs/libmythfreesurround/freesurround.cpp
      }
 Index: mythtv/libs/libmythfreesurround/el_processor.h
 ===================================================================
---- mythtv/libs/libmythfreesurround/el_processor.h	(revision 21947)
+--- mythtv/libs/libmythfreesurround/el_processor.h	(revision 22249)
 +++ mythtv/libs/libmythfreesurround/el_processor.h	(working copy)
 @@ -47,14 +47,11 @@
  	//  a is the coefficient of left rear in left total, b is the coefficient of left rear in right total; the same is true for right.
@@ -2574,7 +2457,7 @@ Index: mythtv/libs/libmythfreesurround/el_processor.h
  	// override the steering mode
 Index: mythtv/programs/mythfrontend/globalsettings.cpp
 ===================================================================
---- mythtv/programs/mythfrontend/globalsettings.cpp	(revision 21947)
+--- mythtv/programs/mythfrontend/globalsettings.cpp	(revision 22249)
 +++ mythtv/programs/mythfrontend/globalsettings.cpp	(working copy)
 @@ -91,30 +91,37 @@
  static HostComboBox *MaxAudioChannels()
@@ -2699,7 +2582,7 @@ Index: mythtv/programs/mythfrontend/globalsettings.cpp
      return gc;
  }
  
-@@ -1985,18 +1993,6 @@
+@@ -1958,18 +1966,6 @@
      return gc;
  }
  
@@ -2718,7 +2601,7 @@ Index: mythtv/programs/mythfrontend/globalsettings.cpp
  static HostCheckBox *ClearSavedPosition()
  {
      HostCheckBox *gc = new HostCheckBox("ClearSavedPosition");
-@@ -3505,25 +3501,43 @@
+@@ -3467,25 +3463,43 @@
      return gs;
  }
  
@@ -2773,9 +2656,9 @@ Index: mythtv/programs/mythfrontend/globalsettings.cpp
  
 Index: mythtv/programs/mythtranscode/transcode.cpp
 ===================================================================
---- mythtv/programs/mythtranscode/transcode.cpp	(revision 21947)
+--- mythtv/programs/mythtranscode/transcode.cpp	(revision 22249)
 +++ mythtv/programs/mythtranscode/transcode.cpp	(working copy)
-@@ -49,7 +49,7 @@
+@@ -37,7 +37,7 @@
      AudioReencodeBuffer(int audio_bits, int audio_channels)
      {
          Reset();
@@ -2784,7 +2667,7 @@ Index: mythtv/programs/mythtranscode/transcode.cpp
          Reconfigure(settings);
          bufsize = 512000;
          audiobuffer = new unsigned char[bufsize];
-@@ -222,7 +222,23 @@
+@@ -210,7 +210,23 @@
          // Do nothing
          return kMuteOff;
      }

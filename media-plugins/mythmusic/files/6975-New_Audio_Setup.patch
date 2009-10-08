@@ -1,6 +1,6 @@
 Index: mythplugins/mythmusic/mythmusic/playbackbox.cpp
 ===================================================================
---- mythplugins/mythmusic/mythmusic/playbackbox.cpp	(revision 21947)
+--- mythplugins/mythmusic/mythmusic/playbackbox.cpp	(revision 22249)
 +++ mythplugins/mythmusic/mythmusic/playbackbox.cpp	(working copy)
 @@ -365,6 +365,8 @@
              changeSpeed(true);
@@ -27,7 +27,7 @@ Index: mythplugins/mythmusic/mythmusic/playbackbox.cpp
      if (progress_bar && visualizer_status != 2)
 Index: mythplugins/mythmusic/mythmusic/globalsettings.cpp
 ===================================================================
---- mythplugins/mythmusic/mythmusic/globalsettings.cpp	(revision 21947)
+--- mythplugins/mythmusic/mythmusic/globalsettings.cpp	(revision 22249)
 +++ mythplugins/mythmusic/mythmusic/globalsettings.cpp	(working copy)
 @@ -67,6 +67,17 @@
      return gc;
@@ -57,7 +57,7 @@ Index: mythplugins/mythmusic/mythmusic/globalsettings.cpp
      general->addChild(AutoPlayCD());
 Index: mythplugins/mythmusic/mythmusic/avfdecoder.cpp
 ===================================================================
---- mythplugins/mythmusic/mythmusic/avfdecoder.cpp	(revision 21947)
+--- mythplugins/mythmusic/mythmusic/avfdecoder.cpp	(revision 22249)
 +++ mythplugins/mythmusic/mythmusic/avfdecoder.cpp	(working copy)
 @@ -256,8 +256,8 @@
      if (output())
@@ -72,19 +72,20 @@ Index: mythplugins/mythmusic/mythmusic/avfdecoder.cpp
      }
 Index: mythplugins/mythmusic/mythmusic/main.cpp
 ===================================================================
---- mythplugins/mythmusic/mythmusic/main.cpp	(revision 21947)
+--- mythplugins/mythmusic/mythmusic/main.cpp	(revision 22249)
 +++ mythplugins/mythmusic/mythmusic/main.cpp	(working copy)
-@@ -389,6 +389,7 @@
-     REG_KEY("Music", "VOLUMEDOWN", "Volume down",       "[,{,F10,Volume Down");
-     REG_KEY("Music", "VOLUMEUP",   "Volume up",         "],},F11,Volume Up");
-     REG_KEY("Music", "MUTE",       "Mute",              "|,\\,F9,Volume Mute");
-+    REG_KEY("Music", "TOGGLEUPMIX","Toggle upmixer",             "Ctrl+U");
-     REG_KEY("Music", "CYCLEVIS",   "Cycle visualizer mode",      "6");
-     REG_KEY("Music", "BLANKSCR",   "Blank screen",               "5");
-     REG_KEY("Music", "THMBUP",     "Increase rating",            "9");
+@@ -404,6 +404,8 @@
+         "Volume up"),         "],},F11,Volume Up");
+     REG_KEY("Music", "MUTE",       QT_TRANSLATE_NOOP("MythControls",
+         "Mute"),              "|,\\,F9,Volume Mute");
++    REG_KEY("Music", "TOGGLEUPMIX",QT_TRANSLATE_NOOP("MythControls",
++        "Toggle audio upmixer"),    "Ctrl+U");
+     REG_KEY("Music", "CYCLEVIS",   QT_TRANSLATE_NOOP("MythControls",
+         "Cycle visualizer mode"),      "6");
+     REG_KEY("Music", "BLANKSCR",   QT_TRANSLATE_NOOP("MythControls",
 Index: mythplugins/mythmusic/mythmusic/musicplayer.cpp
 ===================================================================
---- mythplugins/mythmusic/mythmusic/musicplayer.cpp	(revision 21947)
+--- mythplugins/mythmusic/mythmusic/musicplayer.cpp	(revision 22249)
 +++ mythplugins/mythmusic/mythmusic/musicplayer.cpp	(working copy)
 @@ -348,16 +348,19 @@
  
@@ -111,7 +112,7 @@ Index: mythplugins/mythmusic/mythmusic/musicplayer.cpp
  
 Index: mythplugins/mythmusic/mythmusic/playbackbox.h
 ===================================================================
---- mythplugins/mythmusic/mythmusic/playbackbox.h	(revision 21947)
+--- mythplugins/mythmusic/mythmusic/playbackbox.h	(revision 22249)
 +++ mythplugins/mythmusic/mythmusic/playbackbox.h	(working copy)
 @@ -69,6 +69,7 @@
      void changeVolume(bool up_or_down);
@@ -123,7 +124,7 @@ Index: mythplugins/mythmusic/mythmusic/playbackbox.h
      void showVolume(bool on_or_off);
 Index: mythplugins/mythmusic/mythmusic/cddecoder.cpp
 ===================================================================
---- mythplugins/mythmusic/mythmusic/cddecoder.cpp	(revision 21947)
+--- mythplugins/mythmusic/mythmusic/cddecoder.cpp	(revision 22249)
 +++ mythplugins/mythmusic/mythmusic/cddecoder.cpp	(working copy)
 @@ -14,6 +14,7 @@
  

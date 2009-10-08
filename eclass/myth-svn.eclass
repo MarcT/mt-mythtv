@@ -31,6 +31,9 @@ if hasq ${_MODULE} ${MYTHPLUGINS} ; then
 	ESVN_REPO_URI="http://cvs.mythtv.org/svn/trunk/mythplugins"
 	ESVN_PROJECT=mythplugins
 elif [ "${_MODULE}" == "mythtv-themes" ]; then
+	ESVN_REPO_URI="http://cvs.mythtv.org/svn/trunk/myththemes"
+	ESVN_PROJECT=myththemes
+elif [ "${_MODULE}" == "mythtv-themes-old" ]; then
 	ESVN_REPO_URI="http://cvs.mythtv.org/svn/trunk/oldthemes"
 	ESVN_PROJECT=oldthemes
 elif [ "${_MODULE}" == "mythtv-themes-extra" ]; then
@@ -78,6 +81,10 @@ myth-svn_src_unpack() {
 	elif [ "${_MODULE}" == "mythfrontend" ]; then
 		pkg_pro="mythtv.pro"
 	elif [ "${_MODULE}" == "mythtv-themes" ]; then
+		pkg_pro="myththemes.pro"
+	elif [ "${_MODULE}" == "mythtv-themes-old" ]; then
+		pkg_pro="myththemes.pro"
+	elif [ "${_MODULE}" == "mythtv-themes-extra" ]; then
 		pkg_pro="myththemes.pro"
 	fi
 
