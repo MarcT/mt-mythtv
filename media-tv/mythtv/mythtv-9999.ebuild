@@ -116,8 +116,6 @@ src_unpack() {
 	myth-svn_src_unpack || die "unpack failed"
 
 	cd ${S}
-
-	epatch "${FILESDIR}"/6975-New_Audio_Setup.patch
 }
 
 setup_pro() {

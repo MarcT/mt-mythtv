@@ -90,10 +90,6 @@ myth-svn_src_unpack() {
 
 	subversion_src_unpack ; cd ${S}
 
-	if [[ ${_MODULE} == "mythmusic" ]] ; then
-		epatch "${FILESDIR}"/6975-New_Audio_Setup.patch
-	fi
-
 	if use debug ; then
 		FEATURES="${FEATURES} nostrip"
 		sed \
