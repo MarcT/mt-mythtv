@@ -11,7 +11,7 @@ KEYWORDS="~x86 ~amd64"
 
 IUSE_VIDEO_CARDS="video_cards_i810 video_cards_nvidia video_cards_via"
 
-IUSE="alsa altivec arts autostart dbox2 debug directfb directv dvb dvd 
+IUSE="alsa altivec autostart dbox2 debug directfb directv dvb dvd 
 hdhomerun hdpvr ieee1394 iptv ivtv jack joystick latm lcd lirc mmx opengl 
 oss perl profile proc-opt vdpau vorbis X xv xvmc ${IUSE_VIDEO_CARDS}"
 
@@ -137,7 +137,6 @@ src_compile() {
 
 	myconf="$(use_enable alsa audio-alsa)
 		$(use_enable altivec)
-		$(use_enable arts audio-arts)
 		$(use_enable directfb)
 		$(use_enable dvb)
 		$(use_enable hdhomerun)

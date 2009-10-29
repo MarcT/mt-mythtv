@@ -69,7 +69,7 @@ RDEPEND="sys-libs/ncurses
 		mp2? ( media-sound/twolame )
 		mp3? ( media-sound/lame )
 		faac? ( media-libs/faac )
-		x264? ( >=media-libs/x264-0.0.20081006 )
+		x264? ( media-video/x264-encoder )
 		xvid? ( media-libs/xvid )
 		)
 	esd? ( media-sound/esound )
