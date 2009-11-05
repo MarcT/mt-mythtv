@@ -11,5 +11,4 @@ IUSE=""
 
 SRC_TEST="do"
 
-DEPEND="dev-lang/perl
-	dev-perl/module-build"
+DEPEND="dev-lang/perl"
