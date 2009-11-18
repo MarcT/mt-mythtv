@@ -23,11 +23,11 @@ RDEPEND=">=media-libs/freetype-2.0
 	x11-libs/libXv
 	x11-libs/libXrandr
 	x11-libs/libXxf86vm
-	x11-libs/qt-core:4[qt3support]
-	x11-libs/qt-gui:4[qt3support,tiff?]
-	x11-libs/qt-sql:4[qt3support,mysql]
-	x11-libs/qt-opengl:4[qt3support]
-	x11-libs/qt-webkit:4
+	>=x11-libs/qt-core-4.4:4[qt3support]
+	>=x11-libs/qt-gui-4.4:4[qt3support,tiff?]
+	>=x11-libs/qt-sql-4.4:4[qt3support,mysql]
+	>=x11-libs/qt-opengl-4.4:4[qt3support]
+	>=x11-libs/qt-webkit-4.4:4
 	virtual/mysql
 	virtual/opengl
 	virtual/glu
