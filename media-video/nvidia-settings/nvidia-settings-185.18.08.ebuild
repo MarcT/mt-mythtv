@@ -2,6 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-video/nvidia-settings/nvidia-settings-177.80.ebuild,v 1.1 2008/10/13 00:40:38 ricmm Exp $
 
+EAPI="2"
 inherit eutils toolchain-funcs multilib
 
 MY_P="${PN}-1.0"

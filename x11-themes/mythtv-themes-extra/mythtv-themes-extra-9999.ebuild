@@ -2,6 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/x11-themes/mythtv-themes/mythtv-themes-extra-9999.ebuild,v 1.3 2009/07/10 14:05:04 Marc Tousignant Exp $
 
+EAPI="2"
 inherit myth-svn
 
 DESCRIPTION="A collection of themes for the MythTV project."

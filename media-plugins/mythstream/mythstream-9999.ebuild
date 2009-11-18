@@ -4,7 +4,6 @@
 # $Header: /var/cvsroot/gentoo-x86/media-plugins/mythstream/mythstream.ebuild,v 1.0 2009/08/02 20:46:49 Marc Tousignant Exp $
 
 EAPI="2"
-
 inherit qt4 myth-svn
 
 DESCRIPTION="MythStream is an unofficial MythTV plugin that plays Internet audio and video streams."

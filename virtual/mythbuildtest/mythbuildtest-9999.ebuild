@@ -2,6 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/virtual/mythtvlibs/mythtvlibs-0.18.ebuild
 
+EAPI="2"
 DESCRIPTION="Virtual for mythtv built testing"
 HOMEPAGE="http://www.mythtv.org/"
 SRC_URI=""

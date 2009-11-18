@@ -2,6 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/app-misc/lirc/lirc-9999.ebuild,v 0.1 2009/07/31 MarcT Exp $
 
+EAPI="2"
 inherit eutils linux-mod flag-o-matic autotools cvs
 
 DESCRIPTION="decode and send infra-red signals of many commonly used remote controls"

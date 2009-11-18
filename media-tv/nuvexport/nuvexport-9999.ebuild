@@ -3,7 +3,6 @@
 # $Header: /var/cvsroot/gentoo-x86/media-tv/nuvexport/nuvexport-0.5_p20080311.ebuild,v 1.2 2009/01/10 14:45:35 beandog Exp $
 
 EAPI="2"
-
 inherit eutils subversion
 
 ESVN_REPO_URI="http://cvs.mythtv.org/svn/trunk/mythextras/nuvexport"
