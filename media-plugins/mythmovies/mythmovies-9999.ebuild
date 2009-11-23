@@ -23,3 +23,7 @@ setup_pro() {
 	return 0
 }
 
+src_configure() {
+        return 0
+}
+

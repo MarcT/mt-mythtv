@@ -133,7 +133,7 @@ setup_pro() {
                 -i "${S}"/bindings/perl/perl.pro
 }
 
-src_compile() {
+src_configure() {
 	use debug && use profile && die "You can not have USE="debug" and USE="profile" at the same time. Must disable one or the other."
 
 	myconf="$(use_enable alsa audio-alsa)
@@ -160,7 +160,9 @@ src_compile() {
 
 	use debug && myconf="${myconf} --compile-type=debug"
 	use profile && myconf="${myconf} --compile-type=profile"
+}
 
+src_compile() {
 	myth-svn_src_compile
 }
 

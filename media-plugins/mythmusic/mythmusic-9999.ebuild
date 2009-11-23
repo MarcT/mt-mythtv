@@ -46,14 +46,15 @@ setup_pro() {
 	return 0
 }
 
-src_compile() {
+src_configure() {
 	myconf="${myconf}
 		$(use_enable aac)
 		$(use_enable X fftw)
 		$(use_enable opengl)
 		$(use_enable sdl)
 		$(use_enable libvisual)"
-
-	myth-svn_src_compile
 }
 
+src_compile() {
+	myth-svn_src_compile
+}

@@ -25,5 +25,9 @@ DEPEND=">=sys-apps/sed-4
 	>=media-tv/mythtv-${PV}"
 
 setup_pro() {
+        return 0
+}
+
+src_configure() {
 	myconf="${myconf} $(use_enable exif) $(use_enable opengl)"
 }

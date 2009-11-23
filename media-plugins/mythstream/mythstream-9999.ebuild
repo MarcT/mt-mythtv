@@ -37,6 +37,10 @@ src_unpack() {
 	qmake mythstream.pro
 }
 
+src_configure() {
+        return 0
+}
+
 src_compile() {
 	emake || die
 }
