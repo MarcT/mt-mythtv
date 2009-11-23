@@ -123,7 +123,7 @@ myth-svn_src_compile() {
 		done
 	fi
 	# Myth doesn't use autoconf, and it rejects unexpected options.
-	myconf=$(echo ${myconf} | sed -e 'sX--enable-audio-jackXXg' -e 'sX--enable-audio-alsaXXg' -e 'sX--enable-audio-artsXXg' -e 'sX--enable-audio-ossXXg' -e 'sX--build=x86_64-pc-linux-gnuXXg' -e 'sX--host=x86_64-pc-linux-gnuXXg' )
+	myconf=$(echo ${myconf} | sed -e 'sX--enable-audio-jackXXg' -e 'sX--enable-audio-alsaXXg' -e 'sX--enable-audio-artsXXg' -e 'sX--enable-audio-ossXXg' )
 	sed -e 's/rm mythconfig.mak/rm -f mythconfig.mak/' -i configure
 
         ## CFLAG cleaning so it compiles
