@@ -14,7 +14,7 @@ HOMEPAGE="http://search.cpan.org/~grommel/Math-Round/"
 
 SLOT="0"
 LICENSE="Artistic"
-KEYWORDS="~x86"
+KEYWORDS="~amd64 ~x86"
 IUSE=""
 
 SRC_TEST="do"
