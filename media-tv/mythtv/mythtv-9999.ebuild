@@ -117,6 +117,8 @@ src_unpack() {
 	myth-svn_src_unpack || die "unpack failed"
 
 	cd ${S}
+
+	epatch "${FILESDIR}"/${PN}-0.22-sandbox.patch
 }
 
 setup_pro() {

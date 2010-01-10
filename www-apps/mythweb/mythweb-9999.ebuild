@@ -11,6 +11,10 @@ ESVN_PROJECT=mythplugins
 ESVN_STORE_DIR="${DISTDIR}/svn-src"
 _MODULE=${PN}
 S="${WORKDIR}/${_MODULE}"
+
+[ -z "${MYTHTV_SVN_REVISION}" ] || ESVN_FETCH_CMD="svn checkout --revision ${MYTHTV_SVN_REVISION}"
+[ -z "${MYTHTV_SVN_REVISION}" ] || ESVN_UPDATE_CMD="svn update --revision ${MYTHTV_SVN_REVISION}"
+
 HOMEPAGE="http://www.mythtv.org/"
 IUSE=""
 LICENSE="GPL-2"

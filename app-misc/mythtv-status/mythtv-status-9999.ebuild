@@ -12,7 +12,6 @@ EGIT_REPO_URI="http://git.etc.gen.nz/mythtv-status.git"
 SRC_URI=""
 EGIT_PATCHES="${FILESDIR}"/mythtv-status-mt.patch
 
-
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~ppc ~ppc64 ~x86"
@@ -27,6 +26,10 @@ DEPEND="dev-util/git[curl]
 
 src_unpack() {
 	git_src_unpack
+}
+
+src_configure() {
+        return 0
 }
 
 src_compile() {

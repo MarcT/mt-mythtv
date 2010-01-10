@@ -23,7 +23,7 @@ ESVN_UPDATE_CMD="svn up"
 
 EXPORT_FUNCTIONS src_unpack src_compile src_install
 
-MYTHPLUGINS="mytharchive mythbrowser mythflix mythgallery mythgame mythmovies mythmusic mythnews mythvideo mythweather mythweb mythzoneminder"
+MYTHPLUGINS="mytharchive mythbrowser mythgallery mythgame mythmovies mythmusic mythnews mythvideo mythweather mythweb mythzoneminder"
 
 _MODULE=${PN}
 
