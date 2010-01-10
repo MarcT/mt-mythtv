@@ -1,0 +1,3 @@
+#! /bin/sh
+
+mythtv-update-motd --encoder-details --colour

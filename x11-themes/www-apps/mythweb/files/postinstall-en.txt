@@ -1,0 +1,4 @@
+You should modify ${MY_INSTALLDIR}/config/conf.php to fit your needs.
+
+If you are using php5 you may experience bugs, please report these to
+either Gentoo or MythTV bugzilla.
