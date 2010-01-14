@@ -8,9 +8,9 @@ inherit qt4 myth-svn
 
 DESCRIPTION="MythStream is an unofficial MythTV plugin that plays Internet audio and video streams."
 HOMEPAGE="http://home.kabelfoon.nl/~moongies/streamtuned.html"
-SRC_URI="http://home.kabelfoon.nl/~moongies/sw9vc4htz2/mythstream-0.18_qt4.tar.gz"
+SRC_URI="http://home.kabelfoon.nl/~moongies/sw9vc4htz2/mythstream_mythtv-r21640.tar.gz"
 
-S=${WORKDIR}/"mythstream-0.18_qt4"
+S=${WORKDIR}/"mythstream_mythtv-r21640"
 
 LICENSE="GPL-2"
 SLOT="0"
@@ -26,14 +26,6 @@ DEPEND="|| ( media-video/mplayer-mt media-video/mplayer )
 src_unpack() {
 	unpack ${A}
 	cd "${S}"
-	epatch "${FILESDIR}"/mythstream-parser-update.patch
-	epatch "${FILESDIR}"/mythstream-0.18_qt4-mythtv_0_22.patch
-	epatch "${FILESDIR}"/mythstream-0.18_qt4-apple_parser_fix.patch
-	epatch "${FILESDIR}"/mythstream-0.18_qt4-apple_parser_resolutions.patch
-	epatch "${FILESDIR}"/mythstream-0.18_qt4-streams_res.patch
-	epatch "${FILESDIR}"/mythstream-0.18_qt4-youtube_parser_fix.patch
-	epatch "${FILESDIR}"/mythstream-0.18_qt4-qt_paintevent_fix.patch
-	epatch "${FILESDIR}"/mythstream-0.18_qt4-qt_bitblt_replace.patch
 	qmake mythstream.pro
 }
 
