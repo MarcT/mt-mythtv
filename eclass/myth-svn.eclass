@@ -28,19 +28,19 @@ MYTHPLUGINS="mytharchive mythbrowser mythgallery mythgame mythmovies mythmusic m
 _MODULE=${PN}
 
 if hasq ${_MODULE} ${MYTHPLUGINS} ; then
-	ESVN_REPO_URI="http://cvs.mythtv.org/svn/trunk/mythplugins"
+	ESVN_REPO_URI="http://svn.mythtv.org/svn/svn/trunk/mythplugins"
 	ESVN_PROJECT=mythplugins
 elif [ "${_MODULE}" == "mythtv-themes" ]; then
-	ESVN_REPO_URI="http://cvs.mythtv.org/svn/trunk/myththemes"
+	ESVN_REPO_URI="http://svn.mythtv.org/svn/svn/trunk/myththemes"
 	ESVN_PROJECT=myththemes
 elif [ "${_MODULE}" == "mythtv-themes-old" ]; then
-	ESVN_REPO_URI="http://cvs.mythtv.org/svn/trunk/oldthemes"
+	ESVN_REPO_URI="http://svn.mythtv.org/svn/svn/trunk/oldthemes"
 	ESVN_PROJECT=oldthemes
 elif [ "${_MODULE}" == "mythtv-themes-extra" ]; then
-        ESVN_REPO_URI="http://cvs.mythtv.org/svn/trunk/themes"
+        ESVN_REPO_URI="http://svn.mythtv.org/svn/svn/trunk/themes"
         ESVN_PROJECT=themes
 else
-	ESVN_REPO_URI="http://cvs.mythtv.org/svn/trunk/mythtv"
+	ESVN_REPO_URI="http://svn.mythtv.org/svn/svn/trunk/mythtv"
 	ESVN_PROJECT=${_MODULE/frontend/tv}
 fi
 
