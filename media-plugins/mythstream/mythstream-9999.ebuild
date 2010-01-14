@@ -21,7 +21,7 @@ DEPEND="|| ( media-video/mplayer-mt media-video/mplayer )
 	dev-perl/XML-Simple
 	dev-perl/XML-DOM
 	dev-perl/XML-XQL
-	=sci-libs/fftw-2*"
+	=sci-libs/fftw-3*"
 
 src_unpack() {
 	unpack ${A}
