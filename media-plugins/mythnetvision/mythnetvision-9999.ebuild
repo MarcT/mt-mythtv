@@ -1,7 +1,5 @@
 # Copyright 1999-2009 Gentoo Foundation
-# Copyright 2005 Preston Crow
-# Modifications by (Simon at Koala) from mythtv-dev list.
-# Modifications by Marc Tousignant 2009
+# Copyright 2010 Marc Tousignant 2009
 #  ( If you make changes, please add a copyright notice above, but
 #    never remove an existing notice. )
 # Distributed under the terms of the GNU General Public License v2
@@ -10,7 +8,7 @@
 EAPI="2"
 inherit myth-svn
 
-DESCRIPTION="RSS feed news reading module for MythTV."
+DESCRIPTION="NetVision module for MythTV."
 HOMEPAGE="http://www.mythtv.org/"
 
 LICENSE="GPL-2"
@@ -25,6 +23,28 @@ DEPEND=">=sys-apps/sed-4
 	>=dev-lang/python-2.5
 	dev-python/feedparser
 	dev-python/pycurl"
+
+pkg_setup() {
+	ewarn
+	ewarn "Add the following to library.xml in defaultmenu: "
+	ewarn 
+	ewarn "    <button>"
+	ewarn "        <type>NET_VIDEO_SEARCH</type>"
+	ewarn "        <text>Search Internet Video</text>"
+	ewarn "        <description>Search popular video sites</description>"
+	ewarn "        <action>JUMP MythNetVision</action>"
+	ewarn "        <depends>mythnetvision</depends>"
+	ewarn "    </button>"
+	ewarn
+	ewarn "    <button>"
+	ewarn "        <type>NET_VIDEO_TREE</type>"
+	ewarn "        <text>Browse Internet Video</text>"
+	ewarn "        <description>Browse highlights and entire sites</description>"
+	ewarn "        <action>JUMP MythNetTree</action>"
+	ewarn "        <depends>mythnetvision</depends>"
+	ewarn "    </button>"
+	ewarn
+}
 
 setup_pro() {
 	return 0
