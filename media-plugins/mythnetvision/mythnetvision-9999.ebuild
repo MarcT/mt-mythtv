@@ -24,28 +24,6 @@ DEPEND=">=sys-apps/sed-4
 	dev-python/feedparser
 	dev-python/pycurl"
 
-pkg_setup() {
-	ewarn
-	ewarn "Add the following to library.xml in defaultmenu: "
-	ewarn 
-	ewarn "    <button>"
-	ewarn "        <type>NET_VIDEO_SEARCH</type>"
-	ewarn "        <text>Search Internet Video</text>"
-	ewarn "        <description>Search popular video sites</description>"
-	ewarn "        <action>JUMP MythNetVision</action>"
-	ewarn "        <depends>mythnetvision</depends>"
-	ewarn "    </button>"
-	ewarn
-	ewarn "    <button>"
-	ewarn "        <type>NET_VIDEO_TREE</type>"
-	ewarn "        <text>Browse Internet Video</text>"
-	ewarn "        <description>Browse highlights and entire sites</description>"
-	ewarn "        <action>JUMP MythNetTree</action>"
-	ewarn "        <depends>mythnetvision</depends>"
-	ewarn "    </button>"
-	ewarn
-}
-
 setup_pro() {
 	return 0
 }
