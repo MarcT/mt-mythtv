@@ -50,24 +50,21 @@ S="${WORKDIR}/${_MODULE}"
 
 myth-svn_src_unpack() {
 	#
-	# Deal with subversion eclass avoiding updates when
-	# the last run was within an hour
+	# Disable checkout if local repo was downloaded within the past 
+	# 2 hours and MYTHTV_SVN_REVISION has not been changed
 	#
-	if hasq ${_MODULE} ${MYTHPLUGINS} ; then
-
-		[ -z "${MYTHPLUGINS_SVN_REVISION}" ] || ESVN_FETCH_CMD="svn checkout --revision ${MYTHTV_SVN_REVISION}"
-		[ -z "${MYTHPLUGINS_SVN_REVISION}" ] || ESVN_UPDATE_CMD="svn update --revision ${MYTHTV_SVN_REVISION}"
-
-		ENTRIES=/usr/portage/distfiles/svn-src/mythplugins/mythplugins/.svn/entries
-		if [ -f "${ENTRIES}" ] ; then
-			local REV=$(grep '  revision="' ${ENTRIES} | sed -e 'sX^[^"]*XX' -e 'sX".*XX' )
-			if [ -n "${MYTHPLUGINS_SVN_REVISION}" ] && [ "${REV}" != "${MYTHPLUGINS_SVN_REVISION}" ] ; then
-				touch -t 199901010101 ${ENTRIES}
-			fi
-			local NOW=$(date +%s) UPDATE=$(date -r ${ENTRIES} +%s) INTERVAL=3600
-			if (( ${NOW} - ${UPDATE} <= ${INTERVAL} )); then
+	ESVN_UP_FREQ=2
+	ENTRIES=${ESVN_STORE_DIR}/${ESVN_PROJECT}/${ESVN_PROJECT}/.svn/entries
+	if [ -f "${ENTRIES}" ] ; then
+		local REV=`svn info ${ESVN_STORE_DIR}/${ESVN_PROJECT}/${ESVN_PROJECT} | grep 'Revision: ' | sed 's/[^0-9]*\([0-9]*\).*/\1/' `
+		if [ -n "${MYTHTV_SVN_REVISION}" ] && [ "${REV}" != "${MYTHTV_SVN_REVISION}" ] ; then
+			ESVN_UP_FREQ=0
+		fi
+		local NOW=$(date +%s) UPDATE=$(date -r ${ENTRIES} +%s) INTERVAL=7200
+		if (( ${NOW} - ${UPDATE} <= ${INTERVAL} )) && [ "${REV}" = "${MYTHTV_SVN_REVISION}" ] ; then
+			if hasq ${_MODULE} ${MYTHPLUGINS} ; then
 				echo
-				ewarn "You ran this within 1 hour of another myth plugin ebuild,"
+				ewarn "You ran this within 2 hours of another myth plugin ebuild,"
 		        	ewarn "so it will skip the update.  To bypass this:"
 				ewarn " touch -t 199901010101 ${ENTRIES}"
 				echo

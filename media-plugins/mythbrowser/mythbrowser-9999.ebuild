@@ -8,7 +8,7 @@
 # $Header: $
 
 EAPI="2"
-inherit myth-svn kde-functions
+inherit myth-svn kde4-functions
 
 DESCRIPTION="Web browser module for MythTV."
 HOMEPAGE="http://www.mythtv.org/"
