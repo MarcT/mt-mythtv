@@ -65,6 +65,22 @@ DEPEND="${RDEPEND}
 PDEPEND=""
 
 pkg_setup() {
+	ENTRIES=/usr/portage/distfiles/svn-src/mythtv/mythtv/.svn/entries
+	if [ -f "${ENTRIES}" ] ; then
+		local REV=$(grep '  revision="' ${ENTRIES} | sed -e 'sX^[^"]*XX' -e 'sX".*XX' )
+		if [ -n "${MYTHTV_SVN_REVISION}" ] && [ "${REV}" != "${MYTHTV_SVN_REVISION}" ] ; then
+			touch -t 199901010101 ${ENTRIES}
+		fi
+		local NOW=$(date +%s) UPDATE=$(date -r ${ENTRIES} +%s) INTERVAL=3600
+		if (( ${NOW} - ${UPDATE} <= ${INTERVAL} )); then
+			echo
+			ewarn "You ran this within 1 hour of your last build,"
+			ewarn "so it will skip the update.  To bypass this:"
+			ewarn " touch -t 199901010101 ${ENTRIES}"
+			echo
+		fi
+	fi
+
 	if use xvmc && use video_cards_nvidia; then
 		elog
 		elog "For NVIDIA based cards, the XvMC renderer only works on"
@@ -106,7 +122,7 @@ src_unpack() {
 }
 
 setup_pro() {
-	cp -fR ${ESVN_STORE_DIR}/mythtv/mythtv/.svn ${S}
+	cp -fR /usr/portage/distfiles/svn-src/mythtv/mythtv/.svn ${S}
 
         # upstream wants the revision number in their version.cpp
         # since the subversion.eclass strips out the .svn directory
