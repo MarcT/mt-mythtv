@@ -38,5 +38,16 @@ src_install() {
         einfo " Cleaning the build folder to avoid possible collisions "
         rm ${S}/*
         cp -r "${S}" "${D}/usr/share/mythtv/themes"
+	if [ -a "${S}/Arclight" ] ; then
+		dodir /usr/share/fonts/Arclight
+		cp -r "${S}/Arclight/CartoGothicStd-Book.otf" "${D}/usr/share/fonts/Arclight"
+		cp -r "${S}/Arclight/League Gothic.otf" "${D}/usr/share/fonts/Arclight"
+	fi
 }
 
+pkg_postinst() {
+	if [ -a "${S}/Arclight" ] ; then
+		einfo "Installing Arclight Fonts"
+		fc-cache -f
+	fi
+}
