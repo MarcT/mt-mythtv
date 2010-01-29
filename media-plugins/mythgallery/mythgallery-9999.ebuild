@@ -16,7 +16,7 @@ HOMEPAGE="http://www.mythtv.org/"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="opengl exif"
+IUSE="debug exif opengl"
 
 DEPEND=">=sys-apps/sed-4
 	opengl? ( virtual/opengl )

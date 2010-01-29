@@ -13,7 +13,7 @@ inherit subversion eutils flag-o-matic multilib versionator toolchain-funcs
 
 ECLASS=myth-svn
 INHERITED="${INHERITED} ${ECLASS}"
-IUSE="${IUSE} nls debug"
+IUSE="${IUSE} nls"
 
 ESVN_FETCH_CMD="svn co"
 ESVN_UPDATE_CMD="svn up"
