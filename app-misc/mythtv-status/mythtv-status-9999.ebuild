@@ -17,7 +17,7 @@ SLOT="0"
 KEYWORDS="~amd64 ~ppc ~ppc64 ~x86"
 IUSE=""
 
-DEPEND="dev-util/git[curl]
+DEPEND="dev-vcs/git[curl]
 	dev-perl/libwww-perl
 	dev-perl/XML-LibXML
 	dev-perl/DateManip
