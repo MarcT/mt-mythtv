@@ -6,7 +6,7 @@ EAPI="2"
 inherit myth-svn webapp depend.php
 
 DESCRIPTION="PHP scripts intended to manage MythTV from a web browser."
-ESVN_REPO_URI="http://svn.mythtv.org/svn/trunk/mythplugins"
+ESVN_REPO_URI="http://svn.mythtv.org/svn/release-0-22-fixes/mythplugins"
 ESVN_PROJECT=mythplugins
 ESVN_STORE_DIR="${DISTDIR}/svn-src"
 _MODULE=${PN}
