@@ -5,7 +5,7 @@
 EAPI="2"
 inherit eutils subversion
 
-ESVN_REPO_URI="http://cvs.mythtv.org/svn/release-0-23-fixes/mythextras/nuvexport"
+ESVN_REPO_URI="http://cvs.mythtv.org/svn/branches/release-0-23-fixes/mythextras/nuvexport"
 
 DESCRIPTION="Export from mythtv recorded NuppelVideo files"
 HOMEPAGE="http://www.forevermore.net/mythtv/"
