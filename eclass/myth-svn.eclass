@@ -90,7 +90,7 @@ myth-svn_src_unpack() {
 	if use debug ; then
 		FEATURES="${FEATURES} nostrip"
 		sed \
-			-e '/profile:CONFIG +=/s/branches/release/debug/' \
+			-e '/profile:CONFIG +=/s/release/debug/' \
 			-i 'settings.pro' || die "Setting debug failed"
 	fi
 
