@@ -15,7 +15,7 @@ S=${WORKDIR}/"mythstream_mythtv-r21640"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~ppc ~ppc64 ~x86"
-IUSE=""
+IUSE="debug"
 
 DEPEND="|| ( media-video/mplayer-mt media-video/mplayer )
 	dev-perl/XML-Simple
