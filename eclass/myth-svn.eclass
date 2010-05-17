@@ -24,10 +24,11 @@ ESVN_UPDATE_CMD="svn up"
 EXPORT_FUNCTIONS src_unpack src_compile src_install
 
 MYTHPLUGINS="mytharchive mythbrowser mythgallery mythgame mythmovies mythmusic mythnetvision mythnews mythvideo mythweather mythzoneminder"
+ALLPLUGINS="${MYTHPLUGINS} mythweb"
 
 _MODULE=${PN}
 
-if hasq ${_MODULE} ${MYTHPLUGINS} ; then
+if hasq ${_MODULE} ${ALLPLUGINS} ; then
 	ESVN_REPO_URI="http://svn.mythtv.org/svn/trunk/mythplugins"
 	ESVN_PROJECT=mythplugins
 elif [ "${_MODULE}" == "mythtv-themes" ]; then
