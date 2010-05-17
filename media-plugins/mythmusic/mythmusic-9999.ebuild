@@ -16,7 +16,7 @@ HOMEPAGE="http://www.mythtv.org/"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="acc debug libvisual opengl sdl X"
+IUSE="debug libvisual opengl sdl X"
 
 DEPEND=">=media-libs/taglib-1.4
 	>=media-sound/cdparanoia-3.9.8
@@ -48,7 +48,6 @@ setup_pro() {
 
 src_configure() {
 	myconf="${myconf}
-		$(use_enable aac)
 		$(use_enable X fftw)
 		$(use_enable opengl)
 		$(use_enable sdl)

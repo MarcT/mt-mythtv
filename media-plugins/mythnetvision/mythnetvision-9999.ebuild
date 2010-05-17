@@ -22,6 +22,7 @@ DEPEND=">=sys-apps/sed-4
 	www-plugins/adobe-flash
 	>=dev-lang/python-2.5
 	dev-python/feedparser
+	dev-python/oauth
 	dev-python/pycurl"
 
 setup_pro() {
