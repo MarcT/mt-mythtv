@@ -29,7 +29,7 @@ RDEPEND="!dev-php/php
 pkg_setup() {
 	webapp_pkg_setup
 
-	require_php_with_use session mysql pcre posix json
+	require_php_with_use session mysql posix json
 }
 
 src_compile() {
