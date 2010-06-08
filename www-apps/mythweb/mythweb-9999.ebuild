@@ -20,7 +20,8 @@ IUSE=""
 LICENSE="GPL-2"
 KEYWORDS="~x86 ~amd64"
 
-DEPEND="dev-perl/Math-Round"
+DEPEND="dev-perl/Math-Round
+	>=dev-lang/php-5.3"
 
 RDEPEND="!dev-php/php
 	!www-apps/mythweb-cvs"
