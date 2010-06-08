@@ -1,0 +1,121 @@
+# Copyright 1999-2010 Gentoo Foundation
+# Distributed under the terms of the GNU General Public License v2
+# $Header: /var/cvsroot/gentoo-x86/dev-lang/php/files/eblits/src_install-v1.eblit,v 1.1 2010/05/27 23:05:04 mabi Exp $
+
+eblit-php-src_install() {
+	# Makefile forgets to create this before trying to write to it...
+	dodir "${PHP_DESTDIR}/bin"
+
+	# Install php environment (without any sapis)
+	emake INSTALL_ROOT="${D}" \
+		install-build install-headers install-programs \
+		|| die "emake install failed"
+
+	local extension_dir="$("${D}/${PHP_DESTDIR}/bin/php-config" --extension-dir)"
+
+	# And install the modules to it
+	if use sharedext ; then
+		insinto "${extension_dir}"
+		doins "${S}/modules/"*.so
+	fi
+
+	# Generate the USE file for PHP
+	phpconfutils_generate_usefile
+
+	# Create the directory where we'll put version-specific php scripts
+	keepdir /usr/share/php${PHP_MV}
+
+	if use cli ; then
+		einfo "Installing SAPI: cli"
+		into "${PHP_DESTDIR}"
+		dobin "${SAPIS}"/cli/php \
+			|| die "Unable to install cli sapi"
+		php_install_ini cli
+	fi
+
+	if use cgi ; then
+		einfo "Installing SAPI: cgi"
+		into "${PHP_DESTDIR}" # needed each time, php_install_ini would reset it
+		dobin "${SAPIS}"/cgi/php-cgi \
+			|| die "Unable to install cgi sapi"
+		php_install_ini cgi
+	fi
+
+	if use embed ; then
+		einfo "Installing SAPI: embed"
+		into "${PHP_DESTDIR}"
+		dolib.so "${SAPIS}"/embed/libphp5.so \
+			|| die "Unable to install embed sapi"
+		php_install_ini embed
+	fi
+
+	if use apache2 ; then
+		einfo "Installing SAPI: apache2"
+		emake INSTALL_ROOT="${D}" install-sapi || \
+			die "Unable to install apache2 SAPI"
+
+		if use concurrentmodphp ; then
+			einfo "Installing Apache2 config file 70_mod_php${PHP_MV}_concurr.conf"
+			insinto "${APACHE_MODULES_CONFDIR}"
+			newins "${FILESDIR}/70_mod_php${PHP_MV}_concurr.conf-apache2" \
+				"70_mod_php${PHP_MV}_concurr.conf"
+
+			# Put the ld version script in the right place so it's alwayas
+			# accessible
+			insinto "/var/lib/php-pkg/${CATEGORY}/${PN}-${PVR}/"
+			doins "${FILESDIR}/php${PHP_MV}-ldvs"
+		else
+			einfo "Installing Apache2 config 70_mod_php${PHP_MV}.conf)"
+			insinto ${APACHE_MODULES_CONFDIR}
+			newins "${FILESDIR}/70_mod_php${PHP_MV}.conf-apache2" \
+				"70_mod_php${PHP_MV}.conf"
+		fi
+		php_install_ini apache2
+	fi
+
+	# Install env.d files
+	newenvd "${FILESDIR}/20php${PHP_MV}-envd" \
+		"20php${PHP_MV}"
+	sed -e "s|/lib/|/$(get_libdir)/|g" -i \
+		"${D}/etc/env.d/20php${PHP_MV}"
+}
+
+php_install_ini() {
+	local phpsapi="${1}"
+
+	# work out where we are installing the ini file
+	php_set_ini_dir "${phpsapi}"
+
+	local phpinisrc="${PHP_INI_UPSTREAM}-${phpsapi}"
+	cp "${PHP_INI_UPSTREAM}" "${phpinisrc}"
+
+	# default to expose_php=Off, bug 300695
+	sed -e 's|^expose_php .*|expose_php = Off|g' -i "${phpinisrc}"
+
+	# Set the extension dir
+	sed -e "s|^extension_dir .*$|extension_dir = ${extension_dir}|g" -i "${phpinisrc}"
+
+	# Set the include path to point to where we want to find PEAR packages
+	sed -e 's|^;include_path = ".:/php/includes".*|include_path = ".:/usr/share/php'${PHP_MV}':/usr/share/php"|' -i "${phpinisrc}"
+
+	dodir ${PHP_INI_DIR}
+	insinto ${PHP_INI_DIR}
+	newins "${phpinisrc}" ${PHP_INI_FILE}
+
+	dodir ${PHP_EXT_INI_DIR}
+	dodir ${PHP_EXT_INI_DIR_ACTIVE}
+
+	# Install any extensions built as shared objects
+	if use sharedext ; then
+		insinto "${PHP_EXT_INI_DIR}"
+		for extension in "${D}/${extension_dir}/"*.so ; do
+			extension="${extension##*/}"
+			inifilename="${extension/.so/.ini}"
+			echo "extension=${extension}" > "${S}/modules/$inifilename"
+			doins "${S}/modules/$inifilename"
+			dosym "${PHP_EXT_INI_DIR}/${inifilename}" "${PHP_EXT_INI_DIR_ACTIVE}/${inifilename}"
+		done
+	fi
+}
+
+
