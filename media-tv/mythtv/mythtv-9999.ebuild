@@ -104,7 +104,7 @@ src_unpack() {
 
 	epatch "${FILESDIR}"/${PN}-0.22-sandbox.patch
 	if [[ "${MYTHTV_SVN_REVISION}" -gt 25123 ]]; then
-		epatch "${FILESDIR}"/vuvuzela-trunk25124.patch
+		epatch "${FILESDIR}"/vuvuzela-trunk25124.2.patch
 	fi
 }
 
