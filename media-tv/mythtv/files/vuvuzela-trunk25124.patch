@@ -1,3 +1,35 @@
+Index: mythtv/libs/libmythtv/avformatdecoder.cpp
+===================================================================
+--- mythtv/libs/libmythtv/avformatdecoder.cpp	(revision 25118)
++++ mythtv/libs/libmythtv/avformatdecoder.cpp	(working copy)
+@@ -498,8 +498,7 @@
+       audioSamples(NULL),
+       allow_ac3_passthru(false),    allow_dts_passthru(false),
+       internal_vol(false),
+-      disable_passthru(false),      max_channels(2),
+-      dummy_frame(NULL),
++      disable_passthru(false),      dummy_frame(NULL),
+       // DVD
+       lastdvdtitle(-1),
+       decodeStillFrame(false),
+@@ -4633,7 +4632,8 @@
+         // Force pass through state to be reanalyzed
+         QMutexLocker locker(avcodeclock);
+         SetupAudioStream();
+-    }
++        VERBOSE(VB_AUDIO, LOC + QString("max_channels = %1").arg(max_channels));
++   }
+ }
+ 
+ inline bool AvFormatDecoder::DecoderWillDownmix(const AVCodecContext *ctx)
+@@ -4660,6 +4660,7 @@
+     else if (ctx->codec_id == CODEC_ID_DTS)
+         passthru = allow_dts_passthru && !internal_vol;
+ 
++    passthru &= !GetNVP()->GetAudio()->IsVuvuzela();
+     passthru &= !transcoding && !disable_passthru;
+     // Don't know any cards that support spdif clocked at < 44100
+     // Some US cable transmissions have 2ch 32k AC-3 streams
 Index: mythtv/libs/libmythtv/tv_play.h
 ===================================================================
 --- mythtv/libs/libmythtv/tv_play.h	(revision 25118)
@@ -14,7 +46,7 @@ Index: mythtv/libs/libmythtv/audioplayer.cpp
 ===================================================================
 --- mythtv/libs/libmythtv/audioplayer.cpp	(revision 25118)
 +++ mythtv/libs/libmythtv/audioplayer.cpp	(working copy)
-@@ -269,6 +269,16 @@
+@@ -269,6 +269,23 @@
      return toggle;
  }
  
@@ -24,8 +56,15 @@ Index: mythtv/libs/libmythtv/audioplayer.cpp
 +    m_lock.lock();
 +    if (m_audioOutput)
 +        toggle = m_audioOutput->ToggleVuvuzela();
++    if (m_parent->GetDecoder())
++        m_parent->GetDecoder()->SetDisablePassThrough(toggle);        
 +    m_lock.unlock();
 +    return toggle;
++}
++
++bool AudioPlayer::IsVuvuzela(void)
++{
++    return m_audioOutput ? m_audioOutput->IsVuvuzela() : false;
 +}
 +
  void AudioPlayer::SetStretchFactor(float factor)
@@ -143,17 +182,18 @@ Index: mythtv/libs/libmythtv/audioplayer.h
 ===================================================================
 --- mythtv/libs/libmythtv/audioplayer.h	(revision 25118)
 +++ mythtv/libs/libmythtv/audioplayer.h	(working copy)
-@@ -33,6 +33,7 @@
+@@ -33,6 +33,8 @@
      float GetStretchFactor(void) { return m_stretchfactor;   }
      void  SetStretchFactor(float factor);
      bool  ToggleUpmix(void);
 +    bool  ToggleVuvuzela(void);
++    bool  IsVuvuzela(void);
      long long GetAudioTime(void);
  
      bool      IsMuted(void) { return GetMuteState() == kMuteAll; }
 Index: mythtv/libs/libmyth/audiooutputbase.h
 ===================================================================
---- mythtv/libs/libmyth/audiooutputbase.h	(revision 25118)
+--- mythtv/libs/libmyth/audiooutputbase.h	(revision 25122)
 +++ mythtv/libs/libmyth/audiooutputbase.h	(working copy)
 @@ -17,6 +17,7 @@
  // MythTV headers
@@ -163,15 +203,16 @@ Index: mythtv/libs/libmyth/audiooutputbase.h
  #include "samplerate.h"
  #include "mythverbose.h"
  
-@@ -50,6 +51,7 @@
+@@ -50,6 +51,8 @@
  
      virtual bool CanPassthrough(void) const;
      virtual bool ToggleUpmix(void);
 +    virtual bool ToggleVuvuzela(void);
++    virtual bool IsVuvuzela(void) { return vuvuzela; }
  
      virtual void Reset(void);
  
-@@ -210,6 +212,10 @@
+@@ -211,6 +214,10 @@
      /** main audio buffer */
      uchar audiobuffer[kAudioRingBufferSize];
      uint memory_corruption_test3;
@@ -265,7 +306,7 @@ Index: mythtv/libs/libmyth/audiooutpututil.h
  #endif
 Index: mythtv/libs/libmyth/audiooutputbase.cpp
 ===================================================================
---- mythtv/libs/libmyth/audiooutputbase.cpp	(revision 25118)
+--- mythtv/libs/libmyth/audiooutputbase.cpp	(revision 25123)
 +++ mythtv/libs/libmyth/audiooutputbase.cpp	(working copy)
 @@ -94,7 +94,9 @@
      memory_corruption_test0(0xdeadbeef),
@@ -278,11 +319,11 @@ Index: mythtv/libs/libmyth/audiooutputbase.cpp
  {
      src_in = (float *)AOALIGN(src_in_buf);
      // The following are not bzero() because MS Windows doesn't like it.
-@@ -249,6 +251,26 @@
+@@ -240,6 +242,26 @@
  }
  
  /**
-+ * Toggle between stereo and upmixed 5.1 if the source material is stereo
++ * Toggle Vuvuzela filter
 + */
 +bool AudioOutputBase::ToggleVuvuzela(void)
 +{
@@ -305,7 +346,7 @@ Index: mythtv/libs/libmyth/audiooutputbase.cpp
   * (Re)Configure AudioOutputBase
   *
   * Must be called from concrete subclasses
-@@ -297,6 +319,7 @@
+@@ -302,6 +324,7 @@
                          settings.samplerate  == source_samplerate &&
                          settings.use_passthru == passthru &&
                          lneeds_upmix == needs_upmix && lreenc == reenc &&
@@ -313,7 +354,7 @@ Index: mythtv/libs/libmyth/audiooutputbase.cpp
                          lneeds_downmix == needs_downmix;
  
      if (general_deps)
-@@ -305,6 +328,8 @@
+@@ -310,6 +333,8 @@
          return;
      }
  
@@ -322,7 +363,7 @@ Index: mythtv/libs/libmyth/audiooutputbase.cpp
      KillAudio();
  
      QMutexLocker lock(&audio_buflock);
-@@ -322,6 +347,7 @@
+@@ -327,6 +352,7 @@
      needs_downmix          = lneeds_downmix;
      format                 = output_format   = settings.format;
      source_samplerate      = samplerate      = settings.samplerate;
@@ -330,7 +371,7 @@ Index: mythtv/libs/libmyth/audiooutputbase.cpp
  
      killaudio = pauseaudio = false;
      was_paused = true;
-@@ -409,7 +435,7 @@
+@@ -414,7 +440,7 @@
      // Turn on float conversion?
      if (need_resampler || needs_upmix || needs_downmix ||
          stretchfactor != 1.0f || (internal_vol && SWVolume()) ||
@@ -339,7 +380,7 @@ Index: mythtv/libs/libmyth/audiooutputbase.cpp
          !output_settings->IsSupportedFormat(output_format))
      {
          VBAUDIO("Audio processing enabled");
-@@ -420,6 +446,13 @@
+@@ -425,6 +451,13 @@
              output_format = output_settings->BestSupportedFormat();
      }
  
@@ -353,7 +394,7 @@ Index: mythtv/libs/libmyth/audiooutputbase.cpp
      if (passthru)
          channels = 2; // IEC958 bitstream - 2 ch
  
-@@ -554,8 +587,14 @@
+@@ -559,8 +592,14 @@
          src_ctx = NULL;
      }
  
@@ -369,7 +410,7 @@ Index: mythtv/libs/libmyth/audiooutputbase.cpp
      CloseDevice();
  
      killAudioLock.unlock();
-@@ -937,6 +976,27 @@
+@@ -942,6 +981,27 @@
              return false; // would overflow
      }
  
@@ -377,19 +418,19 @@ Index: mythtv/libs/libmyth/audiooutputbase.cpp
 +    {
 +        notch_instance->parameters.N = frames * channels;
 +        // Notch attenuation
-+        notch_instance->parameters.attenuation_dB = 30.0f;
++        notch_instance->parameters.attenuation_dB = 35.0f;
 +
 +            // Notch frequency
 +        notch_instance->parameters.frequency = 233.0f;
 +        AudioOutputUtil::notch_update (*notch_instance, (float)source_samplerate);
 +        AudioOutputUtil::notch_execute (*notch_instance, src_in, src_out);
-+        notch_instance->parameters.frequency = 466.0f;
++        notch_instance->parameters.frequency = 466.0f;  // 1st harmonic
 +        AudioOutputUtil::notch_update (*notch_instance, (float)source_samplerate);
 +        AudioOutputUtil::notch_execute (*notch_instance, src_out, src_in);
-+        notch_instance->parameters.frequency = 932.0f;
++        notch_instance->parameters.frequency = 932.0f;  // 2nd harmonic
 +        AudioOutputUtil::notch_update (*notch_instance, (float)source_samplerate);
 +        AudioOutputUtil::notch_execute (*notch_instance, src_in, src_out);
-+        notch_instance->parameters.frequency = 1864.0f;
++        notch_instance->parameters.frequency = 1864.0f;  // 3rd harmonic
 +        AudioOutputUtil::notch_update (*notch_instance, (float)source_samplerate);
 +        AudioOutputUtil::notch_execute (*notch_instance, src_out, src_in);
 +    }
@@ -401,11 +442,12 @@ Index: mythtv/libs/libmyth/audiooutput.h
 ===================================================================
 --- mythtv/libs/libmyth/audiooutput.h	(revision 25118)
 +++ mythtv/libs/libmyth/audiooutput.h	(working copy)
-@@ -69,6 +69,7 @@
+@@ -69,6 +69,8 @@
      virtual int readOutputData(unsigned char *read_buffer, int max_length) = 0;
  
      virtual bool ToggleUpmix(void) = 0;
 +    virtual bool ToggleVuvuzela(void) = 0;
++    virtual bool IsVuvuzela(void) = 0;
  
    protected:
      void Error(const QString &msg);
@@ -413,7 +455,7 @@ Index: mythtv/libs/libmyth/audiooutpututil.cpp
 ===================================================================
 --- mythtv/libs/libmyth/audiooutpututil.cpp	(revision 25118)
 +++ mythtv/libs/libmyth/audiooutpututil.cpp	(working copy)
-@@ -610,3 +610,143 @@
+@@ -610,3 +610,144 @@
      else
          _MuteChannel((int *)buffer, channels, ch, frames);
  }
@@ -499,6 +541,7 @@ Index: mythtv/libs/libmyth/audiooutpututil.cpp
 +
 +// Notch filter
 +#define PI_FLOAT                    (3.14159265358979f)
++#define LN2_FLOAT                   (0.69314718055994530942f)
 +
 +void AudioOutputUtil::notch_update (Notch &instance, float fs)
 +{
@@ -513,7 +556,7 @@ Index: mythtv/libs/libmyth/audiooutpututil.cpp
 +	// Ref: http://www.musicdsp.org/files/Audio-EQ-Cookbook.txt and others
 +	float normalised_notch_frequency = (2.0f * instance.parameters.frequency / fs);
 +	normalised_notch_frequency += instance.state.frequency_offset;
-+	float frequency_factor = -2.0f * cos(PI_FLOAT * normalised_notch_frequency);
++	float frequency_factor = -2.0f * cosf(PI_FLOAT * normalised_notch_frequency);
 +	float a1 = frequency_factor * instance.state.a1s;
 +	float a2 = instance.state.a2;
 +	float b1 = frequency_factor * instance.state.depth_factor;
@@ -591,7 +634,7 @@ Index: mythtv/programs/mythtranscode/transcode.cpp
 ===================================================================
 --- mythtv/programs/mythtranscode/transcode.cpp	(revision 25118)
 +++ mythtv/programs/mythtranscode/transcode.cpp	(working copy)
-@@ -186,7 +186,12 @@
+@@ -186,7 +186,16 @@
          // Do nothing
          return false;
      }
@@ -601,7 +644,11 @@ Index: mythtv/programs/mythtranscode/transcode.cpp
 +        // Do nothing
 +        return false;
 +    }
-+    
++    virtual bool IsVuvuzela(void)
++    {
++        // Do nothing
++        return false;
++    }
      virtual void SetSWVolume(int new_volume, bool save)
      {
          // Do nothing
