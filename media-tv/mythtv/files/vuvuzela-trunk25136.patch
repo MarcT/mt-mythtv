@@ -1,6 +1,6 @@
 Index: mythtv/libs/libmythtv/tv_play.h
 ===================================================================
---- mythtv/libs/libmythtv/tv_play.h	(revision 25125)
+--- mythtv/libs/libmythtv/tv_play.h	(revision 25135)
 +++ mythtv/libs/libmythtv/tv_play.h	(working copy)
 @@ -433,6 +433,7 @@
                                   const QStringList &actions);
@@ -12,9 +12,9 @@ Index: mythtv/libs/libmythtv/tv_play.h
  
 Index: mythtv/libs/libmythtv/audioplayer.cpp
 ===================================================================
---- mythtv/libs/libmythtv/audioplayer.cpp	(revision 25125)
+--- mythtv/libs/libmythtv/audioplayer.cpp	(revision 25136)
 +++ mythtv/libs/libmythtv/audioplayer.cpp	(working copy)
-@@ -269,6 +269,23 @@
+@@ -269,6 +269,18 @@
      return toggle;
  }
  
@@ -30,17 +30,12 @@ Index: mythtv/libs/libmythtv/audioplayer.cpp
 +    return toggle;
 +}
 +
-+bool AudioPlayer::IsVuvuzela(void)
-+{
-+    return m_audioOutput ? m_audioOutput->IsVuvuzela() : false;
-+}
-+
  void AudioPlayer::SetStretchFactor(float factor)
  {
      m_stretchfactor = factor;
 Index: mythtv/libs/libmythtv/tv_play.cpp
 ===================================================================
---- mythtv/libs/libmythtv/tv_play.cpp	(revision 25125)
+--- mythtv/libs/libmythtv/tv_play.cpp	(revision 25135)
 +++ mythtv/libs/libmythtv/tv_play.cpp	(working copy)
 @@ -4219,6 +4219,8 @@
          ToggleTimeStretch(ctx);
@@ -123,7 +118,7 @@ Index: mythtv/libs/libmythtv/tv_play.cpp
      else if (category == "COMMSKIP")
 Index: mythtv/libs/libmythtv/tvosdmenuentry.cpp
 ===================================================================
---- mythtv/libs/libmythtv/tvosdmenuentry.cpp	(revision 25125)
+--- mythtv/libs/libmythtv/tvosdmenuentry.cpp	(revision 25135)
 +++ mythtv/libs/libmythtv/tvosdmenuentry.cpp	(working copy)
 @@ -1,6 +1,7 @@
  #include "tvosdmenuentry.h"
@@ -148,20 +143,19 @@ Index: mythtv/libs/libmythtv/tvosdmenuentry.cpp
      curMenuEntries.append(new TVOSDMenuEntry(
 Index: mythtv/libs/libmythtv/audioplayer.h
 ===================================================================
---- mythtv/libs/libmythtv/audioplayer.h	(revision 25125)
+--- mythtv/libs/libmythtv/audioplayer.h	(revision 25136)
 +++ mythtv/libs/libmythtv/audioplayer.h	(working copy)
-@@ -33,6 +33,8 @@
+@@ -33,6 +33,7 @@
      float GetStretchFactor(void) { return m_stretchfactor;   }
      void  SetStretchFactor(float factor);
      bool  ToggleUpmix(void);
 +    bool  ToggleVuvuzela(void);
-+    bool  IsVuvuzela(void);
+     bool  CanPassthrough(void);
      long long GetAudioTime(void);
  
-     bool      IsMuted(void) { return GetMuteState() == kMuteAll; }
 Index: mythtv/libs/libmyth/audiooutputbase.h
 ===================================================================
---- mythtv/libs/libmyth/audiooutputbase.h	(revision 25125)
+--- mythtv/libs/libmyth/audiooutputbase.h	(revision 25136)
 +++ mythtv/libs/libmyth/audiooutputbase.h	(working copy)
 @@ -17,6 +17,7 @@
  // MythTV headers
@@ -171,16 +165,15 @@ Index: mythtv/libs/libmyth/audiooutputbase.h
  #include "samplerate.h"
  #include "mythverbose.h"
  
-@@ -50,6 +51,8 @@
+@@ -50,6 +51,7 @@
  
-     virtual bool CanPassthrough(void) const;
+     virtual bool CanPassthrough(bool willreencode=true) const;
      virtual bool ToggleUpmix(void);
 +    virtual bool ToggleVuvuzela(void);
-+    virtual bool IsVuvuzela(void) { return vuvuzela; }
  
      virtual void Reset(void);
  
-@@ -211,6 +214,10 @@
+@@ -211,6 +213,10 @@
      /** main audio buffer */
      uchar audiobuffer[kAudioRingBufferSize];
      uint memory_corruption_test3;
@@ -193,7 +186,7 @@ Index: mythtv/libs/libmyth/audiooutputbase.h
  #endif
 Index: mythtv/libs/libmyth/audiooutpututil.h
 ===================================================================
---- mythtv/libs/libmyth/audiooutpututil.h	(revision 25125)
+--- mythtv/libs/libmyth/audiooutpututil.h	(revision 25135)
 +++ mythtv/libs/libmyth/audiooutpututil.h	(working copy)
 @@ -5,9 +5,64 @@
  #include "mythverbose.h"
@@ -271,7 +264,7 @@ Index: mythtv/libs/libmyth/audiooutpututil.h
  #endif
 Index: mythtv/libs/libmyth/audiooutputbase.cpp
 ===================================================================
---- mythtv/libs/libmyth/audiooutputbase.cpp	(revision 25125)
+--- mythtv/libs/libmyth/audiooutputbase.cpp	(revision 25136)
 +++ mythtv/libs/libmyth/audiooutputbase.cpp	(working copy)
 @@ -94,7 +94,9 @@
      memory_corruption_test0(0xdeadbeef),
@@ -284,7 +277,7 @@ Index: mythtv/libs/libmyth/audiooutputbase.cpp
  {
      src_in = (float *)AOALIGN(src_in_buf);
      // The following are not bzero() because MS Windows doesn't like it.
-@@ -240,6 +242,26 @@
+@@ -249,6 +251,26 @@
  }
  
  /**
@@ -311,7 +304,7 @@ Index: mythtv/libs/libmyth/audiooutputbase.cpp
   * (Re)Configure AudioOutputBase
   *
   * Must be called from concrete subclasses
-@@ -303,6 +325,7 @@
+@@ -312,6 +334,7 @@
                          settings.use_passthru == passthru &&
                          lneeds_upmix == needs_upmix && lreenc == reenc &&
                          lsource_channels == source_channels &&
@@ -319,7 +312,7 @@ Index: mythtv/libs/libmyth/audiooutputbase.cpp
                          lneeds_downmix == needs_downmix;
  
      if (general_deps)
-@@ -311,6 +334,8 @@
+@@ -320,6 +343,8 @@
          return;
      }
  
@@ -328,7 +321,7 @@ Index: mythtv/libs/libmyth/audiooutputbase.cpp
      KillAudio();
  
      QMutexLocker lock(&audio_buflock);
-@@ -328,6 +353,7 @@
+@@ -337,6 +362,7 @@
      needs_downmix          = lneeds_downmix;
      format                 = output_format   = settings.format;
      source_samplerate      = samplerate      = settings.samplerate;
@@ -336,7 +329,7 @@ Index: mythtv/libs/libmyth/audiooutputbase.cpp
  
      killaudio = pauseaudio = false;
      was_paused = true;
-@@ -415,7 +441,7 @@
+@@ -424,7 +450,7 @@
      // Turn on float conversion?
      if (need_resampler || needs_upmix || needs_downmix ||
          stretchfactor != 1.0f || (internal_vol && SWVolume()) ||
@@ -345,7 +338,7 @@ Index: mythtv/libs/libmyth/audiooutputbase.cpp
          !output_settings->IsSupportedFormat(output_format))
      {
          VBAUDIO("Audio processing enabled");
-@@ -426,6 +452,13 @@
+@@ -435,6 +461,13 @@
              output_format = output_settings->BestSupportedFormat();
      }
  
@@ -359,7 +352,7 @@ Index: mythtv/libs/libmyth/audiooutputbase.cpp
      if (passthru)
          channels = 2; // IEC958 bitstream - 2 ch
  
-@@ -560,8 +593,14 @@
+@@ -569,8 +602,14 @@
          src_ctx = NULL;
      }
  
@@ -375,7 +368,7 @@ Index: mythtv/libs/libmyth/audiooutputbase.cpp
      CloseDevice();
  
      killAudioLock.unlock();
-@@ -943,6 +982,19 @@
+@@ -952,6 +991,19 @@
              return false; // would overflow
      }
  
@@ -397,20 +390,19 @@ Index: mythtv/libs/libmyth/audiooutputbase.cpp
          if(AudioOutputDownmix::DownmixFrames(source_channels, channels,
 Index: mythtv/libs/libmyth/audiooutput.h
 ===================================================================
---- mythtv/libs/libmyth/audiooutput.h	(revision 25125)
+--- mythtv/libs/libmyth/audiooutput.h	(revision 25136)
 +++ mythtv/libs/libmyth/audiooutput.h	(working copy)
-@@ -69,6 +69,8 @@
+@@ -69,6 +69,7 @@
      virtual int readOutputData(unsigned char *read_buffer, int max_length) = 0;
  
      virtual bool ToggleUpmix(void) = 0;
 +    virtual bool ToggleVuvuzela(void) = 0;
-+    virtual bool IsVuvuzela(void) = 0;
  
    protected:
      void Error(const QString &msg);
 Index: mythtv/libs/libmyth/audiooutpututil.cpp
 ===================================================================
---- mythtv/libs/libmyth/audiooutpututil.cpp	(revision 25125)
+--- mythtv/libs/libmyth/audiooutpututil.cpp	(revision 25135)
 +++ mythtv/libs/libmyth/audiooutpututil.cpp	(working copy)
 @@ -610,3 +610,122 @@
      else
@@ -537,7 +529,7 @@ Index: mythtv/libs/libmyth/audiooutpututil.cpp
 +}
 Index: mythtv/programs/mythfrontend/globalsettings.cpp
 ===================================================================
---- mythtv/programs/mythfrontend/globalsettings.cpp	(revision 25125)
+--- mythtv/programs/mythfrontend/globalsettings.cpp	(revision 25135)
 +++ mythtv/programs/mythfrontend/globalsettings.cpp	(working copy)
 @@ -219,6 +219,17 @@
      return gc;
@@ -567,19 +559,14 @@ Index: mythtv/programs/mythfrontend/globalsettings.cpp
      group2->addChild(settings3);
 Index: mythtv/programs/mythtranscode/transcode.cpp
 ===================================================================
---- mythtv/programs/mythtranscode/transcode.cpp	(revision 25125)
+--- mythtv/programs/mythtranscode/transcode.cpp	(revision 25136)
 +++ mythtv/programs/mythtranscode/transcode.cpp	(working copy)
-@@ -186,7 +186,16 @@
+@@ -186,7 +186,11 @@
          // Do nothing
          return false;
      }
 -
 +    virtual bool ToggleVuvuzela(void)
-+    {
-+        // Do nothing
-+        return false;
-+    }
-+    virtual bool IsVuvuzela(void)
 +    {
 +        // Do nothing
 +        return false;
