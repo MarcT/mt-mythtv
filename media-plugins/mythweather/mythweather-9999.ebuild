@@ -33,5 +33,5 @@ setup_pro() {
 }
 
 src_configure() {
-        return 0
+	return 0
 }
