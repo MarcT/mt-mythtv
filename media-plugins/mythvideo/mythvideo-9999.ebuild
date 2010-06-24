@@ -16,7 +16,7 @@ HOMEPAGE="http://www.mythtv.org/"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="debug"
+IUSE="debug jamu"
 
 DEPEND=">=sys-apps/sed-4
 	sys-apps/eject
@@ -40,3 +40,28 @@ setup_pro() {
 src_configure() {
 	return 0
 }
+
+src_install() {
+	# setup JAMU cron jobs
+	if use jamu; then
+		exeinto /etc/cron.daily
+		newexe "${FILESDIR}/mythvideo.daily" mythvideo || die
+		exeinto /etc/cron.hourly
+		newexe "${FILESDIR}/mythvideo.hourly" mythvideo || die
+		exeinto /etc/cron.weekly
+		newexe "${FILESDIR}/mythvideo.weekly" mythvideo || die
+		insinto /home/mythtv/.mythtv/
+		newins mythvideo/mythvideo/scripts/jamu-example.conf jamu.conf || die
+	fi
+}
+
+pkg_postinst() {
+	elog "MythVideo can use any media player to playback files if you"
+	elog "are *NOT* using Storage Groups. If you are using Storage"
+	elog "Groups, you *MUST* use the Internal player."
+	elog
+	elog "Otherwise, you can install mplayer, xine or any other video"
+	elog "player and use that instead by configuring the player to use."
+	elog "The default is 'Internal'."
+}
+
