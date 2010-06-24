@@ -21,12 +21,12 @@ IUSE="debug"
 DEPEND=">=sys-apps/sed-4
 	dev-perl/DateManip
 	dev-perl/DateTime-Format-ISO8601
-        dev-perl/ImageSize
-        dev-perl/SOAP-Lite
-        dev-perl/XML-Simple
-        dev-perl/XML-Parser
-        dev-perl/XML-SAX
-        >=media-tv/mythtv-${PV}"
+	dev-perl/ImageSize
+	dev-perl/SOAP-Lite
+	dev-perl/XML-Simple
+	dev-perl/XML-Parser
+	dev-perl/XML-SAX
+	>=media-tv/mythtv-${PV}"
 
 setup_pro() {
 	return 0
