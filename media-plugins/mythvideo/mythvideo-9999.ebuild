@@ -42,6 +42,8 @@ src_configure() {
 }
 
 src_install() {
+	myth-svn_src_install
+
 	# setup JAMU cron jobs
 	if use jamu; then
 		exeinto /etc/cron.daily
@@ -51,7 +53,7 @@ src_install() {
 		exeinto /etc/cron.weekly
 		newexe "${FILESDIR}/mythvideo.weekly" mythvideo || die
 		insinto /home/mythtv/.mythtv/
-		newins mythvideo/mythvideo/scripts/jamu-example.conf jamu.conf || die
+		newins mythvideo/scripts/jamu-example.conf jamu.conf || die
 	fi
 }
 
@@ -64,4 +66,3 @@ pkg_postinst() {
 	elog "player and use that instead by configuring the player to use."
 	elog "The default is 'Internal'."
 }
-
