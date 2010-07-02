@@ -26,6 +26,7 @@ DEPEND=">=sys-apps/sed-4
 	dev-perl/XML-Simple
 	dev-perl/XML-Parser
 	dev-perl/XML-SAX
+	dev-perl/XML-XPath
 	>=media-tv/mythtv-${PV}"
 
 setup_pro() {
