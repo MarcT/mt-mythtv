@@ -5,7 +5,7 @@
 
 depend() {
 	need net
-	use mysql
+	use mysql lircd LCDd ntp-client
 }
 
 checkconfig() {
