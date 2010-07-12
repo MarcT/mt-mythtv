@@ -1,0 +1,15 @@
+Index: libs/libmythui/metadataimagedownload.cpp
+===================================================================
+--- libs/libmythui/metadataimagedownload.cpp	(revision 25329)
++++ libs/libmythui/metadataimagedownload.cpp	(working copy)
+@@ -151,7 +151,8 @@
+ 
+                     if (dest_file.open(QIODevice::WriteOnly))
+                     {
+-                        qint64 size = dest_file.write(download->data());
++                        QByteArray output = download->data();
++                        qint64 size = dest_file.write(output);
+                         if (size != download->size())
+                         {
+                             VERBOSE(VB_IMPORTANT,
+
