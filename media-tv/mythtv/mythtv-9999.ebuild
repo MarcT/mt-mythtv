@@ -103,7 +103,6 @@ src_unpack() {
 	cd ${S}
 
 	epatch "${FILESDIR}"/${PN}-0.22-sandbox.patch
-	epatch "${FILESDIR}"/localimagedl.diff
 
 }
 
