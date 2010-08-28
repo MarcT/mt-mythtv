@@ -102,6 +102,7 @@ src_unpack() {
 
 	cd ${S}
 
+	epatch "${FILESDIR}"/gentoo-myth-config-fix.diff
 	epatch "${FILESDIR}"/${PN}-0.22-sandbox.patch
 
 }
