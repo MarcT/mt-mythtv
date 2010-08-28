@@ -134,7 +134,6 @@ src_configure() {
 		$(use_enable ivtv)
 		$(use_enable jack audio-jack)
 		$(use_enable joystick joystick-menu)
-		$(use_enable latm libfaad)
 		$(use_enable lirc)
 		$(use_enable opengl opengl-vsync)
 		$(use_enable opengl opengl-video)
