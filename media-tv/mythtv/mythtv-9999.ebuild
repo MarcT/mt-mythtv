@@ -118,7 +118,7 @@ setup_pro() {
 
         # Perl bits need to go into vender_perl and not site_perl
         sed -e "s:pure_install:pure_install INSTALLDIRS=vendor:" \
-                -i "${S}"/bindings/perl/perl.pro
+                -i "${S}"/bindings/perl/Makefile
 }
 
 src_configure() {
