@@ -18,6 +18,8 @@ KEYWORDS="~amd64 ~ppc ~ppc64 ~x86"
 IUSE=""
 
 DEPEND="dev-vcs/git[curl]
+	dev-perl/Config-Auto
+	dev-perl/Config-IniFiles
 	dev-perl/libwww-perl
 	dev-perl/XML-LibXML
 	dev-perl/DateManip
