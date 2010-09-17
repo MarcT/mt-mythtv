@@ -1,34 +1,7 @@
-diff --git a/a/mythtv-status/bin/mythtv-status b/b/mythtv-status/bin/mythtv-status
-index 26901da..3fed5ff 100755
---- a/a/mythtv-status/bin/mythtv-status
-+++ b/b/mythtv-status/bin/mythtv-status
-@@ -162,13 +162,16 @@ my @blocks = (
-     'attrs' => [ qw/hostname id state connected/ ],
-     'template' => "__hostname__ (__id__) - __state____connected__",
-     'rewrite' => {
--      '/connected/' => { '1' => '', '0' => ' (Disconnected)' },
-+      '/connected/' => { '1' => '', '0' => "${warning}(Disconnected)${normal}" },
-       '/state/' => {
-+	 '^-1$' => "${warning}Error${normal}",
- 	 '^0$' => "${safe}Idle${normal}",
--         '^1$' => "${warning}Watching LiveTV${normal}",
--         '^2$' => "${warning}Watching Pre-recorded${normal}",
--         '^3$' => "${warning}Watching Recording${normal}",
--         '^4$' => "${warning}Recording${normal}" },
-+	 '^1$' => "${warning}Watching LiveTV${normal}",
-+	 '^2$' => "${warning}Watching Pre-recorded${normal}",
-+	 '^3$' => "${warning}Watching DVD${normal}",
-+	 '^4$' => "${warning}Watching Video${normal}",
-+	 '^5$' => "${warning}Watching Recording${normal}",
-+	 '^6$' => "${warning}Recording${normal}" },
-     }
-   },
- 
-diff --git a/a/mythtv-status/bin/mythtv-update-motd b/b/mythtv-status/bin/mythtv-update-motd
-index d58aa41..c5fbaab 100755
---- a/a/mythtv-status/bin/mythtv-update-motd
-+++ b/b/mythtv-status/bin/mythtv-update-motd
-@@ -7,10 +7,10 @@ then
+diff -u -r a/bin/mythtv-update-motd b/bin/mythtv-update-motd
+--- a/bin/mythtv-update-motd	2010-09-17 15:17:21.000000000 -0400
++++ b/bin/mythtv-update-motd	2010-09-17 15:40:50.000000000 -0400
+@@ -7,11 +7,11 @@
    exit
  fi
  
@@ -36,10 +9,11 @@ index d58aa41..c5fbaab 100755
 +[ ! -f /etc/motd.orig ] && cp /etc/motd /etc/motd.orig
  
 -cp /var/run/motd.orig /var/run/motd.new
--if mythtv-status $ARGS -h $HOST >> /var/run/motd.new
 +cp /etc/motd.orig /etc/motd.new
-+if mythtv-status $ARGS -h $HOST >> /etc/motd.new
- then
--  mv /var/run/motd.new /var/run/motd
-+  mv /etc/motd.new /etc/motd
+ ret=0
+-mythtv-status $ARGS -h $HOST >> /var/run/motd.new 2> /dev/null || ret=$?
++mythtv-status $ARGS -h $HOST >> /etc/motd.new 2> /dev/null || ret=$?
+ if [ $ret -eq 0 -o $ret -eq 1 ]; then
+-  [ -f /var/run/motd.new ] && mv /var/run/motd.new /var/run/motd
++  [ -f /etc/motd.new ] && mv /etc/motd.new /etc/motd
  fi
