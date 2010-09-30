@@ -12,7 +12,7 @@ KEYWORDS="~x86 ~amd64"
 
 IUSE_VIDEO_CARDS="video_cards_i810 video_cards_nvidia video_cards_via"
 
-IUSE="alsa altivec autostart dbox2 debug directfb directv dvb dvd 
+IUSE="alsa altivec autostart dbox2 debug directfb directv dvb dvd fftw
 hdhomerun hdpvr ieee1394 iptv ivtv jack joystick latm lcd lirc mmx opengl 
 oss perl profile proc-opt python tiff vdpau vorbis X xv xvmc ${IUSE_VIDEO_CARDS}"
 
