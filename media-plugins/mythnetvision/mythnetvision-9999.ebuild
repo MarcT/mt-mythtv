@@ -6,7 +6,7 @@
 # $Header: $
 
 EAPI="2"
-inherit myth-svn
+inherit myth-git
 
 DESCRIPTION="NetVision module for MythTV."
 HOMEPAGE="http://www.mythtv.org/"

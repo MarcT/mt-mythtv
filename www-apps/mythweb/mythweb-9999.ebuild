@@ -3,7 +3,7 @@
 # $Header: /var/cvsroot/gentoo-x86/www-apps/mythweb/mythweb-9999.ebuild,v 1.3 2009/07/10 14:05:04 Marc Tousignant Exp $
 
 EAPI="2"
-inherit myth-svn webapp depend.php
+inherit myth-git webapp depend.php
 
 DESCRIPTION="PHP scripts intended to manage MythTV from a web browser."
 ESVN_REPO_URI="http://svn.mythtv.org/svn/branches/release-0-24-fixes/mythplugins"

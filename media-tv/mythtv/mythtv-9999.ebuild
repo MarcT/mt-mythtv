@@ -3,20 +3,21 @@
 # $Header: /var/cvsroot/gentoo-x86/media-tv/mythtv/mythtv-9999.ebuild,v 1.3 2009/07/10 14:05:04 Marc Tousignant Exp $
 
 EAPI="2"
-inherit myth-svn qt4 flag-o-matic multilib eutils toolchain-funcs
+inherit myth-git qt4 flag-o-matic multilib eutils toolchain-funcs
 
 DESCRIPTION="Homebrew PVR project"
 HOMEPAGE="http://www.mythtv.org/"
 SLOT="0"
 KEYWORDS="~x86 ~amd64"
-
 IUSE_VIDEO_CARDS="video_cards_i810 video_cards_nvidia video_cards_via"
 
 IUSE="alsa altivec autostart dbox2 debug directfb directv dvb dvd fftw
 hdhomerun hdpvr ieee1394 iptv ivtv jack joystick latm lcd lirc mmx opengl 
 oss perl profile proc-opt python tiff vdpau vorbis X xv xvmc ${IUSE_VIDEO_CARDS}"
 
-RDEPEND=">=media-libs/freetype-2.0
+RDEPEND="media-fonts/dejavu
+	media-fonts/corefonts
+	>=media-libs/freetype-2.0
 	>=media-sound/lame-3.93.1
 	x11-libs/libX11
 	x11-libs/libXext
@@ -98,9 +99,9 @@ pkg_setup() {
 }
 
 src_unpack() {
-	myth-svn_src_unpack || die "unpack failed"
+	myth-git_src_unpack || die "unpack failed"
 
-	cd ${S}
+	cd ${S}/mythtv
 
 	epatch "${FILESDIR}"/gentoo-myth-config-fix.diff
 	epatch "${FILESDIR}"/${PN}-0.22-sandbox.patch
@@ -108,17 +109,17 @@ src_unpack() {
 }
 
 setup_pro() {
-	cp -fR /usr/portage/distfiles/svn-src/mythtv/mythtv/.svn ${S}
+#	cp -fR /usr/portage/distfiles/svn-src/mythtv/mythtv/.svn ${S}
 
         # upstream wants the revision number in their version.cpp
         # since the subversion.eclass strips out the .svn directory
         # svnversion in MythTV's build doesn't work
-        sed -e "s:\`(svnversion \$\${SVNTREEDIR} 2>\/dev\/null) || echo Unknown\`:${MYTHTV_SVN_REVISION}:" \
-                -i "${S}"/version.pro || die "svnversion sed failed"
+#        sed -e "s:\`(svnversion \$\${SVNTREEDIR} 2>\/dev\/null) || echo Unknown\`:${MYTHTV_SVN_REVISION}:" \
+#                -i "${S}"/version.pro || die "svnversion sed failed"
 
         # Perl bits need to go into vender_perl and not site_perl
         sed -e "s:pure_install:pure_install INSTALLDIRS=vendor:" \
-                -i "${S}"/bindings/perl/Makefile
+                -i "${S}"/mythtv/bindings/perl/Makefile
 }
 
 src_configure() {
@@ -150,11 +151,11 @@ src_configure() {
 }
 
 src_compile() {
-	myth-svn_src_compile
+	myth-git_src_compile
 }
 
 src_install() {
-	myth-svn_src_install || die "install failed"
+	myth-git_src_install || die "install failed"
 
 	insinto /usr/share/mythtv/database
 	doins database/*

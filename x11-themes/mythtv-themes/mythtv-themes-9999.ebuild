@@ -3,7 +3,7 @@
 # $Header: /var/cvsroot/gentoo-x86/x11-themes/mythtv-themes/mythtv-themes-9999.ebuild,v 1.3 2009/07/10 14:05:04 Marc Tousignant Exp $
 
 EAPI="2"
-inherit myth-svn
+inherit myth-git
 
 DESCRIPTION="A collection of themes for the MythTV project."
 HOMEPAGE="http://www.mythtv.org/"
@@ -12,18 +12,17 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~ppc ~x86"
 IUSE=""
-
 RDEPEND=">=media-tv/mythtv-${PV}"
 
 #S=${WORKDIR}
 
 src_unpack() {
-        myth-svn_src_unpack
+        myth-git_src_unpack
         cd ${S}
-        rm -rf ${S}/myththemes
-        rm -Rf ${S}/.svn
-        rm -Rf ${S}/*/.svn
-        rm -Rf ${S}/*/*/.svn
+#        rm -rf ${S}/myththemes
+#        rm -Rf ${S}/.svn
+#        rm -Rf ${S}/*/.svn
+#        rm -Rf ${S}/*/*/.svn
 }
 
 
