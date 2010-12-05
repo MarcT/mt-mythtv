@@ -34,6 +34,7 @@ elif [ "${_MODULE}" == "mythtv-themes" ]; then
 elif [ "${_MODULE}" == "mythweb" ]; then
 	EGIT_REPO_URI="git://github.com/MythTV/mythweb.git"
 	EGIT_PROJECT=mythweb
+	EGIT_COMMIT="${MYTHWEB_GIT_REVISION}"
 else
 	EGIT_REPO_URI="git://github.com/MythTV/mythtv.git"
 	EGIT_PROJECT=${_MODULE/frontend/tv}
