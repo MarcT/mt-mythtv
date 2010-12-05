@@ -1,0 +1,23 @@
+diff -u -r mythtv.orig/mythplugins/mythweather/mythweather/mythweather.pro mythtv/mythplugins/mythweather/mythweather/mythweather.pro
+--- mythtv.orig/mythplugins/mythweather/mythweather/mythweather.pro	2010-12-05 17:48:10.000000000 -0500
++++ mythtv/mythplugins/mythweather/mythweather/mythweather.pro	2010-12-05 18:00:47.000000000 -0500
+@@ -2,6 +2,9 @@
+ include ( ../../settings.pro )
+ include ( ../../programs-libs.pro )
+ 
++# Directories
++SUBDIRS = scripts
++
+ QT += sql xml
+ 
+ TEMPLATE = lib
+diff -u -r mythtv.orig/mythplugins/mythweather/mythweather.pro mythtv/mythplugins/mythweather/mythweather.pro
+--- mythtv.orig/mythplugins/mythweather/mythweather.pro	2010-12-05 17:48:10.000000000 -0500
++++ mythtv/mythplugins/mythweather/mythweather.pro	2010-12-05 17:59:24.000000000 -0500
+@@ -1,5 +1,4 @@
+ TEMPLATE = subdirs
+ 
+ # Directories
+-SUBDIRS = mythweather theme i18n mythweather/scripts
+-
++SUBDIRS = mythweather theme i18n
