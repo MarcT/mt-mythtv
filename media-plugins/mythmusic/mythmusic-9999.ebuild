@@ -8,7 +8,7 @@
 # $Header: $
 
 EAPI="2"
-inherit myth-svn
+inherit myth-git
 
 DESCRIPTION="Music player module for MythTV."
 HOMEPAGE="http://www.mythtv.org/"
@@ -55,5 +55,5 @@ src_configure() {
 }
 
 src_compile() {
-	myth-svn_src_compile
+	myth-git_src_compile
 }

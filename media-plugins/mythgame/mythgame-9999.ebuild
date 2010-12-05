@@ -8,7 +8,7 @@
 # $Header: $
 
 EAPI="2"
-inherit myth-svn
+inherit myth-git
 
 DESCRIPTION="Game emulator module for MythTV."
 HOMEPAGE="http://www.mythtv.org/"

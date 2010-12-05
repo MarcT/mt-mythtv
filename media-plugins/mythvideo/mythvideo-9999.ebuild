@@ -8,7 +8,7 @@
 # $Header: $
 
 EAPI="2"
-inherit myth-svn
+inherit myth-git
 
 DESCRIPTION="Video player module for MythTV."
 HOMEPAGE="http://www.mythtv.org/"
@@ -42,7 +42,7 @@ src_configure() {
 }
 
 src_install() {
-	myth-svn_src_install
+	myth-git_src_install
 
 	# setup JAMU cron jobs
 	if use jamu; then
@@ -53,7 +53,7 @@ src_install() {
 		exeinto /etc/cron.weekly
 		newexe "${FILESDIR}/mythvideo.weekly" mythvideo || die
 		insinto /home/mythtv/.mythtv/
-		newins mythvideo/scripts/jamu-example.conf jamu.conf || die
+		newins mythvideo/mythvideo/scripts/jamu-example.conf jamu.conf || die
 	fi
 }
 

@@ -9,69 +9,43 @@
 # Modified: Preston Crow
 #
 
-inherit subversion eutils flag-o-matic multilib versionator toolchain-funcs
+inherit git eutils flag-o-matic multilib versionator toolchain-funcs
 
-ECLASS=myth-svn
+ECLASS=myth-git
 INHERITED="${INHERITED} ${ECLASS}"
 IUSE="${IUSE} nls"
-
-ESVN_FETCH_CMD="svn co"
-ESVN_UPDATE_CMD="svn up"
-
-[ -z "${MYTHTV_SVN_REVISION}" ] || ESVN_FETCH_CMD="svn checkout --revision ${MYTHTV_SVN_REVISION}"
-[ -z "${MYTHTV_SVN_REVISION}" ] || ESVN_UPDATE_CMD="svn update --revision ${MYTHTV_SVN_REVISION}"
 
 EXPORT_FUNCTIONS src_unpack src_compile src_install
 
 MYTHPLUGINS="mytharchive mythbrowser mythgallery mythgame mythmusic mythnetvision mythnews mythvideo mythweather mythzoneminder"
-ALLPLUGINS="${MYTHPLUGINS} mythweb"
 
 _MODULE=${PN}
 
-if hasq ${_MODULE} ${ALLPLUGINS} ; then
-	ESVN_REPO_URI="http://svn.mythtv.org/svn/trunk/mythplugins"
-	ESVN_PROJECT=mythplugins
+if hasq ${_MODULE} ${MYTHPLUGINS} ; then
+	EGIT_REPO_URI="git://github.com/MythTV/mythtv.git"
+	EGIT_PROJECT=mythplugins
+	EGIT_COMMIT="${MYTHTV_GIT_REVISION}"
 elif [ "${_MODULE}" == "mythtv-themes" ]; then
-	ESVN_REPO_URI="http://svn.mythtv.org/svn/trunk/myththemes"
-	ESVN_PROJECT=myththemes
-elif [ "${_MODULE}" == "mythtv-themes-old" ]; then
-	ESVN_REPO_URI="http://svn.mythtv.org/svn/trunk/oldthemes"
-	ESVN_PROJECT=oldthemes
-elif [ "${_MODULE}" == "mythtv-themes-extra" ]; then
-        ESVN_REPO_URI="http://svn.mythtv.org/svn/trunk/themes"
-        ESVN_PROJECT=themes
+	EGIT_REPO_URI="git://github.com/MythTV/myththemes.git"
+	EGIT_PROJECT=myththemes
+	EGIT_COMMIT="${MYTHTHEMES_GIT_REVISION}"
+elif [ "${_MODULE}" == "mythweb" ]; then
+	EGIT_REPO_URI="git://github.com/MythTV/mythweb.git"
+	EGIT_PROJECT=mythweb
+	EGIT_COMMIT="${MYTHWEB_GIT_REVISION}"
 else
-	ESVN_REPO_URI="http://svn.mythtv.org/svn/trunk/mythtv"
-	ESVN_PROJECT=${_MODULE/frontend/tv}
+	EGIT_REPO_URI="git://github.com/MythTV/mythtv.git"
+	EGIT_PROJECT=${_MODULE/frontend/tv}
+	EGIT_COMMIT="${MYTHTV_GIT_REVISION}"
 fi
 
-#ESVN_STORE_DIR="${DISTDIR}/svn-src"
+if [ "${EGIT_COMMIT}" == "" ]; then
+        EGIT_COMMIT="${EGIT_BRANCH}"
+fi
 
-S="${WORKDIR}/${_MODULE}"
+S="${WORKDIR}"
 
-myth-svn_src_unpack() {
-	#
-	# Disable checkout if local repo was downloaded within the past 
-	# 2 hours and MYTHTV_SVN_REVISION has not been changed
-	#
-	ESVN_UP_FREQ=2
-	ENTRIES=${ESVN_STORE_DIR}/${ESVN_PROJECT}/${ESVN_PROJECT}/.svn/entries
-	if [ -f "${ENTRIES}" ] ; then
-		local REV=`svn info ${ESVN_STORE_DIR}/${ESVN_PROJECT}/${ESVN_PROJECT} | grep 'Revision: ' | sed 's/[^0-9]*\([0-9]*\).*/\1/' `
-		if [ -n "${MYTHTV_SVN_REVISION}" ] && [ "${REV}" != "${MYTHTV_SVN_REVISION}" ] ; then
-			ESVN_UP_FREQ=0
-		fi
-		local NOW=$(date +%s) UPDATE=$(date -r ${ENTRIES} +%s) INTERVAL=7200
-		if (( ${NOW} - ${UPDATE} <= ${INTERVAL} )) && [ "${REV}" = "${MYTHTV_SVN_REVISION}" ] ; then
-			if hasq ${_MODULE} ${MYTHPLUGINS} ; then
-				echo
-				ewarn "You ran this within 2 hours of another myth plugin ebuild,"
-		        	ewarn "so it will skip the update.  To bypass this:"
-				ewarn " touch -t 199901010101 ${ENTRIES}"
-				echo
-			fi
-		fi
-	fi
+myth-git_src_unpack() {
 
 	pkg_pro=${_MODULE}.pro
 	if hasq ${_MODULE} ${MYTHPLUGINS} ; then
@@ -86,7 +60,15 @@ myth-svn_src_unpack() {
 		pkg_pro="myththemes.pro"
 	fi
 
-	subversion_src_unpack ; cd ${S}
+	git_src_unpack
+
+	if hasq ${_MODULE} ${MYTHPLUGINS} ; then
+		cd ${S}/mythplugins
+	elif [ "${_MODULE}" == "mythtv-themes" ]; then
+		cd ${S}
+	else
+		cd ${S}/${_MODULE}
+	fi
 
 	if use debug ; then
 		FEATURES="${FEATURES} nostrip"
@@ -110,7 +92,7 @@ myth-svn_src_unpack() {
 	setup_pro
 }
 
-myth-svn_src_compile() {
+myth-git_src_compile() {
 	if hasq ${_MODULE} ${MYTHPLUGINS} ; then
 		for x in ${MYTHPLUGINS} ; do
 			if [[ ${_MODULE} == ${x} ]] ; then
@@ -122,6 +104,15 @@ myth-svn_src_compile() {
 	fi
 	# Myth doesn't use autoconf, and it rejects unexpected options.
 	myconf=$(echo ${myconf} | sed -e 'sX--enable-audio-jackXXg' -e 'sX--enable-audio-alsaXXg' -e 'sX--enable-audio-artsXXg' -e 'sX--enable-audio-ossXXg' )
+
+	if hasq ${_MODULE} ${MYTHPLUGINS} ; then
+		cd ${S}/mythplugins
+	elif [ "${_MODULE}" == "mythtv-themes" ]; then
+		cd ${S}
+	else
+		cd ${S}/${_MODULE}
+	fi
+
 	sed -e 's/rm mythconfig.mak/rm -f mythconfig.mak/' -i configure
 
         ## CFLAG cleaning so it compiles
@@ -149,13 +140,24 @@ myth-svn_src_compile() {
         einfo "Running ./configure --prefix=/usr --mandir=/usr/share/man ${myconf}"
 	./configure --prefix=/usr --mandir=/usr/share/man ${myconf}
 
-	for X in */ */*/ ; do cd $X ; ln -s ../mythconfig.mak . ; cd ${S} ; done
+
+	if hasq ${_MODULE} ${MYTHPLUGINS} ; then
+		for X in */ */*/ ; do cd $X ; ln -s ../mythconfig.mak . ; cd ${S}/mythplugins ; done
+	elif [ "${_MODULE}" == "mythtv-themes" ]; then
+		for X in */ */*/ ; do cd $X ; ln -s ../mythconfig.mak . ; cd ${S}/ ; done
+	else
+		for X in */ */*/ ; do cd $X ; ln -s ../mythconfig.mak . ; cd ${S}/${_MODULE} ; done
+	fi
 	qmake ${pkg_pro}
 	emake CC="$(tc-getCC)" CXX="$(tc-getCXX)" "${@}" || die
 }
 
-myth-svn_src_install() {
+myth-git_src_install() {
 	if hasq ${_MODULE} ${MYTHPLUGINS} ; then
+		cd ${S}/mythplugins
+	elif [ "${_MODULE}" == "mythtv-themes" ]; then
+		cd ${S}
+	else
 		cd ${S}/${_MODULE}
 	fi
 
