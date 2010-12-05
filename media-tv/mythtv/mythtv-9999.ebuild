@@ -116,9 +116,6 @@ setup_pro() {
         # svnversion in MythTV's build doesn't work
 #        sed -e "s:\`(svnversion \$\${SVNTREEDIR} 2>\/dev\/null) || echo Unknown\`:${MYTHTV_SVN_REVISION}:" \
 #                -i "${S}"/version.pro || die "svnversion sed failed"
-	sed -e 's/\(path*\).*/\1/' -e '/path/ c\const MPUBLIC char *myth_source_path = ${EGIT_BRANCH};'\
-		 -i "${S}"/mythtv/version.cpp
-
 
         # Perl bits need to go into vender_perl and not site_perl
         sed -e "s:pure_install:pure_install INSTALLDIRS=vendor:" \
