@@ -53,7 +53,7 @@ src_install() {
 		exeinto /etc/cron.weekly
 		newexe "${FILESDIR}/mythvideo.weekly" mythvideo || die
 		insinto /home/mythtv/.mythtv/
-		newins mythplugins/mythvideo/scripts/jamu-example.conf jamu.conf || die
+		newins mythplugins/mythvideo/mythvideo/scripts/jamu-example.conf jamu.conf || die
 	fi
 }
 
