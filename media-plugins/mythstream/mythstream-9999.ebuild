@@ -4,7 +4,7 @@
 # $Header: /var/cvsroot/gentoo-x86/media-plugins/mythstream/mythstream.ebuild,v 1.0 2009/08/02 20:46:49 Marc Tousignant Exp $
 
 EAPI="2"
-inherit qt4 myth-svn
+inherit qt4 myth-git
 
 DESCRIPTION="MythStream is an unofficial MythTV plugin that plays Internet audio and video streams."
 HOMEPAGE="http://home.kabelfoon.nl/~moongies/streamtuned.html"
@@ -39,7 +39,7 @@ src_compile() {
 
 src_install() {
 #	emake PREFIX=/usr install || die
-	myth-svn_src_install || die "install failed"
+	myth-git_src_install || die "install failed"
 }
 
 pkg_postinst() {
