@@ -12,9 +12,7 @@ KEYWORDS="alpha amd64 arm hppa ia64 mips ppc ppc64 sh sparc x86"
 IUSE=""
 DEPEND=""
 RDEPEND="=media-tv/mythtv-${PV}
-	>=x11-themes/mythtv-themes-graphite-1.0
 	=x11-themes/mythtv-themes-${PV}
-	=x11-themes/mythtv-themes-extra-${PV}
 	=media-plugins/mythvideo-${PV}
 	=media-plugins/mythmovies-${PV}
 	=media-plugins/mythzoneminder-${PV}
@@ -24,4 +22,6 @@ RDEPEND="=media-tv/mythtv-${PV}
 	=media-plugins/mythweather-${PV}
 	=media-plugins/mythgallery-${PV}
 	=media-plugins/mythbrowser-${PV}
-	=media-plugins/mythnews-${PV}"
+	=media-plugins/mythnews-${PV}
+	=mythnetvision/mythnetvision-${PV}
+	=mythweb/mythweb-${PV}"
