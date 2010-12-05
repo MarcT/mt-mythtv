@@ -41,6 +41,10 @@ else
 	EGIT_COMMIT="${MYTHTV_GIT_REVISION}"
 fi
 
+if [ "${EGIT_COMMIT}" == "" ]; then
+        EGIT_COMMIT="${EGIT_BRANCH}"
+fi
+
 S="${WORKDIR}"
 
 myth-git_src_unpack() {
