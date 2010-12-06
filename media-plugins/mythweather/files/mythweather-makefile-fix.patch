@@ -1,16 +1,28 @@
 diff -u -r mythtv.orig/mythplugins/mythweather/mythweather/mythweather.pro mythtv/mythplugins/mythweather/mythweather/mythweather.pro
 --- mythtv.orig/mythplugins/mythweather/mythweather/mythweather.pro	2010-12-05 17:48:10.000000000 -0500
-+++ mythtv/mythplugins/mythweather/mythweather/mythweather.pro	2010-12-05 18:00:47.000000000 -0500
-@@ -2,6 +2,9 @@
- include ( ../../settings.pro )
- include ( ../../programs-libs.pro )
++++ mythtv/mythplugins/mythweather/mythweather/mythweather.pro	2010-12-05 18:59:26.000000000 -0500
+@@ -21,6 +21,21 @@
  
-+# Directories
-+SUBDIRS = scripts
+ INSTALLS += datafiles
+ 
++installscripts.path = $${PREFIX}/share/mythtv/mythweather/scripts
++installscripts.files = scripts/README
++installscriptsca_envcan.path = $${PREFIX}/share/mythtv/mythweather/scripts/ca_envcan
++installscriptsca_envcan.files = scripts/ca_envcan/*.pl scripts/ca_envcan/*.pm scripts/ca_envcan/*.xml scripts/ca_envcan/ENVCAN_icons
++installscriptsno_yrno.path = $${PREFIX}/share/mythtv/mythweather/scripts/no_yrno
++installscriptsno_yrno.files = scripts/no_yrno/*.pl
++installscriptsuk_bbc.path = $${PREFIX}/share/mythtv/mythweather/scripts/uk_bbc
++installscriptsuk_bbc.files = scripts/uk_bbc/*.pl scripts/uk_bbc/*.pm
++installscriptsus_nws.path = $${PREFIX}/share/mythtv/mythweather/scripts/us_nws
++installscriptsus_nws.files = scripts/us_nws/*.pl scripts/us_nws/*.pm scripts/us_nws/*.xml scripts/us_nws/*.dbx scripts/us_nws/icons
++installscriptswunderground.path = $${PREFIX}/share/mythtv/mythweather/scripts/wunderground
++installscriptswunderground.files = scripts/wunderground/*.pl scripts/wunderground/*.csv
 +
- QT += sql xml
- 
- TEMPLATE = lib
++INSTALLS += installscripts installscriptsca_envcan installscriptsno_yrno installscriptsuk_bbc installscriptsus_nws installscriptswunderground
++
+ # Input
+ HEADERS += weather.h weatherSource.h sourceManager.h weatherScreen.h dbcheck.h
+ HEADERS += weatherSetup.h weatherUtils.h
 diff -u -r mythtv.orig/mythplugins/mythweather/mythweather.pro mythtv/mythplugins/mythweather/mythweather.pro
 --- mythtv.orig/mythplugins/mythweather/mythweather.pro	2010-12-05 17:48:10.000000000 -0500
 +++ mythtv/mythplugins/mythweather/mythweather.pro	2010-12-05 17:59:24.000000000 -0500
