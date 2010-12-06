@@ -32,8 +32,7 @@ DEPEND=">=sys-apps/sed-4
 	media-gfx/dcraw"
 
 setup_pro() {
-	epatch "${FILESDIR}"/mythweather-makefile-fix.patch
-
+	epatch "${FILESDIR}"/mythweather-0.25-sandbox.patch
 }
 
 src_configure() {
