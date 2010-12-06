@@ -142,10 +142,9 @@ src_configure() {
 		$(use_enable oss audio-oss)
 		$(use_enable proc-opt)
 		$(use_enable vdpau)
-		$(use_enable xvmc)
 		$(use_enable xv)
-		--enable-x11
-"
+		$(use_enable xvmc)
+		--enable-x11"
 
 	use debug && myconf="${myconf} --compile-type=debug"
 	use profile && myconf="${myconf} --compile-type=profile"
