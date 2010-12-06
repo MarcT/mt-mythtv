@@ -14,7 +14,7 @@ IUSE_VIDEO_CARDS="video_cards_i810 video_cards_nvidia video_cards_via"
 
 IUSE="alsa altivec autostart dbox2 debug directfb directv dvb dvd 
 hdhomerun hdpvr ieee1394 iptv ivtv jack joystick latm lcd lirc mmx opengl 
-oss perl profile proc-opt python vdpau vorbis X xv xvmc tiff fftw ${IUSE_VIDEO_CARDS}"
+oss perl profile proc-opt python vdpau vorbis xv xvmc tiff fftw ${IUSE_VIDEO_CARDS}"
 
 RDEPEND=">=media-libs/freetype-2.0
 	>=media-sound/lame-3.93.1
@@ -140,9 +140,9 @@ src_configure() {
 		$(use_enable oss audio-oss)
 		$(use_enable proc-opt)
 		$(use_enable vdpau)
-		$(use_enable X x11)
 		$(use_enable xv)
-		$(use_enable xvmc)"
+		$(use_enable xvmc)
+		--enable-x11"
 
 	use debug && myconf="${myconf} --compile-type=debug"
 	use profile && myconf="${myconf} --compile-type=profile"
