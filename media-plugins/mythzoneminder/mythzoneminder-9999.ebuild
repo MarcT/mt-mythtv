@@ -1,5 +1,5 @@
 # Copyright 1999-2009 Gentoo Foundation
-# Copyright 2009 Marc Tousignant
+# Copyright 2009-2010 Marc Tousignant
 #  ( If you make changes, please add a copyright notice above, but
 #    never remove an existing notice. )
 # Distributed under the terms of the GNU General Public License v2

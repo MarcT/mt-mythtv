@@ -1,4 +1,7 @@
 # Copyright 1999-2009 Gentoo Foundation
+# Copyright 2009-2010 Marc Tousignant
+#  ( If you make changes, please add a copyright notice above, but
+#    never remove an existing notice. )
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/x11-themes/mythtv-themes/mythtv-themes-9999.ebuild,v 1.3 2009/07/10 14:05:04 Marc Tousignant Exp $
 
@@ -19,10 +22,6 @@ RDEPEND=">=media-tv/mythtv-${PV}"
 src_unpack() {
         myth-git_src_unpack
         cd ${S}
-#        rm -rf ${S}/myththemes
-#        rm -Rf ${S}/.svn
-#        rm -Rf ${S}/*/.svn
-#        rm -Rf ${S}/*/*/.svn
 }
 
 

@@ -1,7 +1,8 @@
 # Copyright 1999-2009 Gentoo Foundation
 # Copyright 2005 Preston Crow
+# Copyright 2009-2010 Marc Tousignant
 # Modifications by (Simon at Koala) from mythtv-dev list.
-# Modifications by Marc Tousignant 2009
+# Modifications by Marc Tousignant
 #  ( If you make changes, please add a copyright notice above, but
 #    never remove an existing notice. )
 # Distributed under the terms of the GNU General Public License v2
