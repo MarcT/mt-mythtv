@@ -1,4 +1,7 @@
 # Copyright 1999-2009 Gentoo Foundation
+# Copyright 2009-2010 Marc Tousignant
+#  ( If you make changes, please add a copyright notice above, but
+#    never remove an existing notice. )
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/www-apps/mythweb/mythweb-9999.ebuild,v 1.3 2009/07/10 14:05:04 Marc Tousignant Exp $
 
@@ -29,12 +32,6 @@ src_compile() {
 
 src_install() {
 	webapp_src_preinst
-
-#	rm -rf /var/tmp/mythweb
-#	mv ${S}/mythweb /var/tmp
-#	rm -rf ${S}/*
-#	mv /var/tmp/mythweb/* ${S}
-#	mv /var/tmp/mythweb/.htaccess ${S}
 
 	keepdir ${MY_HTDOCSDIR}/video_dir
 	keepdir ${MY_HTDOCSDIR}/image_cache

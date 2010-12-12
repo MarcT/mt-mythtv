@@ -1,5 +1,6 @@
 # Copyright 1999-2004 Gentoo Foundation
 # Copyright 2005 Preston Crow
+# Copyright 2009-2010 Marc Tousignant
 #  ( If you make changes, please add a copyright notice above, but
 #    never remove an existing notice. )
 # Distributed under the terms of the GNU General Public License v2
@@ -7,6 +8,7 @@
 #
 # Author: Daniel Ahlberg <aliz@gentoo.org>
 # Modified: Preston Crow
+# Modified: Marc Tousignant
 #
 
 inherit git eutils flag-o-matic multilib versionator toolchain-funcs
