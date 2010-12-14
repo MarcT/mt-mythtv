@@ -14,7 +14,7 @@ HOMEPAGE="http://www.mythtv.org/"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="debug"
+IUSE="debug minimal"
 
 DEPEND=">=sys-apps/sed-4
 	minimal? ( dev-db/mysql
