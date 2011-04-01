@@ -3,9 +3,18 @@
 # $Header: /var/cvsroot/gentoo-x86/media-tv/nuvexport/nuvexport-0.5_p20080311.ebuild,v 1.2 2009/01/10 14:45:35 beandog Exp $
 
 EAPI="2"
-inherit eutils subversion
+inherit eutils git
 
-ESVN_REPO_URI="http://cvs.mythtv.org/svn/branches/release-0-24-fixes/mythextras/nuvexport"
+EGIT_BRANCH="fixes/0.24"
+
+#ESVN_REPO_URI="http://cvs.mythtv.org/svn/branches/release-0-24-fixes/mythextras/nuvexport"
+EGIT_REPO_URI="git://github.com/MythTV/nuvexport.git"
+EGIT_PROJECT=nuvexport
+EGIT_COMMIT="${NUVEXPORT_GIT_REVISION}"
+
+if [ "${EGIT_COMMIT}" == "" ]; then
+        EGIT_COMMIT="${EGIT_BRANCH}"
+fi
 
 DESCRIPTION="Export from mythtv recorded NuppelVideo files"
 HOMEPAGE="http://www.forevermore.net/mythtv/"
