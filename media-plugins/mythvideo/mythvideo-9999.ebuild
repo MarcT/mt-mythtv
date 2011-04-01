@@ -20,7 +20,7 @@ KEYWORDS="~amd64 ~x86"
 IUSE="debug jamu"
 
 DEPEND=">=sys-apps/sed-4
-	sys-apps/eject
+	sys-block/eject
 	>=media-tv/mythtv-${PV}"
 
 RDEPEND="${DEPEND}
