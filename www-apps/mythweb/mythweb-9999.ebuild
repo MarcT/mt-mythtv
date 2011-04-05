@@ -14,11 +14,18 @@ IUSE=""
 LICENSE="GPL-2"
 KEYWORDS="~x86 ~amd64"
 
-DEPEND="dev-perl/Math-Round
-	>=dev-lang/php-5.3"
+RDEPEND="dev-lang/php[json,mysql,session,posix]
+	|| ( <dev-lang/php-5.3[spl,pcre] >=dev-lang/php-5.3 )
+	dev-perl/DBI
+	dev-perl/DBD-mysql
+	dev-perl/Net-UPnP"
 
-RDEPEND="!dev-php/php
-	!www-apps/mythweb-cvs"
+DEPEND="${RDEPEND}
+	dev-perl/Math-Round
+	app-arch/unzip"
+
+need_httpd_cgi
+need_php5_httpd
 
 pkg_setup() {
 	webapp_pkg_setup
