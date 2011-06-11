@@ -14,13 +14,11 @@ SLOT="0"
 KEYWORDS="~x86 ~amd64"
 IUSE_VIDEO_CARDS="video_cards_i810 video_cards_nvidia video_cards_via"
 
-IUSE="alsa altivec autostart dbox2 debug directfb directv dvb dvd fftw
+IUSE="alsa altivec autostart bluray dbox2 debug directfb directv dvb dvd fftw
 hdhomerun hdpvr ieee1394 iptv ivtv jack joystick latm lcd lirc mmx opengl 
 oss perl profile proc-opt python tiff vdpau vorbis xv xvmc ${IUSE_VIDEO_CARDS}"
 
-RDEPEND="media-fonts/dejavu
-	media-fonts/corefonts
-	>=media-libs/freetype-2.0
+RDEPEND=">=media-libs/freetype-2.0
 	>=media-sound/lame-3.93.1
 	x11-libs/libX11
 	x11-libs/libXext
@@ -28,40 +26,47 @@ RDEPEND="media-fonts/dejavu
 	x11-libs/libXv
 	x11-libs/libXrandr
 	x11-libs/libXxf86vm
-	>=x11-libs/qt-core-4.4:4[qt3support]
-	>=x11-libs/qt-gui-4.4:4[qt3support,tiff?]
-	>=x11-libs/qt-sql-4.4:4[qt3support,mysql]
-	>=x11-libs/qt-opengl-4.4:4[qt3support]
-	>=x11-libs/qt-webkit-4.4:4
+	x11-libs/qt-core:4[qt3support]
+	x11-libs/qt-gui:4[qt3support]
+	x11-libs/qt-sql:4[qt3support,mysql]
+	x11-libs/qt-opengl:4[qt3support]
+	x11-libs/qt-webkit:4
 	virtual/mysql
 	virtual/opengl
 	virtual/glu
 	|| ( >=net-misc/wget-1.9.1 >=media-tv/xmltv-0.5.43 )
 	alsa? ( >=media-libs/alsa-lib-0.9 )
-	autostart? ( 	net-dialup/mingetty
+	autostart? (    net-dialup/mingetty
 			x11-wm/evilwm
 			x11-apps/xset )
-	directv? ( virtual/perl-Time-HiRes )
 	dvb? ( media-libs/libdvb media-tv/linuxtv-dvb-headers )
 	dvd? ( media-libs/libdvdcss )
-	fftw? ( sci-libs/fftw:3.0 )
-	ieee1394? ( 	>=sys-libs/libraw1394-1.2.0
-			>=sys-libs/libavc1394-0.5.0
+	ieee1394? (	>=sys-libs/libraw1394-1.2.0
+			>=sys-libs/libavc1394-0.5.3
 			>=media-libs/libiec61883-1.0.0 )
-	ivtv? ( media-tv/ivtv-utils )
 	jack? ( media-sound/jack-audio-connection-kit )
-	latm? ( media-libs/faad2 )
 	lcd? ( app-misc/lcdproc )
 	lirc? ( app-misc/lirc )
-	perl? ( dev-perl/DBD-mysql )
-	python? ( dev-python/mysql-python )
+	perl? (         dev-perl/DBD-mysql
+			dev-perl/Net-UPnP )
+	python? (       dev-python/mysql-python
+			dev-python/lxml )
+
+	bluray? ( media-libs/libbluray )
+	media-fonts/dejavu
+	media-fonts/corefonts
+	directv? ( virtual/perl-Time-HiRes )
+	fftw? ( sci-libs/fftw:3.0 )
+	ivtv? ( media-tv/ivtv-utils )
+	latm? ( media-libs/faad2 )
 	vdpau? ( >=x11-drivers/nvidia-drivers-180.40 )
-	xvmc? ( 	x11-libs/libXvMC
-			video_cards_nvidia? ( x11-drivers/nvidia-drivers )
-			video_cards_via? ( x11-drivers/xf86-video-via )
-			video_cards_i810? ( x11-drivers/xf86-video-i810 ) )"
+	xvmc? (	x11-libs/libXvMC 
+		video_cards_nvidia? ( x11-drivers/nvidia-drivers )
+		video_cards_via? ( x11-drivers/xf86-video-via )
+		video_cards_i810? ( x11-drivers/xf86-video-i810 ) )"
 
 DEPEND="${RDEPEND}
+	dev-lang/yasm
 	x11-proto/xineramaproto
 	x11-proto/xf86vidmodeproto
 	x11-apps/xinit"
