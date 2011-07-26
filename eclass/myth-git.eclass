@@ -19,25 +19,29 @@ IUSE="${IUSE} nls"
 
 EXPORT_FUNCTIONS src_unpack src_compile src_install
 
-EGIT_BRANCH="fixes/0.24"
+# EGIT_BRANCH="jyavenard/backports/fixes/0.24"
 
 MYTHPLUGINS="mytharchive mythbrowser mythgallery mythgame mythmusic mythnetvision mythnews mythvideo mythweather mythzoneminder"
 
 _MODULE=${PN}
 
 if hasq ${_MODULE} ${MYTHPLUGINS} ; then
+	EGIT_BRANCH="jyavenard/backports/fixes/0.24"
 	EGIT_REPO_URI="git://github.com/MythTV/mythtv.git"
 	EGIT_PROJECT=mythplugins
 	EGIT_COMMIT="${MYTHTV_GIT_REVISION}"
 elif [ "${_MODULE}" == "mythtv-themes" ]; then
+	EGIT_BRANCH="fixes/0.24"
 	EGIT_REPO_URI="git://github.com/MythTV/myththemes.git"
 	EGIT_PROJECT=myththemes
 	EGIT_COMMIT="${MYTHTHEMES_GIT_REVISION}"
 elif [ "${_MODULE}" == "mythweb" ]; then
+	EGIT_BRANCH="fixes/0.24"
 	EGIT_REPO_URI="git://github.com/MythTV/mythweb.git"
 	EGIT_PROJECT=mythweb
 	EGIT_COMMIT="${MYTHWEB_GIT_REVISION}"
 else
+	EGIT_BRANCH="jyavenard/backports/fixes/0.24"
 	EGIT_REPO_URI="git://github.com/MythTV/mythtv.git"
 	EGIT_PROJECT=${_MODULE/frontend/tv}
 	EGIT_COMMIT="${MYTHTV_GIT_REVISION}"
