@@ -53,7 +53,9 @@ RDEPEND="media-fonts/dejavu
 	latm? ( media-libs/faad2 )
 	lcd? ( app-misc/lcdproc )
 	lirc? ( app-misc/lirc )
-	perl? ( dev-perl/DBD-mysql )
+	perl? ( dev-perl/DBD-mysql 
+		dev-perl/Net-UPnP
+		>=dev-perl/libwww-perl-6 )
 	python? ( dev-python/mysql-python )
 	vdpau? ( >=x11-drivers/nvidia-drivers-180.40 )
 	xvmc? ( 	x11-libs/libXvMC

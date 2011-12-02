@@ -23,7 +23,7 @@ MYTHPLUGINS="mytharchive mythbrowser mythgallery mythgame mythmusic mythnetvisio
 
 _MODULE=${PN}
 
-if hasq ${_MODULE} ${MYTHPLUGINS} ; then
+if has ${_MODULE} ${MYTHPLUGINS} ; then
 	EGIT_REPO_URI="git://github.com/MythTV/mythtv.git"
 	EGIT_PROJECT=mythplugins
 	EGIT_COMMIT="${MYTHTV_GIT_REVISION}"
@@ -50,7 +50,7 @@ S="${WORKDIR}"
 myth-git_src_unpack() {
 
 	pkg_pro=${_MODULE}.pro
-	if hasq ${_MODULE} ${MYTHPLUGINS} ; then
+	if has ${_MODULE} ${MYTHPLUGINS} ; then
 		pkg_pro="mythplugins.pro"
 	elif [ "${_MODULE}" == "mythfrontend" ]; then
 		pkg_pro="mythtv.pro"
@@ -64,7 +64,7 @@ myth-git_src_unpack() {
 
 	git_src_unpack
 
-	if hasq ${_MODULE} ${MYTHPLUGINS} ; then
+	if has ${_MODULE} ${MYTHPLUGINS} ; then
 		cd ${S}/mythplugins
 	elif [ "${_MODULE}" == "mythtv-themes" ]; then
 		cd ${S}
@@ -80,7 +80,7 @@ myth-git_src_unpack() {
 	fi
 
 	if ! use nls ; then
-		if hasq ${_MODULE} ${MYTHPLUGINS} ; then
+		if has ${_MODULE} ${MYTHPLUGINS} ; then
 			sed \
 				-e "/^SUBDIRS/s:i18n::" \
 				-i  ${_MODULE}/${_MODULE}.pro || die "Disable i18n failed"
@@ -95,7 +95,7 @@ myth-git_src_unpack() {
 }
 
 myth-git_src_compile() {
-	if hasq ${_MODULE} ${MYTHPLUGINS} ; then
+	if has ${_MODULE} ${MYTHPLUGINS} ; then
 		for x in ${MYTHPLUGINS} ; do
 			if [[ ${_MODULE} == ${x} ]] ; then
 				myconf="${myconf} --enable-${x}"
@@ -107,7 +107,7 @@ myth-git_src_compile() {
 	# Myth doesn't use autoconf, and it rejects unexpected options.
 	myconf=$(echo ${myconf} | sed -e 'sX--enable-audio-jackXXg' -e 'sX--enable-audio-alsaXXg' -e 'sX--enable-audio-artsXXg' -e 'sX--enable-audio-ossXXg' )
 
-	if hasq ${_MODULE} ${MYTHPLUGINS} ; then
+	if has ${_MODULE} ${MYTHPLUGINS} ; then
 		cd ${S}/mythplugins
 	elif [ "${_MODULE}" == "mythtv-themes" ]; then
 		cd ${S}
@@ -143,7 +143,7 @@ myth-git_src_compile() {
 	./configure --prefix=/usr --mandir=/usr/share/man ${myconf}
 
 
-	if hasq ${_MODULE} ${MYTHPLUGINS} ; then
+	if has ${_MODULE} ${MYTHPLUGINS} ; then
 		for X in */ */*/ ; do cd $X ; ln -s ../mythconfig.mak . ; cd ${S}/mythplugins ; done
 	elif [ "${_MODULE}" == "mythtv-themes" ]; then
 		for X in */ */*/ ; do cd $X ; ln -s ../mythconfig.mak . ; cd ${S}/ ; done
@@ -155,7 +155,7 @@ myth-git_src_compile() {
 }
 
 myth-git_src_install() {
-	if hasq ${_MODULE} ${MYTHPLUGINS} ; then
+	if has ${_MODULE} ${MYTHPLUGINS} ; then
 		cd ${S}/mythplugins
 	elif [ "${_MODULE}" == "mythtv-themes" ]; then
 		cd ${S}
