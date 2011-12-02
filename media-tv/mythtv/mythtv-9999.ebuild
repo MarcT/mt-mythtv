@@ -48,7 +48,8 @@ RDEPEND=">=media-libs/freetype-2.0
 	lcd? ( app-misc/lcdproc )
 	lirc? ( app-misc/lirc )
 	perl? (         dev-perl/DBD-mysql
-			dev-perl/Net-UPnP )
+			dev-perl/Net-UPnP
+			>=dev-perl/libwww-perl-6 )
 	python? (       dev-python/mysql-python
 			dev-python/lxml )
 
