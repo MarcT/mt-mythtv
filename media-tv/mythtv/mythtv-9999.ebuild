@@ -15,10 +15,10 @@ SLOT="0"
 KEYWORDS="~x86 ~amd64"
 IUSE_VIDEO_CARDS="video_cards_i810 video_cards_nvidia video_cards_via"
 
-IUSE="alsa altivec autostart bluray crystalhd dbox2 debug directv dvb dvd fftw
-hdhomerun hdpvr ieee1394 iptv ivtv jack joystick lame latm lcd lirc mmx opengl 
-oss perl profile proc-opt pulseaudio python tiff vaapi vdpau vorbis x264 xv 
-xvid ${IUSE_VIDEO_CARDS}"
+IUSE="alsa altivec autostart bluray ceton crystalhd dbox2 debug directv dvb dvd 
+fftw hdhomerun hdpvr ieee1394 iptv ivtv jack joystick lame latm lcd lirc mmx opengl 
+oss perl profile proc-opt pulseaudio python tiff vaapi vdpau vorbis x264 xv xvid 
+${IUSE_VIDEO_CARDS}"
 
 RDEPEND="media-fonts/corefonts
 	media-fonts/dejavu
@@ -130,6 +130,7 @@ src_configure() {
 
 	myconf="$(use_enable alsa audio-alsa)
 		$(use_enable altivec)
+		$(use_enable ceton)
 		$(use_enable crystalhd)
 		$(use_enable dvb)
 		$(use_enable hdhomerun)
