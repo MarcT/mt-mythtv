@@ -14,25 +14,29 @@ SLOT="0"
 KEYWORDS="~x86 ~amd64"
 IUSE_VIDEO_CARDS="video_cards_i810 video_cards_nvidia video_cards_via"
 
-IUSE="alsa altivec autostart dbox2 debug directfb directv dvb dvd fftw
-hdhomerun hdpvr ieee1394 iptv ivtv jack joystick latm lcd lirc mmx opengl 
-oss perl profile proc-opt python tiff vdpau vorbis xv xvmc ${IUSE_VIDEO_CARDS}"
+IUSE="alsa altivec autostart bluray crystalhd dbox2 debug directv dvb dvd fftw
+hdhomerun hdpvr ieee1394 iptv ivtv jack joystick lame latm lcd lirc mmx opengl 
+oss perl profile proc-opt pulseaudio python tiff vaapi vdpau vorbis x264 xv 
+xvid ${IUSE_VIDEO_CARDS}"
 
-RDEPEND="media-fonts/dejavu
-	media-fonts/corefonts
+RDEPEND="media-fonts/corefonts
+	media-fonts/dejavu
+	media-fonts/liberation-fonts
 	>=media-libs/freetype-2.0
 	>=media-sound/lame-3.93.1
+	x11-apps/xinit
+	|| ( >=net-misc/wget-1.12-r3 >=media-tv/xmltv-0.5.43 )
 	x11-libs/libX11
 	x11-libs/libXext
 	x11-libs/libXinerama
 	x11-libs/libXv
 	x11-libs/libXrandr
 	x11-libs/libXxf86vm
-	>=x11-libs/qt-core-4.4:4[qt3support]
-	>=x11-libs/qt-gui-4.4:4[qt3support,tiff?]
-	>=x11-libs/qt-sql-4.4:4[qt3support,mysql]
-	>=x11-libs/qt-opengl-4.4:4[qt3support]
-	>=x11-libs/qt-webkit-4.4:4
+	x11-libs/qt-core:4[qt3support]
+	x11-libs/qt-gui:4[qt3support,tiff?]
+	x11-libs/qt-sql:4[qt3support,mysql]
+	x11-libs/qt-opengl:4[qt3support]
+	x11-libs/qt-webkit:4
 	virtual/mysql
 	virtual/opengl
 	virtual/glu
@@ -41,42 +45,41 @@ RDEPEND="media-fonts/dejavu
 	autostart? ( 	net-dialup/mingetty
 			x11-wm/evilwm
 			x11-apps/xset )
+	bluray? ( media-libs/libbluray )
 	directv? ( virtual/perl-Time-HiRes )
 	dvb? ( media-libs/libdvb media-tv/linuxtv-dvb-headers )
 	dvd? ( media-libs/libdvdcss )
 	fftw? ( sci-libs/fftw:3.0 )
-	ieee1394? ( 	>=sys-libs/libraw1394-1.2.0
-			>=sys-libs/libavc1394-0.5.0
+	ieee1394? (	>=sys-libs/libraw1394-1.2.0
+			>=sys-libs/libavc1394-0.5.3
 			>=media-libs/libiec61883-1.0.0 )
 	ivtv? ( media-tv/ivtv-utils )
 	jack? ( media-sound/jack-audio-connection-kit )
 	latm? ( media-libs/faad2 )
 	lcd? ( app-misc/lcdproc )
 	lirc? ( app-misc/lirc )
-	perl? ( dev-perl/DBD-mysql 
-		dev-perl/Net-UPnP
-		>=dev-perl/libwww-perl-6 )
-	python? ( dev-python/mysql-python )
-	vdpau? ( >=x11-drivers/nvidia-drivers-180.40 )
-	xvmc? ( 	x11-libs/libXvMC
-			video_cards_nvidia? ( x11-drivers/nvidia-drivers )
-			video_cards_via? ( x11-drivers/xf86-video-via )
-			video_cards_i810? ( x11-drivers/xf86-video-i810 ) )"
+	perl? (		dev-perl/DBD-mysql 
+			dev-perl/Net-UPnP
+			>=dev-perl/libwww-perl-6 )
+	pulseaudio? ( media-sound/pulseaudio )
+	python? (	dev-python/mysql-python 
+			dev-python/lxml
+			dev-python/urlgrabber )
+	vaapi? ( x11-libs/libva )
+	vdpau? ( 	dev-python/lxml 
+			>=x11-drivers/nvidia-drivers-180.40 )
+	x264? ( >=media-libs/x264-0.0.20100605 )
+	xvid? ( >=media-libs/xvid-1.1.0 )"
 
 DEPEND="${RDEPEND}
 	x11-proto/xineramaproto
 	x11-proto/xf86vidmodeproto
-	x11-apps/xinit"
+	x11-apps/xinit
+	dev-lang/yasm"
 
 PDEPEND=""
 
 pkg_setup() {
-	if use xvmc && use video_cards_nvidia; then
-		elog
-		elog "For NVIDIA based cards, the XvMC renderer only works on"
-		elog "the NVIDIA 4, 5, 6 & 7 series cards."
-	fi
-
 	if use vdpau; then
 		elog
 		elog "The VDPAU renderer only works on"
@@ -84,14 +87,6 @@ pkg_setup() {
 		if ! use video_cards_nvidia; then
 			die "You enabled VDPAU without NVIDIA"
 		fi
-	fi
-
-	if use xvmc && [[ ! -s "${ROOT}/etc/X11/XvMCConfig" ]]; then
-		ewarn
-		ewarn "No XvMC implementation has been selected yet"
-		ewarn "Use 'eselect xvmc list' for a list of available choices"
-		ewarn "Then use 'eselect xvmc set <choice>' to choose"
-		ewarn "'eselect xvmc set nvidia' for example"
 	fi
 
 	if use autostart; then
@@ -130,9 +125,14 @@ setup_pro() {
 src_configure() {
 	use debug && use profile && die "You can not have USE="debug" and USE="profile" at the same time. Must disable one or the other."
 
+	has distcc ${FEATURES} || myconf="${myconf} --disable-distcc"
+	has ccache ${FEATURES} || myconf="${myconf} --disable-ccache"
+
+	use pulseaudio || myconf="${myconf} --disable-audio-pulseoutput"
+
 	myconf="$(use_enable alsa audio-alsa)
 		$(use_enable altivec)
-		$(use_enable directfb)
+		$(use_enable crystalhd)
 		$(use_enable dvb)
 		$(use_enable hdhomerun)
 		$(use_enable hdpvr)
@@ -141,14 +141,16 @@ src_configure() {
 		$(use_enable ivtv)
 		$(use_enable jack audio-jack)
 		$(use_enable joystick joystick-menu)
+		$(use_enable lame libmp3lame)
 		$(use_enable lirc)
-		$(use_enable opengl opengl-vsync)
 		$(use_enable opengl opengl-video)
 		$(use_enable oss audio-oss)
 		$(use_enable proc-opt)
+		$(use_enable vaapi)
 		$(use_enable vdpau)
+		$(use_enable x264 libx264)
 		$(use_enable xv)
-		$(use_enable xvmc)
+		$(use_enable xvid libxvid)
 		--enable-x11"
 
 	use debug && myconf="${myconf} --compile-type=debug"
