@@ -11,7 +11,7 @@
 # Modified: Marc Tousignant
 #
 
-inherit git eutils flag-o-matic multilib versionator toolchain-funcs
+inherit git-2 eutils flag-o-matic multilib versionator toolchain-funcs
 
 ECLASS=myth-git
 INHERITED="${INHERITED} ${ECLASS}"
@@ -62,7 +62,7 @@ myth-git_src_unpack() {
 		pkg_pro="myththemes.pro"
 	fi
 
-	git_src_unpack
+	git-2_src_unpack
 
 	if has ${_MODULE} ${MYTHPLUGINS} ; then
 		cd ${S}/mythplugins

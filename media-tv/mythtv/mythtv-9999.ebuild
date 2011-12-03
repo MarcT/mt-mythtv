@@ -6,7 +6,8 @@
 # $Header: /var/cvsroot/gentoo-x86/media-tv/mythtv/mythtv-9999.ebuild,v 1.3 2009/07/10 14:05:04 Marc Tousignant Exp $
 
 EAPI="2"
-inherit myth-git qt4 flag-o-matic multilib eutils toolchain-funcs
+inherit myth-git qt4-r2 flag-o-matic multilib eutils toolchain-funcs python
+inherit linux-info
 
 DESCRIPTION="Homebrew PVR project"
 HOMEPAGE="http://www.mythtv.org/"
@@ -125,9 +126,6 @@ setup_pro() {
 src_configure() {
 	use debug && use profile && die "You can not have USE="debug" and USE="profile" at the same time. Must disable one or the other."
 
-	has distcc ${FEATURES} || myconf="${myconf} --disable-distcc"
-	has ccache ${FEATURES} || myconf="${myconf} --disable-ccache"
-
 	use pulseaudio || myconf="${myconf} --disable-audio-pulseoutput"
 
 	myconf="$(use_enable alsa audio-alsa)
@@ -155,6 +153,9 @@ src_configure() {
 
 	use debug && myconf="${myconf} --compile-type=debug"
 	use profile && myconf="${myconf} --compile-type=profile"
+
+	has distcc ${FEATURES} || myconf="${myconf} --disable-distcc"
+	has ccache ${FEATURES} || myconf="${myconf} --disable-ccache"
 }
 
 src_compile() {
