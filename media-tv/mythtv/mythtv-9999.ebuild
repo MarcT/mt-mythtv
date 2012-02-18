@@ -38,7 +38,7 @@ RDEPEND=">=media-libs/freetype-2.0
 			x11-wm/evilwm
 			x11-apps/xset )
 	directv? ( virtual/perl-Time-HiRes )
-	dvb? ( media-libs/libdvb media-tv/linuxtv-dvb-headers )
+	dvb? ( media-libs/libdvb virtual/linuxtv-dvb-headers )
 	dvd? ( media-libs/libdvdcss )
 	fftw? ( sci-libs/fftw:3.0 )
 	ieee1394? ( 	>=sys-libs/libraw1394-1.2.0
