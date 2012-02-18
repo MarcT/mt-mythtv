@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/x11-drivers/nvidia-drivers/nvidia-drivers-177.80.ebuild,v 1.1 2008/10/13 00:35:38 ricmm Exp $
 
-EAPI="2"
+EAPI="3"
 inherit eutils multilib versionator linux-mod flag-o-matic nvidia-driver
 
 X86_NV_PACKAGE="NVIDIA-Linux-x86-${PV}"
