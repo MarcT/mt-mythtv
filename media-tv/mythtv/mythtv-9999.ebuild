@@ -39,7 +39,7 @@ RDEPEND=">=media-libs/freetype-2.0
 	autostart? (    net-dialup/mingetty
 			x11-wm/evilwm
 			x11-apps/xset )
-	dvb? ( media-libs/libdvb media-tv/linuxtv-dvb-headers )
+	dvb? ( media-libs/libdvb virtual/linuxtv-dvb-headers )
 	dvd? ( media-libs/libdvdcss )
 	ieee1394? (	>=sys-libs/libraw1394-1.2.0
 			>=sys-libs/libavc1394-0.5.3
