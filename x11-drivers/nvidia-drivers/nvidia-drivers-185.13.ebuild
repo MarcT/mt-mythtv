@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI="2"
+EAPI="3"
 inherit eutils multilib versionator linux-mod flag-o-matic nvidia-driver
 
 X86_NV_PACKAGE="NVIDIA-Linux-x86-${PV}"

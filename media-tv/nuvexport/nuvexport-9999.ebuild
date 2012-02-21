@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-tv/nuvexport/nuvexport-0.5_p20080311.ebuild,v 1.2 2009/01/10 14:45:35 beandog Exp $
 
-EAPI="2"
+EAPI="3"
 inherit eutils git
 
 #ESVN_REPO_URI="http://cvs.mythtv.org/svn/trunk/mythextras/nuvexport"

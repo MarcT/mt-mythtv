@@ -5,7 +5,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/app-misc/mythtv-status/mythtv-status.ebuild,v 1.0 2009/08/02 20:46:49 Marc Tousignant Exp $
 
-EAPI="2"
+EAPI="3"
 
 inherit git
 

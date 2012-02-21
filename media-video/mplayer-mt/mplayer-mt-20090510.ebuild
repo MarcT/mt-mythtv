@@ -3,7 +3,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # Based on mplayer-1.0_rc2_p20090322.ebuild,v 1.4 2009/03/24 21:32:35 yngwin
 
-EAPI="1"
+EAPI="3"
 
 inherit eutils flag-o-matic multilib
 

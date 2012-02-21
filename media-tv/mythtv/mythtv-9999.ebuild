@@ -5,7 +5,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-tv/mythtv/mythtv-9999.ebuild,v 1.3 2009/07/10 14:05:04 Marc Tousignant Exp $
 
-EAPI="2"
+EAPI="3"
 MYTHTV_BRANCH="master"
 inherit myth-git qt4-r2 flag-o-matic multilib eutils toolchain-funcs python
 inherit linux-info
