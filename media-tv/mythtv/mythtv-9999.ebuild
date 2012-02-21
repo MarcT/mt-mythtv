@@ -49,7 +49,7 @@ RDEPEND="media-fonts/corefonts
 			x11-apps/xset )
 	bluray? ( media-libs/libbluray )
 	directv? ( virtual/perl-Time-HiRes )
-	dvb? ( media-libs/libdvb media-tv/linuxtv-dvb-headers )
+	dvb? ( media-libs/libdvb virtual/linuxtv-dvb-headers )
 	dvd? ( media-libs/libdvdcss )
 	fftw? ( sci-libs/fftw:3.0 )
 	ieee1394? (	>=sys-libs/libraw1394-1.2.0

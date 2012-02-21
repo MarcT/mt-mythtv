@@ -64,7 +64,7 @@ RDEPEND="sys-libs/ncurses
 	dga? ( x11-libs/libXxf86dga  )
 	dts? ( media-libs/libdca )
 	dv? ( media-libs/libdv )
-	dvb? ( media-tv/linuxtv-dvb-headers )
+	dvb? ( virtual/linuxtv-dvb-headers )
 	encode? (
 		mp2? ( media-sound/twolame )
 		mp3? ( media-sound/lame )
