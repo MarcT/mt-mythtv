@@ -19,6 +19,8 @@ IUSE="${IUSE} nls"
 
 EXPORT_FUNCTIONS src_unpack src_compile src_install
 
+EGIT_BRANCH="fixes/0.25"
+
 MYTHPLUGINS="mytharchive mythbrowser mythgallery mythgame mythmusic mythnetvision mythnews mythweather mythzoneminder"
 
 _MODULE=${PN}

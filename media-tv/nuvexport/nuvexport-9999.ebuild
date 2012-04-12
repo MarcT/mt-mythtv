@@ -5,12 +5,16 @@
 EAPI="3"
 inherit eutils git
 
-#ESVN_REPO_URI="http://cvs.mythtv.org/svn/trunk/mythextras/nuvexport"
+EGIT_BRANCH="fixes/0.25"
 
+#ESVN_REPO_URI="http://cvs.mythtv.org/svn/trunk/mythextras/nuvexport"
 EGIT_REPO_URI="git://github.com/MythTV/nuvexport.git"
 EGIT_PROJECT=nuvexport
 EGIT_COMMIT="${NUVEXPORT_GIT_REVISION}"
 
+if [ "${EGIT_COMMIT}" == "" ]; then
+        EGIT_COMMIT="${EGIT_BRANCH}"
+fi
 
 DESCRIPTION="Export from mythtv recorded NuppelVideo files"
 HOMEPAGE="http://www.forevermore.net/mythtv/"
