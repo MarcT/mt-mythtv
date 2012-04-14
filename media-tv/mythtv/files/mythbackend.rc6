@@ -41,7 +41,7 @@ start() {
 	chown -R "${MYTH_USER}" "$(dirname "${MYTH_PID}")"
 
 	ebegin "Starting myth backend"
-	start-stop-daemon --start --quiet --chuid "${MYTH_USER}" \
+	start-stop-daemon --start --quiet --user "${MYTH_USER}" \
 		--exec /usr/bin/mythbackend -- \
 		--daemon --pidfile "${MYTH_PID}" --logfile "${MYTH_LOG}" \
 		--verbose ${MYTH_VERBOSE}
