@@ -43,7 +43,7 @@ start() {
 	ebegin "Starting myth backend"
 	start-stop-daemon --start --quiet --user "${MYTH_USER}" \
 		--exec /usr/bin/mythbackend -- \
-		--daemon --pidfile "${MYTH_PID}" --logfile "${MYTH_LOG}" \
+		--daemon --pidfile "${MYTH_PID}" --logpath "${MYTH_LOG}" \
 		--verbose ${MYTH_VERBOSE}
 	eend $?
 }
