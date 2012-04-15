@@ -16,7 +16,7 @@ SLOT="0"
 KEYWORDS="~x86 ~amd64"
 IUSE_VIDEO_CARDS="video_cards_i810 video_cards_nvidia video_cards_via"
 
-IUSE="alsa altivec autostart bluray ceton crystalhd dbox2 debug directv dvb dvd 
+IUSE="alsa altivec autostart avahi bluray ceton crystalhd dbox2 debug directv dvb dvd 
 fftw hdhomerun hdpvr ieee1394 iptv ivtv jack joystick lame latm lcd lirc mmx opengl 
 oss perl profile proc-opt pulseaudio python tiff vaapi vdpau vorbis x264 xv xvid 
 ${IUSE_VIDEO_CARDS}"
@@ -47,6 +47,7 @@ RDEPEND="media-fonts/corefonts
 	autostart? ( 	net-dialup/mingetty
 			x11-wm/evilwm
 			x11-apps/xset )
+	avahi? ( net-dns/avahi[mdnsresponder-compat] )
 	bluray? ( media-libs/libbluray )
 	directv? ( virtual/perl-Time-HiRes )
 	dvb? ( media-libs/libdvb virtual/linuxtv-dvb-headers )
