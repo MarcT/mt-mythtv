@@ -61,7 +61,8 @@ RDEPEND="media-fonts/corefonts
 	latm? ( media-libs/faad2 )
 	lcd? ( app-misc/lcdproc )
 	lirc? ( app-misc/lirc )
-	perl? (		dev-perl/DBD-mysql 
+	perl? (		dev-perl/DBD-mysql
+			dev-perl/IO-Socket-INET6 
 			dev-perl/Net-UPnP
 			>=dev-perl/libwww-perl-6 )
 	pulseaudio? ( media-sound/pulseaudio )
