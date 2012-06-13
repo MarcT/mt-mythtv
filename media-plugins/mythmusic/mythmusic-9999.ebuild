@@ -17,7 +17,7 @@ HOMEPAGE="http://www.mythtv.org/"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="debug aac cdr fftw libvisual opengl sdl X"
+IUSE="debug aac cdr fftw opengl X"
 
 DEPEND=">=media-libs/taglib-1.4
 	>=media-sound/cdparanoia-3.9.8
@@ -31,17 +31,8 @@ DEPEND=">=media-libs/taglib-1.4
 	aac? ( >=media-libs/faad2-2.0-r7 )
 	cdr? ( virtual/cdrtools )
 	fftw? ( sci-libs/fftw )
-	libvisual? ( =media-libs/libvisual-0.4* )
 	opengl? ( virtual/opengl )
-	sdl? ( >=media-libs/libsdl-1.2.5 )
 	>=media-tv/mythtv-${PV}"
-
-pkg_config() {
-	if use libvisual && ! use sdl; then
-		eerror "libvisual support requires sdl support. enable 'sdl' USE flag"
-		die "libvisual support requires sdl support. enable 'sdl' USE flag"
-	fi
-}
 
 setup_pro() {
 	return 0
@@ -50,9 +41,7 @@ setup_pro() {
 src_configure() {
 	myconf="${myconf}
 		$(use_enable X fftw)
-		$(use_enable opengl)
-		$(use_enable sdl)
-		$(use_enable libvisual)"
+		$(use_enable opengl)"
 }
 
 src_compile() {
