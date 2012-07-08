@@ -27,7 +27,8 @@ DEPEND="dev-vcs/git[curl]
 	dev-perl/XML-LibXML
 	dev-perl/DateManip
 	dev-perl/MIME-tools
-	dev-perl/Net-UPnP"
+	dev-perl/Net-UPnP
+	dev-perl/Sys-SigAction"
 
 src_unpack() {
 	git_src_unpack
