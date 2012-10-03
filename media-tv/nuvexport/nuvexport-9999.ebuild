@@ -5,7 +5,7 @@
 EAPI="3"
 inherit eutils git
 
-#ESVN_REPO_URI="http://cvs.mythtv.org/svn/trunk/mythextras/nuvexport"
+EGIT_BRANCH="fixes/0.26"
 
 EGIT_REPO_URI="git://github.com/MythTV/nuvexport.git"
 EGIT_PROJECT=nuvexport
