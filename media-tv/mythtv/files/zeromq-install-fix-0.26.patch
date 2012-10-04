@@ -1,0 +1,178 @@
+diff -ur a/mythtv/external/zeromq/doc/Makefile.in b/mythtv/external/zeromq/doc/Makefile.in
+--- a/mythtv/external/zeromq/doc/Makefile.in	2012-10-03 14:36:28.000000000 -0400
++++ b/mythtv/external/zeromq/doc/Makefile.in	2012-10-03 20:41:26.000000000 -0400
+@@ -80,7 +80,7 @@
+   sed '$$!N;$$!N;$$!N;$$!N;$$!N;$$!N;$$!N;s/\n/ /g' | \
+   sed '$$!N;$$!N;$$!N;$$!N;s/\n/ /g'
+ man3dir = $(mandir)/man3
+-am__installdirs = "$(DESTDIR)$(man3dir)" "$(DESTDIR)$(man7dir)"
++am__installdirs = "$(man3dir)" "$(man7dir)"
+ man7dir = $(mandir)/man7
+ NROFF = nroff
+ MANS = $(dist_man_MANS)
+@@ -280,7 +280,7 @@
+ 	-rm -rf .libs _libs
+ install-man3: $(dist_man_MANS)
+ 	@$(NORMAL_INSTALL)
+-	test -z "$(man3dir)" || $(MKDIR_P) "$(DESTDIR)$(man3dir)"
++	test -z "$(man3dir)" || $(MKDIR_P) "$(man3dir)"
+ 	@list=''; test -n "$(man3dir)" || exit 0; \
+ 	{ for i in $$list; do echo "$$i"; done; \
+ 	l2='$(dist_man_MANS)'; for i in $$l2; do echo "$$i"; done | \
+@@ -294,15 +294,15 @@
+ 	sed 'N;N;s,\n, ,g' | { \
+ 	list=; while read file base inst; do \
+ 	  if test "$$base" = "$$inst"; then list="$$list $$file"; else \
+-	    echo " $(INSTALL_DATA) '$$file' '$(DESTDIR)$(man3dir)/$$inst'"; \
+-	    $(INSTALL_DATA) "$$file" "$(DESTDIR)$(man3dir)/$$inst" || exit $$?; \
++	    echo " $(INSTALL_DATA) '$$file' '$(man3dir)/$$inst'"; \
++	    $(INSTALL_DATA) "$$file" "$(man3dir)/$$inst" || exit $$?; \
+ 	  fi; \
+ 	done; \
+ 	for i in $$list; do echo "$$i"; done | $(am__base_list) | \
+ 	while read files; do \
+ 	  test -z "$$files" || { \
+-	    echo " $(INSTALL_DATA) $$files '$(DESTDIR)$(man3dir)'"; \
+-	    $(INSTALL_DATA) $$files "$(DESTDIR)$(man3dir)" || exit $$?; }; \
++	    echo " $(INSTALL_DATA) $$files '$(man3dir)'"; \
++	    $(INSTALL_DATA) $$files "$(man3dir)" || exit $$?; }; \
+ 	done; }
+ 
+ uninstall-man3:
+@@ -314,11 +314,11 @@
+ 	} | sed -e 's,.*/,,;h;s,.*\.,,;s,^[^3][0-9a-z]*$$,3,;x' \
+ 	      -e 's,\.[0-9a-z]*$$,,;$(transform);G;s,\n,.,'`; \
+ 	test -z "$$files" || { \
+-	  echo " ( cd '$(DESTDIR)$(man3dir)' && rm -f" $$files ")"; \
+-	  cd "$(DESTDIR)$(man3dir)" && rm -f $$files; }
++	  echo " ( cd '$(man3dir)' && rm -f" $$files ")"; \
++	  cd "$(man3dir)" && rm -f $$files; }
+ install-man7: $(dist_man_MANS)
+ 	@$(NORMAL_INSTALL)
+-	test -z "$(man7dir)" || $(MKDIR_P) "$(DESTDIR)$(man7dir)"
++	test -z "$(man7dir)" || $(MKDIR_P) "$(man7dir)"
+ 	@list=''; test -n "$(man7dir)" || exit 0; \
+ 	{ for i in $$list; do echo "$$i"; done; \
+ 	l2='$(dist_man_MANS)'; for i in $$l2; do echo "$$i"; done | \
+@@ -332,15 +332,15 @@
+ 	sed 'N;N;s,\n, ,g' | { \
+ 	list=; while read file base inst; do \
+ 	  if test "$$base" = "$$inst"; then list="$$list $$file"; else \
+-	    echo " $(INSTALL_DATA) '$$file' '$(DESTDIR)$(man7dir)/$$inst'"; \
+-	    $(INSTALL_DATA) "$$file" "$(DESTDIR)$(man7dir)/$$inst" || exit $$?; \
++	    echo " $(INSTALL_DATA) '$$file' '$(man7dir)/$$inst'"; \
++	    $(INSTALL_DATA) "$$file" "$(man7dir)/$$inst" || exit $$?; \
+ 	  fi; \
+ 	done; \
+ 	for i in $$list; do echo "$$i"; done | $(am__base_list) | \
+ 	while read files; do \
+ 	  test -z "$$files" || { \
+-	    echo " $(INSTALL_DATA) $$files '$(DESTDIR)$(man7dir)'"; \
+-	    $(INSTALL_DATA) $$files "$(DESTDIR)$(man7dir)" || exit $$?; }; \
++	    echo " $(INSTALL_DATA) $$files '$(man7dir)'"; \
++	    $(INSTALL_DATA) $$files "$(man7dir)" || exit $$?; }; \
+ 	done; }
+ 
+ uninstall-man7:
+@@ -352,8 +352,8 @@
+ 	} | sed -e 's,.*/,,;h;s,.*\.,,;s,^[^7][0-9a-z]*$$,7,;x' \
+ 	      -e 's,\.[0-9a-z]*$$,,;$(transform);G;s,\n,.,'`; \
+ 	test -z "$$files" || { \
+-	  echo " ( cd '$(DESTDIR)$(man7dir)' && rm -f" $$files ")"; \
+-	  cd "$(DESTDIR)$(man7dir)" && rm -f $$files; }
++	  echo " ( cd '$(man7dir)' && rm -f" $$files ")"; \
++	  cd "$(man7dir)" && rm -f $$files; }
+ tags: TAGS
+ TAGS:
+ 
+@@ -411,7 +411,7 @@
+ check: check-am
+ all-am: Makefile $(MANS)
+ installdirs:
+-	for dir in "$(DESTDIR)$(man3dir)" "$(DESTDIR)$(man7dir)"; do \
++	for dir in "$(man3dir)" "$(man7dir)"; do \
+ 	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
+ 	done
+ install: install-am
+diff -ur a/mythtv/external/zeromq/src/Makefile.in b/mythtv/external/zeromq/src/Makefile.in
+--- a/mythtv/external/zeromq/src/Makefile.in	2012-10-03 14:36:28.000000000 -0400
++++ b/mythtv/external/zeromq/src/Makefile.in	2012-10-03 20:45:30.000000000 -0400
+@@ -74,7 +74,7 @@
+ am__base_list = \
+   sed '$$!N;$$!N;$$!N;$$!N;$$!N;$$!N;$$!N;s/\n/ /g' | \
+   sed '$$!N;$$!N;$$!N;$$!N;s/\n/ /g'
+-am__installdirs = "$(DESTDIR)$(libdir)" "$(DESTDIR)$(pkgconfigdir)" \
++am__installdirs = "$(libdir)" "$(pkgconfigdir)" \
+ 	"$(DESTDIR)$(includedir)"
+ LTLIBRARIES = $(lib_LTLIBRARIES)
+ @BUILD_PGM_TRUE@libmythzmq_la_DEPENDENCIES =  \
+@@ -501,7 +501,7 @@
+ 	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@
+ install-libLTLIBRARIES: $(lib_LTLIBRARIES)
+ 	@$(NORMAL_INSTALL)
+-	test -z "$(libdir)" || $(MKDIR_P) "$(DESTDIR)$(libdir)"
++	test -z "$(libdir)" || $(MKDIR_P) "$(libdir)"
+ 	@list='$(lib_LTLIBRARIES)'; test -n "$(libdir)" || list=; \
+ 	list2=; for p in $$list; do \
+ 	  if test -f $$p; then \
+@@ -509,8 +509,8 @@
+ 	  else :; fi; \
+ 	done; \
+ 	test -z "$$list2" || { \
+-	  echo " $(LIBTOOL) $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=install $(INSTALL) $(INSTALL_STRIP_FLAG) $$list2 '$(DESTDIR)$(libdir)'"; \
+-	  $(LIBTOOL) $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=install $(INSTALL) $(INSTALL_STRIP_FLAG) $$list2 "$(DESTDIR)$(libdir)"; \
++	  echo " $(LIBTOOL) $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=install $(INSTALL) $(INSTALL_STRIP_FLAG) $$list2 '$(libdir)'"; \
++	  $(LIBTOOL) $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=install $(INSTALL) $(INSTALL_STRIP_FLAG) $$list2 "$(libdir)"; \
+ 	}
+ 
+ uninstall-libLTLIBRARIES:
+@@ -518,8 +518,8 @@
+ 	@list='$(lib_LTLIBRARIES)'; test -n "$(libdir)" || list=; \
+ 	for p in $$list; do \
+ 	  $(am__strip_dir) \
+-	  echo " $(LIBTOOL) $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=uninstall rm -f '$(DESTDIR)$(libdir)/$$f'"; \
+-	  $(LIBTOOL) $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=uninstall rm -f "$(DESTDIR)$(libdir)/$$f"; \
++	  echo " $(LIBTOOL) $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=uninstall rm -f '$(libdir)/$$f'"; \
++	  $(LIBTOOL) $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=uninstall rm -f "$(libdir)/$$f"; \
+ 	done
+ 
+ clean-libLTLIBRARIES:
+@@ -1084,15 +1084,15 @@
+ 	-rm -rf .libs _libs
+ install-pkgconfigDATA: $(pkgconfig_DATA)
+ 	@$(NORMAL_INSTALL)
+-	test -z "$(pkgconfigdir)" || $(MKDIR_P) "$(DESTDIR)$(pkgconfigdir)"
++	test -z "$(pkgconfigdir)" || $(MKDIR_P) "$(pkgconfigdir)"
+ 	@list='$(pkgconfig_DATA)'; test -n "$(pkgconfigdir)" || list=; \
+ 	for p in $$list; do \
+ 	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
+ 	  echo "$$d$$p"; \
+ 	done | $(am__base_list) | \
+ 	while read files; do \
+-	  echo " $(INSTALL_DATA) $$files '$(DESTDIR)$(pkgconfigdir)'"; \
+-	  $(INSTALL_DATA) $$files "$(DESTDIR)$(pkgconfigdir)" || exit $$?; \
++	  echo " $(INSTALL_DATA) $$files '$(pkgconfigdir)'"; \
++	  $(INSTALL_DATA) $$files "$(pkgconfigdir)" || exit $$?; \
+ 	done
+ 
+ uninstall-pkgconfigDATA:
+@@ -1100,8 +1100,8 @@
+ 	@list='$(pkgconfig_DATA)'; test -n "$(pkgconfigdir)" || list=; \
+ 	files=`for p in $$list; do echo $$p; done | sed -e 's|^.*/||'`; \
+ 	test -n "$$files" || exit 0; \
+-	echo " ( cd '$(DESTDIR)$(pkgconfigdir)' && rm -f" $$files ")"; \
+-	cd "$(DESTDIR)$(pkgconfigdir)" && rm -f $$files
++	echo " ( cd '$(pkgconfigdir)' && rm -f" $$files ")"; \
++	cd "$(pkgconfigdir)" && rm -f $$files
+ install-includeHEADERS: $(include_HEADERS)
+ 	@$(NORMAL_INSTALL)
+ 	test -z "$(includedir)" || $(MKDIR_P) "$(DESTDIR)$(includedir)"
+@@ -1212,7 +1212,7 @@
+ check: check-am
+ all-am: Makefile $(LTLIBRARIES) $(DATA) $(HEADERS) platform.hpp
+ installdirs:
+-	for dir in "$(DESTDIR)$(libdir)" "$(DESTDIR)$(pkgconfigdir)" "$(DESTDIR)$(includedir)"; do \
++	for dir in "$(libdir)" "$(pkgconfigdir)" "$(DESTDIR)$(includedir)"; do \
+ 	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
+ 	done
+ install: install-am
