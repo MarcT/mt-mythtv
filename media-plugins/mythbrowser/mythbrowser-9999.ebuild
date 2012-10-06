@@ -19,9 +19,9 @@ SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE="debug"
 
-DEPEND=">=sys-apps/sed-4
-	x11-libs/qt-webkit
-	>=media-tv/mythtv-${PV}"
+RDEPEND=""
+
+DEPEND="x11-libs/qt-webkit:4"
 
 setup_pro() {
 	set-kdedir

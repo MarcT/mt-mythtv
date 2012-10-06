@@ -17,18 +17,22 @@ HOMEPAGE="http://www.mythtv.org/"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="debug exif opengl"
+IUSE="debug exif opengl raw"
 
-DEPEND=">=sys-apps/sed-4
-	opengl? ( virtual/opengl )
-	exif? ( media-libs/libexif )
-	media-libs/tiff
-	>=media-tv/mythtv-${PV}"
+RDEPEND="exif? ( >=media-libs/libexif-0.6.10 )
+         media-libs/tiff
+         opengl? ( virtual/opengl )
+         raw? ( media-gfx/dcraw )"
+
+DEPEND="${RDEPEND}"
 
 setup_pro() {
         return 0
 }
 
 src_configure() {
-	myconf="${myconf} $(use_enable exif) $(use_enable opengl)"
+	myconf="${myconf}
+		$(use_enable exif)
+		$(use_enable raw dcraw)
+		$(use_enable opengl)"
 }

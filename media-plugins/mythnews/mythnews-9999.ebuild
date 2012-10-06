@@ -19,8 +19,9 @@ SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE="debug"
 
-DEPEND=">=sys-apps/sed-4
-	>=media-tv/mythtv-${PV}"
+RDEPEND="media-plugins/mythbrowser"
+
+DEPEND="${RDEPEND}"
 
 setup_pro() {
 	return 0

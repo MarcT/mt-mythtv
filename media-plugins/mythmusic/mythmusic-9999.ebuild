@@ -17,22 +17,25 @@ HOMEPAGE="http://www.mythtv.org/"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="debug aac cdr fftw opengl X"
+IUSE="debug cdr fftw opengl projectm"
 
-DEPEND=">=media-libs/taglib-1.4
-	>=media-sound/cdparanoia-3.9.8
+RDEPEND="
 	>=media-libs/libmad-0.15.1b
-	>=media-libs/libid3tag-0.15.1b
 	>=media-libs/libvorbis-1.0
-	>=media-libs/libcdaudio-0.99.6
 	>=media-libs/flac-1.1.2
 	>=media-libs/taglib-1.4
-	>=sys-apps/sed-4
-	aac? ( >=media-libs/faad2-2.0-r7 )
-	cdr? ( virtual/cdrtools )
+	dev-libs/libcdio
+	media-gfx/dcraw
 	fftw? ( sci-libs/fftw )
 	opengl? ( virtual/opengl )
-	>=media-tv/mythtv-${PV}"
+	cdr? ( virtual/cdrtools )
+	projectm? ( media-plugins/libvisual-projectm
+				>=media-libs/libsdl-1.2.5 
+				=media-libs/libvisual-0.4*
+				)
+	"
+
+DEPEND="${RDEPEND}"
 
 setup_pro() {
 	return 0

@@ -19,18 +19,16 @@ SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE="debug"
 
-DEPEND=">=sys-apps/sed-4
-	dev-perl/DateManip
-	dev-perl/DateTime-Format-ISO8601
-	dev-perl/Class-Inspector
+DEPEND="dev-perl/DateManip
 	dev-perl/ImageSize
 	dev-perl/SOAP-Lite
 	dev-perl/XML-Simple
 	dev-perl/XML-Parser
 	dev-perl/XML-SAX
+	dev-perl/DateTime-Format-ISO8601
 	dev-perl/XML-XPath
-	>=media-tv/mythtv-${PV}
-	media-gfx/dcraw"
+	dev-perl/JSON
+	>=media-tv/mythtv-${PV}"
 
 setup_pro() {
 	return 0
