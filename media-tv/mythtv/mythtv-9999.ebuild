@@ -112,19 +112,20 @@ src_unpack() {
 
 	cd ${S}/mythtv
 
-	epatch "${FILESDIR}"/gentoo-myth-config-fix.diff
 	epatch "${FILESDIR}"/${PN}-0.22-sandbox.patch
 
 }
 
 setup_pro() {
-#	cp -fR /usr/portage/distfiles/svn-src/mythtv/mythtv/.svn ${S}
-
         # upstream wants the revision number in their version.cpp
         # since the subversion.eclass strips out the .svn directory
         # svnversion in MythTV's build doesn't work
-#        sed -e "s:\`(svnversion \$\${SVNTREEDIR} 2>\/dev\/null) || echo Unknown\`:${MYTHTV_SVN_REVISION}:" \
-#                -i "${S}"/version.pro || die "svnversion sed failed"
+
+        cd "${S}"
+        MYTHTV_VERSION=$(git describe)
+        sed -e "s#\${SOURCE_VERSION}#${MYTHTV_VERSION}#g" \
+                -e "s#\${BRANCH}#${MYTHTV_BRANCH}#g" \
+                -i "${S}"/mythtv/version.sh
 
         # Perl bits need to go into vender_perl and not site_perl
         sed -e "s:pure_install:pure_install INSTALLDIRS=vendor:" \
