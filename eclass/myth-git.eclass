@@ -165,7 +165,7 @@ myth-git_src_install() {
 		cd ${S}/${_MODULE}
 	fi
 
-	einstall INSTALL_ROOT="${D}"
+	emake INSTALL_ROOT="${D}" install || die "install failed"
 	for doc in AUTHORS COPYING FAQ UPGRADING ChangeLog README; do
 		test -e "${doc}" && dodoc ${doc}
 	done
