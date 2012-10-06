@@ -141,8 +141,8 @@ myth-git_src_compile() {
         CFLAGS=""
         CXXFLAGS=""
 
-        einfo "Running ./configure --prefix=/usr --mandir=/usr/share/man ${myconf}"
-	./configure --prefix=/usr --mandir=/usr/share/man ${myconf}
+        einfo "Running ./configure --prefix=/usr --mandir=/usr/share/man --libdir-name=$(get_libdir) ${myconf}"
+	./configure --prefix=/usr --mandir=/usr/share/man --libdir-name=$(get_libdir) ${myconf}
 
 
 	if has ${_MODULE} ${MYTHPLUGINS} ; then
