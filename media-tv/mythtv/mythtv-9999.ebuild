@@ -32,11 +32,11 @@ SDEPEND="
 	x11-libs/libXv
 	x11-libs/libXrandr
 	x11-libs/libXxf86vm
-	x11-libs/qt-core:4[qt3support]
-	x11-libs/qt-gui:4[qt3support]
-	x11-libs/qt-sql:4[qt3support,mysql]
-	x11-libs/qt-opengl:4[qt3support]
-	x11-libs/qt-webkit:4
+	|| ( x11-libs/qt-core:4[qt3support] dev-qt/qtcore:4[qt3support] )
+	|| ( x11-libs/qt-gui:4[qt3support] dev-qt/qtgui:4[qt3support] )
+	|| ( x11-libs/qt-sql:4[qt3support,mysql] dev-qt/qtsql:4[qt3support,mysql] )
+	|| ( x11-libs/qt-opengl:4[qt3support] dev-qt/qtopengl:4[qt3support] )
+	|| ( x11-libs/qt-webkit:4 dev-qt/qtwebkit:4 )
 	alsa? ( >=media-libs/alsa-lib-0.9 )
 	ass? ( media-libs/libass )
 	bluray? (	dev-libs/libxml2
