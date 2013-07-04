@@ -224,8 +224,8 @@ src_install() {
 	insinto /etc/conf.d
 	newins "${FILESDIR}/mythbackend.conf" mythbackend
 
-	dodoc keys.txt docs/*.{txt,pdf}
-	dohtml docs/*.html
+	#dodoc keys.txt docs/*.{txt,pdf}
+	#dohtml docs/*.html
 
 	keepdir /var/{log,run}/mythtv
 }
