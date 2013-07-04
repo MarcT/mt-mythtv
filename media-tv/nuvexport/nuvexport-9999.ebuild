@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-tv/nuvexport/nuvexport-0.5_p20080311.ebuild,v 1.2 2009/01/10 14:45:35 beandog Exp $
 
-EAPI="3"
+EAPI="5"
 inherit eutils git
 
 EGIT_BRANCH="fixes/0.26"

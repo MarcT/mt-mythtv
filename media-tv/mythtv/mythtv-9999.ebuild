@@ -5,7 +5,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-tv/mythtv/mythtv-9999.ebuild,v 1.3 2009/07/10 14:05:04 Marc Tousignant Exp $
 
-EAPI="3"
+EAPI="5"
 MYTHTV_BRANCH="fixes/0.26"
 inherit myth-git qt4-r2 flag-o-matic multilib eutils toolchain-funcs python
 inherit linux-info
@@ -32,11 +32,11 @@ SDEPEND="
 	x11-libs/libXv
 	x11-libs/libXrandr
 	x11-libs/libXxf86vm
-	|| ( x11-libs/qt-core:4[qt3support] dev-qt/qtcore:4[qt3support] )
-	|| ( x11-libs/qt-gui:4[qt3support] dev-qt/qtgui:4[qt3support] )
-	|| ( x11-libs/qt-sql:4[qt3support,mysql] dev-qt/qtsql:4[qt3support,mysql] )
-	|| ( x11-libs/qt-opengl:4[qt3support] dev-qt/qtopengl:4[qt3support] )
-	|| ( x11-libs/qt-webkit:4 dev-qt/qtwebkit:4 )
+	dev-qt/qtcore:4[qt3support]
+	dev-qt/qtgui:4[qt3support]
+	dev-qt/qtsql:4[qt3support,mysql]
+	dev-qt/qtopengl:4[qt3support]
+	dev-qt/qtwebkit:4
 	alsa? ( >=media-libs/alsa-lib-0.9 )
 	ass? ( media-libs/libass )
 	bluray? (	dev-libs/libxml2

@@ -5,7 +5,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/www-apps/mythweb/mythweb-9999.ebuild,v 1.3 2009/07/10 14:05:04 Marc Tousignant Exp $
 
-EAPI="3"
+EAPI="5"
 inherit myth-git webapp depend.php
 
 DESCRIPTION="PHP scripts intended to manage MythTV from a web browser."
