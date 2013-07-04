@@ -8,7 +8,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI="3"
+EAPI="5"
 inherit myth-git kde4-functions
 
 DESCRIPTION="Web browser module for MythTV."
@@ -21,7 +21,7 @@ IUSE="debug"
 
 RDEPEND=""
 
-DEPEND="x11-libs/qt-webkit:4"
+DEPEND="dev-qt/qtwebkit:4"
 
 setup_pro() {
 	set-kdedir
