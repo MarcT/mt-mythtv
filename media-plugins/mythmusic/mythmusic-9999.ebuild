@@ -17,7 +17,7 @@ HOMEPAGE="http://www.mythtv.org/"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="debug cdr fftw opengl projectm"
+IUSE="debug cdr fftw opengl projectm X"
 
 RDEPEND="
 	>=media-libs/libmad-0.15.1b
