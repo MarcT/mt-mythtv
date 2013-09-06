@@ -5,7 +5,7 @@
 EAPI="5"
 inherit eutils git
 
-EGIT_BRANCH="fixes/0.26"
+EGIT_BRANCH="fixes/0.27"
 
 EGIT_REPO_URI="git://github.com/MythTV/nuvexport.git"
 EGIT_PROJECT=nuvexport
