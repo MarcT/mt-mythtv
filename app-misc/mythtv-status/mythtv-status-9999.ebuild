@@ -7,7 +7,7 @@
 
 EAPI="5"
 
-inherit git
+inherit git-2
 
 DESCRIPTION="Places MythTV Status information in your MOTD"
 HOMEPAGE="http://www.etc.gen.nz/projects/mythtv/mythtv-status.html"
@@ -31,7 +31,7 @@ DEPEND="dev-vcs/git[curl]
 	dev-perl/Sys-SigAction"
 
 src_unpack() {
-	git_src_unpack
+	git-2_src_unpack
 }
 
 src_configure() {
